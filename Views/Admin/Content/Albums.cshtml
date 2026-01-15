@@ -1,0 +1,17 @@
+@model List<MangoTaikaDistrict.Domain.Entities.Album>
+<h2>Albums</h2>
+<p><a asp-area="Admin" asp-controller="Content" asp-action="CreateAlbum">+ Nouvel album</a></p>
+
+@foreach (var a in Model)
+{
+    <div style="border:1px solid #eee;padding:10px;margin:10px 0;">
+        <b>@a.Titre</b> — @a.Visibilite
+        <div><a asp-area="Admin" asp-controller="Content" asp-action="UploadMedia" asp-route-albumId="@a.Id">Uploader un média</a></div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;">
+            @foreach (var m in a.Medias)
+            {
+                <img src="@m.FilePath" style="width:120px;height:80px;object-fit:cover;border:1px solid #ddd;" />
+            }
+        </div>
+    </div>
+}

@@ -1,0 +1,39 @@
+@model List<MangoTaikaDistrict.Domain.Entities.Activite>
+<h2>Activités</h2>
+
+@if (TempData["err"] != null) { <p style="color:red;">@TempData["err"]</p> }
+
+<p><a asp-area="Admin" asp-controller="Authorizations" asp-action="CreateActivite">+ Nouvelle activité</a></p>
+<p><a asp-area="Admin" asp-controller="Authorizations" asp-action="Pending">Demandes en attente</a></p>
+
+<table border="1" cellpadding="6">
+<thead>
+<tr><th>Titre</th><th>Groupe</th><th>Date</th><th>Statut</th><th>Demande</th></tr>
+</thead>
+<tbody>
+@foreach (var a in Model)
+{
+    <tr>
+        <td>@a.Titre</td>
+        <td>@a.Groupe?.Nom</td>
+        <td>@a.DateDebut.ToString("dd/MM/yyyy HH:mm")</td>
+        <td>@a.Statut</td>
+        <td>
+            @if (a.DemandeAutorisation == null)
+            {
+                <form method="post" asp-area="Admin" asp-controller="Authorizations" asp-action="Soumettre">
+                    <input type="hidden" name="activiteId" value="@a.Id" />
+                    <button type="submit">Soumettre</button>
+                </form>
+            }
+            else
+            {
+                <a asp-area="Admin" asp-controller="Authorizations" asp-action="Details" asp-route-id="@a.DemandeAutorisation.Id">
+                    Voir demande
+                </a>
+            }
+        </td>
+    </tr>
+}
+</tbody>
+</table>

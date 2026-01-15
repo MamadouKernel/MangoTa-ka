@@ -1,0 +1,25 @@
+@model List<MangoTaikaDistrict.Domain.Entities.LivreOrMessage>
+<h2>Modération Livre d'or</h2>
+
+<table border="1" cellpadding="6">
+<thead>
+<tr><th>Auteur</th><th>Message</th><th>Statut</th><th>Action</th></tr>
+</thead>
+<tbody>
+@foreach (var m in Model)
+{
+    <tr>
+        <td>@m.Auteur</td>
+        <td>@m.Message</td>
+        <td>@m.Statut</td>
+        <td>
+            <form method="post" asp-area="Admin" asp-controller="Content" asp-action="Moderate">
+                <input type="hidden" name="id" value="@m.Id" />
+                <button name="action" value="approve">Valider</button>
+                <button name="action" value="reject">Rejeter</button>
+            </form>
+        </td>
+    </tr>
+}
+</tbody>
+</table>

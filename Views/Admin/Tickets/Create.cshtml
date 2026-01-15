@@ -1,0 +1,16 @@
+@model MangoTaikaDistrict.Domain.Entities.Ticket
+<h2>Créer un ticket</h2>
+
+<form method="post">
+    <div>Type:
+        <select asp-for="Type">
+            <option value="INCIDENT">Incident</option>
+            <option value="DEMANDE">Demande</option>
+        </select>
+    </div>
+    <div>Sujet: <input asp-for="Sujet" /></div>
+    <div>Description: <textarea asp-for="Description" rows="6"></textarea></div>
+    <button type="submit">Créer</button>
+</form>
+
+<p><a asp-area="Admin" asp-controller="Tickets" asp-action="Index">Retour</a></p>

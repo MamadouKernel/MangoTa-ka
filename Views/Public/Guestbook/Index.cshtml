@@ -1,0 +1,27 @@
+@model MangoTaikaDistrict.Domain.Entities.LivreOrMessage
+@{
+    ViewData["Title"] = "Livre d'or";
+    var messages = ViewBag.Messages as List<MangoTaikaDistrict.Domain.Entities.LivreOrMessage> ?? new();
+}
+
+<h2>Livre d’or</h2>
+
+@if (TempData["ok"] != null)
+{
+    <p style="color:green;">@TempData["ok"]</p>
+}
+
+<form method="post" style="border:1px solid #eee;padding:12px;">
+    <div>Auteur: <input asp-for="Auteur" /></div>
+    <div>Message: <textarea asp-for="Message" rows="4" cols="50"></textarea></div>
+    <button type="submit">Envoyer</button>
+</form>
+
+<h3>Messages validés</h3>
+@foreach (var m in messages)
+{
+    <div style="border-bottom:1px solid #eee;margin:10px 0;padding:6px 0;">
+        <b>@m.Auteur</b> <small>(@m.CreatedAt.ToString("dd/MM/yyyy"))</small>
+        <p>@m.Message</p>
+    </div>
+}

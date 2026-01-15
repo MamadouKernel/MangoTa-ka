@@ -1,0 +1,22 @@
+@model List<MangoTaikaDistrict.Domain.Entities.Ticket>
+<h2>Tickets</h2>
+<p><a asp-area="Admin" asp-controller="Tickets" asp-action="Create">+ Nouveau ticket</a></p>
+
+<table border="1" cellpadding="6">
+<thead>
+<tr><th>Date</th><th>Type</th><th>Sujet</th><th>Statut</th><th>Créé par</th><th></th></tr>
+</thead>
+<tbody>
+@foreach (var t in Model)
+{
+    <tr>
+        <td>@t.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+        <td>@t.Type</td>
+        <td>@t.Sujet</td>
+        <td>@t.Statut</td>
+        <td>@t.CreatedBy?.Nom</td>
+        <td><a asp-area="Admin" asp-controller="Tickets" asp-action="Details" asp-route-id="@t.Id">Détails</a></td>
+    </tr>
+}
+</tbody>
+</table>

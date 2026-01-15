@@ -1,0 +1,35 @@
+@model List<MangoTaikaDistrict.Domain.Entities.Groupe>
+@{
+    ViewData["Title"] = "Groupes";
+}
+
+<h2>Groupes</h2>
+
+<div id="map" style="height:420px;border:1px solid #ddd;"></div>
+
+<ul>
+@foreach (var g in Model)
+{
+    <li><b>@g.Nom</b> — @g.ContactTel — @g.ContactEmail</li>
+}
+</ul>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+    const map = L.map('map').setView([5.345, -4.024], 11); // Abidjan par défaut
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19
+    }).addTo(map);
+
+    const groups = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+        Model.Where(x => x.GpsLat.HasValue && x.GpsLng.HasValue)
+             .Select(x => new { x.Nom, lat = x.GpsLat, lng = x.GpsLng, x.ContactTel })
+    ));
+
+    groups.forEach(g => {
+        L.marker([g.lat, g.lng]).addTo(map)
+          .bindPopup(`<b>${g.Nom}</b><br/>${g.ContactTel ?? ''}`);
+    });
+</script>

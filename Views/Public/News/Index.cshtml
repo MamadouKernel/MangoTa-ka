@@ -1,0 +1,14 @@
+@model List<MangoTaikaDistrict.Domain.Entities.Actualite>
+@{
+    ViewData["Title"] = "Actualités";
+}
+<h2>Actualités</h2>
+
+@foreach (var a in Model)
+{
+    <article style="border:1px solid #eee;padding:12px;margin:10px 0;">
+        <h3>@a.Titre</h3>
+        <small>Publié: @(a.PublishedAt?.ToString("dd/MM/yyyy HH:mm") ?? "-")</small>
+        <p>@a.Contenu</p>
+    </article>
+}

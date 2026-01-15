@@ -6,10 +6,17 @@
 <p>Bienvenue dans le backoffice MangoTaikaDistrict.</p>
 
 <form method="post" asp-controller="Account" asp-action="Logout" asp-area="">
-    <button type="submit">D�connexion</button>
+    <button type="submit">D�connexion</button>
 </form>
 
 <ul>
-    <li><a asp-area="Admin" asp-controller="Groupes" asp-action="Index">Gestion des groupes</a></li>
-    <li><a asp-area="Admin" asp-controller="Scouts" asp-action="Index">Gestion des scouts</a></li>
+    <li><a asp-area="Admin" asp-controller="Groupes" asp-action="Index">Groupes</a></li>
+    <li><a asp-area="Admin" asp-controller="Scouts" asp-action="Index">Scouts</a></li>
+    <li><a asp-area="Admin" asp-controller="Authorizations" asp-action="Activites">Activités & Autorisations</a></li>
+    <li><a asp-area="Admin" asp-controller="Tickets" asp-action="Index">Support / Tickets</a></li>
+    <li><a asp-area="Admin" asp-controller="Content" asp-action="News">Contenu (News)</a></li>
+    <li><a asp-area="Admin" asp-controller="Content" asp-action="Albums">Galerie (Albums)</a></li>
+    <li><a asp-area="Admin" asp-controller="Content" asp-action="Guestbook">Modération Livre d'or</a></li>
+    <li><a asp-area="Admin" asp-controller="Reports" asp-action="Index">Reporting</a></li>
 </ul>
+

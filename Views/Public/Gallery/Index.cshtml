@@ -1,0 +1,21 @@
+@model List<MangoTaikaDistrict.Domain.Entities.Album>
+@{
+    ViewData["Title"] = "Galerie";
+}
+<h2>Galerie</h2>
+
+@foreach (var album in Model)
+{
+    <div style="margin:14px 0;padding:10px;border:1px solid #eee;">
+        <h3>@album.Titre</h3>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            @foreach (var m in album.Medias)
+            {
+                <div style="width:160px;">
+                    <img src="@m.FilePath" style="width:160px;height:110px;object-fit:cover;border:1px solid #ddd;" />
+                    <small>@m.Caption</small>
+                </div>
+            }
+        </div>
+    </div>
+}

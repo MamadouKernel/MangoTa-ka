@@ -1,0 +1,23 @@
+@model MangoTaikaDistrict.Domain.Entities.Ticket
+<h2>Ticket — @Model.Sujet</h2>
+<p><b>Type:</b> @Model.Type | <b>Statut:</b> @Model.Statut | <b>Priorité:</b> @Model.Priorite</p>
+<p><b>Description:</b> @Model.Description</p>
+<p><b>Créé le:</b> @Model.CreatedAt</p>
+
+<h3>Messages</h3>
+@if (Model.Messages?.Any() == true)
+{
+    foreach (var m in Model.Messages)
+    {
+        <div style="border-top:1px solid #eee;padding:8px 0;">
+            <b>@m.Auteur?.Nom</b> <small>@m.CreatedAt</small>
+            <p>@m.Message</p>
+        </div>
+    }
+}
+else
+{
+    <p>Aucun message.</p>
+}
+
+<p><a asp-area="Admin" asp-controller="Tickets" asp-action="Index">Retour</a></p>

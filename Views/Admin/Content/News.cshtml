@@ -1,0 +1,11 @@
+@model List<MangoTaikaDistrict.Domain.Entities.Actualite>
+<h2>News</h2>
+<p><a asp-area="Admin" asp-controller="Content" asp-action="CreateNews">+ Nouvelle actualité</a></p>
+
+@foreach (var n in Model)
+{
+    <div style="border:1px solid #eee;padding:10px;margin:10px 0;">
+        <b>@n.Titre</b> — publié: @n.IsPublished
+        <p>@n.Contenu</p>
+    </div>
+}

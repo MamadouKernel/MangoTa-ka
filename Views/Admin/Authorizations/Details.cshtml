@@ -1,0 +1,36 @@
+@model MangoTaikaDistrict.Domain.Entities.DemandeAutorisation
+<h2>Demande — @Model.Activite?.Titre</h2>
+
+@if (TempData["err"] != null) { <p style="color:red;">@TempData["err"]</p> }
+
+<p><b>Groupe:</b> @Model.Activite?.Groupe?.Nom</p>
+<p><b>Statut:</b> @Model.Statut | <b>Étape actuelle:</b> @Model.CurrentStep</p>
+
+<h3>Historique validations</h3>
+@if (Model.Validations?.Any() == true)
+{
+    foreach (var v in Model.Validations.OrderBy(x => x.StepOrder))
+    {
+        <div style="border-top:1px solid #eee;padding:8px 0;">
+            <b>Étape @v.StepOrder</b> — @v.Decision — par @v.Valideur?.Nom (@v.DecidedAt)
+            <div>@v.Commentaire</div>
+        </div>
+    }
+}
+else
+{
+    <p>Aucune validation encore.</p>
+}
+
+@if (Model.Statut.ToString() == "EN_ATTENTE")
+{
+    <h3>Décision</h3>
+    <form method="post" asp-area="Admin" asp-controller="Authorizations" asp-action="Decide">
+        <input type="hidden" name="id" value="@Model.Id" />
+        <div>Commentaire: <input type="text" name="commentaire" /></div>
+        <button name="decision" value="approve">Approuver</button>
+        <button name="decision" value="reject">Rejeter</button>
+    </form>
+}
+
+<p><a asp-area="Admin" asp-controller="Authorizations" asp-action="Pending">Retour</a></p>

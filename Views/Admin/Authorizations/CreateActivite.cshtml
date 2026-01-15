@@ -1,0 +1,27 @@
+@model MangoTaikaDistrict.Domain.Entities.Activite
+@{
+    var groupes = ViewBag.Groupes as List<MangoTaikaDistrict.Domain.Entities.Groupe> ?? new();
+}
+<h2>Créer activité</h2>
+
+<form method="post">
+    <div>Titre: <input asp-for="Titre" /></div>
+    <div>Type: <input asp-for="TypeActivite" /></div>
+    <div>Lieu: <input asp-for="Lieu" /></div>
+
+    <div>Groupe:
+        <select asp-for="GroupeId">
+            @foreach (var g in groupes)
+            {
+                <option value="@g.Id">@g.Nom</option>
+            }
+        </select>
+    </div>
+
+    <div>Date début: <input asp-for="DateDebut" type="datetime-local" /></div>
+    <div>Date fin: <input asp-for="DateFin" type="datetime-local" /></div>
+
+    <button type="submit">Enregistrer</button>
+</form>
+
+<p><a asp-area="Admin" asp-controller="Authorizations" asp-action="Activites">Retour</a></p>

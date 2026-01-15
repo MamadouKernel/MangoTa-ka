@@ -1,0 +1,26 @@
+<h2>Reporting</h2>
+
+<ul>
+    <li>Nombre de groupes: <b>@ViewBag.NbGroupes</b></li>
+    <li>Nombre de scouts: <b>@ViewBag.NbScouts</b></li>
+    <li>Nombre d'activités: <b>@ViewBag.NbActivites</b></li>
+    <li>Nombre de tickets: <b>@ViewBag.NbTickets</b></li>
+</ul>
+
+<p><a asp-area="Admin" asp-controller="Reports" asp-action="ExportScoutsCsv">Exporter Scouts (CSV)</a></p>
+<p>
+  <a asp-area="Admin" asp-controller="Reports" asp-action="ExportScoutsExcel">
+    Exporter Scouts (Excel)
+  </a>
+</p>
+<p>
+  <a asp-area="Admin" asp-controller="Reports" asp-action="ExportScoutsPdf">
+    Exporter Scouts (PDF)
+  </a>
+</p>
+<p>
+  <a asp-area="Admin" asp-controller="Reports" asp-action="ExportScoutsPdfOfficial">
+    Exporter Scouts (PDF Officiel + Logo + Stats)
+  </a>
+</p>
+

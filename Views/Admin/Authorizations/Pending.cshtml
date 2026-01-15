@@ -1,0 +1,19 @@
+@model List<MangoTaikaDistrict.Domain.Entities.DemandeAutorisation>
+<h2>Demandes en attente</h2>
+
+<table border="1" cellpadding="6">
+<thead>
+<tr><th>Activité</th><th>Groupe</th><th>Étape</th><th></th></tr>
+</thead>
+<tbody>
+@foreach (var d in Model)
+{
+    <tr>
+        <td>@d.Activite?.Titre</td>
+        <td>@d.Activite?.Groupe?.Nom</td>
+        <td>@d.CurrentStep</td>
+        <td><a asp-area="Admin" asp-controller="Authorizations" asp-action="Details" asp-route-id="@d.Id">Ouvrir</a></td>
+    </tr>
+}
+</tbody>
+</table>
