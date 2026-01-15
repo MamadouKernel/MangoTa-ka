@@ -1,0 +1,15 @@
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<h2>Dashboard</h2>
+<p>Bienvenue dans le backoffice MangoTaikaDistrict.</p>
+
+<form method="post" asp-controller="Account" asp-action="Logout" asp-area="">
+    <button type="submit">Déconnexion</button>
+</form>
+
+<ul>
+    <li><a asp-area="Admin" asp-controller="Groupes" asp-action="Index">Gestion des groupes</a></li>
+    <li><a asp-area="Admin" asp-controller="Scouts" asp-action="Index">Gestion des scouts</a></li>
+</ul>

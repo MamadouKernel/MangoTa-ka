@@ -1,0 +1,36 @@
+@model List<MangoTaikaDistrict.Domain.Entities.Scout>
+@{
+    ViewData["Title"] = "Scouts";
+}
+<h2>Scouts</h2>
+
+<p><a asp-area="Admin" asp-controller="Scouts" asp-action="Create">+ Nouveau scout</a></p>
+
+<table border="1" cellpadding="6">
+    <thead>
+        <tr>
+            <th>Matricule</th>
+            <th>Nom</th>
+            <th>Prénoms</th>
+            <th>Groupe</th>
+            <th>Statut</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var s in Model)
+        {
+            <tr>
+                <td>@s.Matricule</td>
+                <td>@s.Nom</td>
+                <td>@s.Prenoms</td>
+                <td>@s.Groupe?.Nom</td>
+                <td>@s.Statut</td>
+                <td>
+                    <a asp-area="Admin" asp-controller="Scouts" asp-action="Edit" asp-route-id="@s.Id">Modifier</a> |
+                    <a asp-area="Admin" asp-controller="Scouts" asp-action="Delete" asp-route-id="@s.Id">Supprimer</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

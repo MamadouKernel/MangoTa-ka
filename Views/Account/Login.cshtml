@@ -1,0 +1,33 @@
+@model MangoTaikaDistrict.Models.Auth.LoginVm
+@{
+    ViewData["Title"] = "Connexion";
+}
+
+<h2>Connexion</h2>
+
+<form method="post">
+    <div>
+        <label asp-for="Telephone"></label>
+        <input asp-for="Telephone" />
+        <span asp-validation-for="Telephone"></span>
+    </div>
+
+    <div>
+        <label asp-for="Password"></label>
+        <input asp-for="Password" />
+        <span asp-validation-for="Password"></span>
+    </div>
+
+    <div style="color:red;">
+        @foreach (var e in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+        {
+            <div>@e.ErrorMessage</div>
+        }
+    </div>
+
+    <button type="submit">Se connecter</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

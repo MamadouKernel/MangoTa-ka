@@ -1,0 +1,27 @@
+@model MangoTaikaDistrict.Domain.Entities.Scout
+@{
+    ViewData["Title"] = "Modifier scout";
+    var groupes = ViewBag.Groupes as List<MangoTaikaDistrict.Domain.Entities.Groupe> ?? new();
+}
+<h2>Modifier un scout</h2>
+
+<form method="post">
+    <input type="hidden" asp-for="Id" />
+    <div>Matricule: <input asp-for="Matricule" /></div>
+    <div>Nom: <input asp-for="Nom" /></div>
+    <div>Prénoms: <input asp-for="Prenoms" /></div>
+    <div>Sexe: <input asp-for="Sexe" /></div>
+    <div>
+        Groupe:
+        <select asp-for="GroupeId">
+            @foreach (var g in groupes)
+            {
+                <option value="@g.Id" selected="@(g.Id == Model.GroupeId)">@g.Nom</option>
+            }
+        </select>
+    </div>
+    <div>Statut: <input asp-for="Statut" /></div>
+    <button type="submit">Sauver</button>
+</form>
+
+<p><a asp-area="Admin" asp-controller="Scouts" asp-action="Index">Retour</a></p>

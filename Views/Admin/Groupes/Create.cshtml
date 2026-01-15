@@ -1,0 +1,17 @@
+﻿@model MangoTaikaDistrict.Domain.Entities.Groupe
+@{
+    ViewData["Title"] = "Créer groupe";
+}
+<h2>Créer un groupe</h2>
+
+<form method="post">
+    <div>Nom: <input asp-for="Nom" /></div>
+    <div>Adresse: <input asp-for="Adresse" /></div>
+    <div>Téléphone: <input asp-for="ContactTel" /></div>
+    <div>Email: <input asp-for="ContactEmail" /></div>
+    <div>GPS Lat: <input asp-for="GpsLat" /></div>
+    <div>GPS Lng: <input asp-for="GpsLng" /></div>
+    <button type="submit">Enregistrer</button>
+</form>
+
+<p><a asp-area="Admin" asp-controller="Groupes" asp-action="Index">Retour</a></p>

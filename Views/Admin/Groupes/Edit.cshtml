@@ -1,0 +1,19 @@
+﻿@model MangoTaikaDistrict.Domain.Entities.Groupe
+@{
+    ViewData["Title"] = "Modifier groupe";
+}
+<h2>Modifier un groupe</h2>
+
+<form method="post">
+    <input type="hidden" asp-for="Id" />
+    <div>Nom: <input asp-for="Nom" /></div>
+    <div>Adresse: <input asp-for="Adresse" /></div>
+    <div>Téléphone: <input asp-for="ContactTel" /></div>
+    <div>Email: <input asp-for="ContactEmail" /></div>
+    <div>GPS Lat: <input asp-for="GpsLat" /></div>
+    <div>GPS Lng: <input asp-for="GpsLng" /></div>
+    <div>Actif: <input asp-for="IsActive" /></div>
+    <button type="submit">Sauver</button>
+</form>
+
+<p><a asp-area="Admin" asp-controller="Groupes" asp-action="Index">Retour</a></p>

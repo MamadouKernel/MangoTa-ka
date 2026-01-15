@@ -1,0 +1,13 @@
+@model MangoTaikaDistrict.Domain.Entities.Scout
+@{
+    ViewData["Title"] = "Supprimer scout";
+}
+<h2>Supprimer</h2>
+<p>Confirmer suppression de : <b>@Model.Nom @Model.Prenoms</b> ?</p>
+
+<form method="post" asp-action="DeleteConfirmed">
+    <input type="hidden" name="id" value="@Model.Id" />
+    <button type="submit">Oui, supprimer</button>
+</form>
+
+<p><a asp-area="Admin" asp-controller="Scouts" asp-action="Index">Annuler</a></p>
