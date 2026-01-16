@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - MangoTaikaDistrict</title>
+    <title>@ViewData["Title"] - MangoTaïka</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/modern-components.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/scout-theme.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/footer-modern.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="~/MangoTaikaDistrict.styles.css" asp-append-version="true" />
 </head>
@@ -20,7 +21,7 @@
             <div class="container-fluid">
                 <a class="navbar-brand fw-bold d-flex align-items-center" asp-area="" asp-controller="Home" asp-action="Index">
                     <img src="~/images/logo.png" alt="Mango Taika District" class="logo-nav me-3" />
-                    <span class="brand-text d-none d-md-inline">MangoTaikaDistrict</span>
+                    <span class="brand-text d-none d-md-inline">MangoTaïka</span>
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -31,6 +32,21 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
                                 <i class="bi bi-house me-1"></i>Accueil
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Groups" asp-action="Index">
+                                <i class="bi bi-people me-1"></i>Groupes
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Gallery" asp-action="Index">
+                                <i class="bi bi-images me-1"></i>Galerie
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="News" asp-action="Index">
+                                <i class="bi bi-newspaper me-1"></i>Actualités
                             </a>
                         </li>
                         <li class="nav-item">
@@ -114,58 +130,149 @@
         </main>
     </div>
 
-    <footer class="modern-footer mt-5 py-5">
-        <div class="container">
-            <div class="row g-4">
-                <div class="col-md-4">
-                    <div class="d-flex align-items-center mb-4">
-                        <img src="~/images/logo.png" alt="Logo" class="logo-footer me-3" />
-                        <h4 class="mb-0 text-white fw-bold">MangoTaikaDistrict</h4>
+    <footer class="footer-modern-scout">
+        <!-- Wave separator -->
+        <div class="footer-wave">
+            <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0 0L60 15C120 30 240 60 360 75C480 90 600 90 720 82.5C840 75 960 60 1080 52.5C1200 45 1320 45 1380 45L1440 45V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="var(--color-primary)"/>
+            </svg>
+        </div>
+        
+        <div class="footer-content">
+            <div class="container">
+                <div class="row g-5 mb-4">
+                    <!-- Logo & Description -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="footer-brand mb-4">
+                            <div class="footer-logo-container mb-3">
+                                <img src="~/images/logo.png" alt="Mango Taika District" class="footer-logo" />
+                            </div>
+                            <h3 class="footer-brand-title">MangoTaïka</h3>
+                            <p class="footer-description">
+                                Plateforme numérique du 22ème siècle pour la gestion et le développement du scoutisme dans notre district.
+                            </p>
+                            <div class="footer-social mt-4">
+                                <a href="https://adhesion.scoutascci.org/" target="_blank" class="social-link" title="ASCCI SYGESCA">
+                                    <i class="bi bi-link-45deg"></i>
+                                </a>
+                                <a href="mailto:contact@mangotaika.ci" class="social-link" title="Email">
+                                    <i class="bi bi-envelope"></i>
+                                </a>
+                                <a href="tel:+225XXXXXXXX" class="social-link" title="Téléphone">
+                                    <i class="bi bi-telephone"></i>
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                    <p class="text-white-50 mb-0 lh-lg">Plateforme numérique du 22ème siècle pour la gestion du district scout</p>
+                    
+                    <!-- Liens rapides -->
+                    <div class="col-lg-2 col-md-6">
+                        <h5 class="footer-section-title">
+                            <i class="bi bi-compass me-2"></i>Navigation
+                        </h5>
+                        <ul class="footer-menu">
+                            <li><a asp-controller="Home" asp-action="Index" class="footer-menu-link">
+                                <i class="bi bi-house me-2"></i>Accueil
+                            </a></li>
+                            <li><a asp-controller="Groups" asp-action="Index" class="footer-menu-link">
+                                <i class="bi bi-people me-2"></i>Groupes
+                            </a></li>
+                            <li><a asp-controller="Gallery" asp-action="Index" class="footer-menu-link">
+                                <i class="bi bi-images me-2"></i>Galerie
+                            </a></li>
+                            <li><a asp-controller="News" asp-action="Index" class="footer-menu-link">
+                                <i class="bi bi-newspaper me-2"></i>Actualités
+                            </a></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Services -->
+                    <div class="col-lg-3 col-md-6">
+                        <h5 class="footer-section-title">
+                            <i class="bi bi-tools me-2"></i>Services
+                        </h5>
+                        <ul class="footer-menu">
+                            @if (User.Identity?.IsAuthenticated == true)
+                            {
+                                <li><a asp-controller="Formations" asp-action="Index" class="footer-menu-link">
+                                    <i class="bi bi-book-half me-2"></i>Formations LMS
+                                </a></li>
+                                <li><a asp-controller="MyData" asp-action="Index" class="footer-menu-link">
+                                    <i class="bi bi-shield-check me-2"></i>Mes données (RGPD)
+                                </a></li>
+                                @if (User.IsInRole("SCOUT"))
+                                {
+                                    <li><a asp-controller="MyProfile" asp-action="Index" class="footer-menu-link">
+                                        <i class="bi bi-person-circle me-2"></i>Mon profil
+                                    </a></li>
+                                }
+                                @if (User.IsInRole("PARENT"))
+                                {
+                                    <li><a asp-controller="Parent" asp-action="MesEnfants" class="footer-menu-link">
+                                        <i class="bi bi-people me-2"></i>Mes enfants
+                                    </a></li>
+                                }
+                            }
+                            else
+                            {
+                                <li><a asp-controller="Account" asp-action="Login" class="footer-menu-link">
+                                    <i class="bi bi-box-arrow-in-right me-2"></i>Connexion
+                                </a></li>
+                                <li><a asp-controller="Account" asp-action="Register" class="footer-menu-link">
+                                    <i class="bi bi-person-plus me-2"></i>Inscription
+                                </a></li>
+                            }
+                        </ul>
+                    </div>
+                    
+                    <!-- Contact -->
+                    <div class="col-lg-3 col-md-6">
+                        <h5 class="footer-section-title">
+                            <i class="bi bi-envelope-paper me-2"></i>Contact
+                        </h5>
+                        <ul class="footer-contact">
+                            <li class="footer-contact-item">
+                                <i class="bi bi-envelope"></i>
+                                <div>
+                                    <strong>Email</strong>
+                                    <a href="mailto:contact@mangotaika.ci">contact@mangotaika.ci</a>
+                                </div>
+                            </li>
+                            <li class="footer-contact-item">
+                                <i class="bi bi-telephone"></i>
+                                <div>
+                                    <strong>Téléphone</strong>
+                                    <a href="tel:+225XXXXXXXX">+225 XX XX XX XX</a>
+                                </div>
+                            </li>
+                            <li class="footer-contact-item">
+                                <i class="bi bi-link-45deg"></i>
+                                <div>
+                                    <strong>ASCCI</strong>
+                                    <a href="https://adhesion.scoutascci.org/" target="_blank">SYGESCA</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="col-md-4">
-                    <h5 class="text-white mb-4 fw-bold"><i class="bi bi-link-45deg me-2"></i>Liens rapides</h5>
-                    <ul class="list-unstyled footer-links">
-                        <li class="mb-3"><a href="/" class="footer-link">
-                            <i class="bi bi-house me-2"></i>Accueil
-                        </a></li>
-                        <li class="mb-3"><a href="/Groups" class="footer-link">
-                            <i class="bi bi-people me-2"></i>Groupes
-                        </a></li>
-                        <li class="mb-3"><a href="/Gallery" class="footer-link">
-                            <i class="bi bi-images me-2"></i>Galerie
-                        </a></li>
-                        <li class="mb-3"><a href="/News" class="footer-link">
-                            <i class="bi bi-newspaper me-2"></i>Actualités
-                        </a></li>
-                    </ul>
-                </div>
-                <div class="col-md-4">
-                    <h5 class="text-white mb-4 fw-bold"><i class="bi bi-envelope me-2"></i>Contact</h5>
-                    <ul class="list-unstyled footer-links">
-                        <li class="mb-3">
-                            <a href="mailto:contact@mangotaika.ci" class="footer-link">
-                                <i class="bi bi-envelope me-2"></i>contact@mangotaika.ci
-                            </a>
-                        </li>
-                        <li class="mb-3">
-                            <a href="tel:+225XXXXXXXX" class="footer-link">
-                                <i class="bi bi-telephone me-2"></i>+225 XX XX XX XX
-                            </a>
-                        </li>
-                        <li class="mb-3">
-                            <a href="https://adhesion.scoutascci.org/" target="_blank" class="footer-link">
-                                <i class="bi bi-link-45deg me-2"></i>ASCCI SYGESCA
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <hr class="my-4" style="border-color: rgba(255,255,255,0.1);" />
-            <div class="row">
-                <div class="col-12 text-center">
-                    <p class="text-muted mb-0">&copy; 2026 - MangoTaikaDistrict. Tous droits réservés.</p>
+                
+                <!-- Divider -->
+                <div class="footer-divider"></div>
+                
+                <!-- Copyright -->
+                <div class="footer-bottom">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <p class="footer-copyright mb-0">
+                                &copy; @DateTime.Now.Year <strong>MangoTaikaDistrict</strong>. Tous droits réservés.
+                            </p>
+                        </div>
+                        <div class="col-md-6 text-md-end">
+                            <p class="footer-made-with mb-0">
+                                Fait avec <i class="bi bi-heart-fill text-danger"></i> pour le scoutisme
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

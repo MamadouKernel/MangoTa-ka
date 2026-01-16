@@ -1,0 +1,122 @@
+@model List<MangoTaikaDistrict.Domain.Entities.Actualite>
+@{
+    ViewData["Title"] = "Actualités";
+}
+
+<!-- Hero Section -->
+<section class="hero-section hero-scout section-scout position-relative overflow-hidden mb-5 natural-pattern">
+    <div class="scout-leaf-decoration"></div>
+    <div class="scout-leaf-decoration"></div>
+    <div class="container position-relative" style="z-index: 2; padding-top: 80px; padding-bottom: 60px;">
+        <div class="row align-items-center">
+            <div class="col-lg-8 mx-auto text-center text-white">
+                <h1 class="display-4 fw-bold mb-3 animate-fade-in">
+                    <i class="bi bi-newspaper me-2"></i>Actualités
+                </h1>
+                <p class="lead mb-4 animate-slide-up">
+                    Restez informé des dernières nouvelles et événements du district Mango Taika
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Liste des Actualités -->
+<div class="container mb-5">
+    @if (Model != null && Model.Any())
+    {
+        <div class="row g-4">
+            @foreach (var actualite in Model.OrderByDescending(a => a.PublishedAt ?? a.CreatedAt))
+            {
+                <div class="col-md-6 col-lg-4">
+                    <div class="card-scout card-modern h-100 animate-fade-in">
+                        <div class="card-badge">
+                            <i class="bi bi-newspaper"></i>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <small class="text-muted">
+                                    <i class="bi bi-calendar me-1"></i>
+                                    @((actualite.PublishedAt ?? actualite.CreatedAt).ToString("dd MMM yyyy", new System.Globalization.CultureInfo("fr-FR")))
+                                </small>
+                                @if (actualite.IsPublished)
+                                {
+                                    <span class="badge badge-success">
+                                        <i class="bi bi-check-circle me-1"></i>Publié
+                                    </span>
+                                }
+                            </div>
+                            
+                            <h4 class="fw-bold mb-3 text-primary">
+                                <a asp-action="Details" asp-route-id="@actualite.Id" class="text-decoration-none text-primary">
+                                    @actualite.Titre
+                                </a>
+                            </h4>
+                            
+                            @if (!string.IsNullOrEmpty(actualite.Contenu))
+                            {
+                                <p class="text-muted mb-3">
+                                    @(actualite.Contenu.Length > 150 ? actualite.Contenu.Substring(0, 150) + "..." : actualite.Contenu)
+                                </p>
+                            }
+                            
+                            <div class="d-grid">
+                                <a asp-action="Details" asp-route-id="@actualite.Id" class="btn btn-scout">
+                                    <i class="bi bi-arrow-right me-2"></i>Lire la suite
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="col-12">
+            <div class="card-modern card-scout text-center p-5">
+                <div class="empty-state">
+                    <div class="empty-state-icon">
+                        <i class="bi bi-inbox" style="font-size: 4rem; color: var(--color-primary-soft);"></i>
+                    </div>
+                    <h3 class="empty-state-title">Aucune actualité disponible</h3>
+                    <p class="empty-state-text">Les actualités seront bientôt disponibles.</p>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<style>
+    .news-image-container {
+        position: relative;
+        width: 100%;
+        padding-top: 60%; /* Ratio 16:10 */
+        overflow: hidden;
+        background: var(--color-primary-soft);
+        border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    }
+    
+    .news-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform var(--transition-normal);
+    }
+    
+    .news-image-container:hover .news-image {
+        transform: scale(1.1);
+    }
+    
+    .card-scout .card-body {
+        padding: 1.5rem;
+    }
+    
+    .card-scout h4 a:hover {
+        color: var(--color-primary-light) !important;
+        text-decoration: underline !important;
+    }
+</style>

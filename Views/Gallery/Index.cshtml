@@ -1,0 +1,239 @@
+@model List<MangoTaikaDistrict.Domain.Entities.Album>
+@{
+    ViewData["Title"] = "Galerie";
+}
+
+<!-- Hero Section -->
+<section class="hero-section hero-scout section-scout position-relative overflow-hidden mb-5 natural-pattern">
+    <div class="scout-leaf-decoration"></div>
+    <div class="scout-leaf-decoration"></div>
+    <div class="container position-relative" style="z-index: 2; padding-top: 80px; padding-bottom: 60px;">
+        <div class="row align-items-center">
+            <div class="col-lg-8 mx-auto text-center text-white">
+                <h1 class="display-4 fw-bold mb-3 animate-fade-in">
+                    <i class="bi bi-images me-2"></i>Galerie Photos
+                </h1>
+                <p class="lead mb-4 animate-slide-up">
+                    Découvrez nos albums photos et revivez les moments forts de nos activités scoutes
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Albums -->
+<div class="container mb-5">
+    @if (Model != null && Model.Any())
+    {
+        <div class="row g-4">
+            @foreach (var album in Model)
+            {
+                <div class="col-md-6 col-lg-4">
+                    <div class="card-scout card-modern h-100 animate-fade-in">
+                        <div class="card-badge">
+                            <i class="bi bi-images"></i>
+                        </div>
+                        <div class="card-body">
+                            <h4 class="fw-bold mb-3 text-primary">
+                                <i class="bi bi-folder me-2"></i>@album.Titre
+                            </h4>
+                            
+                            @if (album.Medias != null && album.Medias.Any())
+                            {
+                                <div class="album-preview mb-3">
+                                    <div class="row g-2">
+                                        @foreach (var media in album.Medias.Take(4))
+                                        {
+                                            <div class="col-6">
+                                                <div class="preview-image-container">
+                                                    <img src="@media.FilePath" 
+                                                         alt="@media.Caption" 
+                                                         class="preview-image"
+                                                         onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'200\' height=\'150\'%3E%3Crect fill=\'%23E8F5E1\' width=\'200\' height=\'150\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' text-anchor=\'middle\' dy=\'.3em\' fill=\'%232D5016\' font-family=\'Arial\' font-size=\'14\'%3EImage%3C/text%3E%3C/svg%3E';" />
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <small class="text-muted">
+                                        <i class="bi bi-image me-1"></i>@album.Medias.Count photo(s)
+                                    </small>
+                                    <small class="text-muted">
+                                        <i class="bi bi-calendar me-1"></i>@album.CreatedAt.ToString("dd/MM/yyyy")
+                                    </small>
+                                </div>
+                                
+                                <button type="button" 
+                                        class="btn btn-scout w-100" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#albumModal@(album.Id)">
+                                    <i class="bi bi-eye me-2"></i>Voir l'album
+                                </button>
+                            }
+                            else
+                            {
+                                <div class="empty-album text-center py-4">
+                                    <i class="bi bi-inbox" style="font-size: 3rem; color: var(--color-primary-soft);"></i>
+                                    <p class="text-muted mt-2 mb-0">Album vide</p>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Modal pour l'album -->
+                @if (album.Medias != null && album.Medias.Any())
+                {
+                    <div class="modal fade" id="albumModal@(album.Id)" tabindex="-1" aria-labelledby="albumModalLabel@(album.Id)" aria-hidden="true">
+                        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header" style="background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-medium) 100%); color: white;">
+                                    <h5 class="modal-title fw-bold" id="albumModalLabel@(album.Id)">
+                                        <i class="bi bi-images me-2"></i>@album.Titre
+                                    </h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body p-4">
+                                    <div class="row g-3">
+                                        @foreach (var media in album.Medias)
+                                        {
+                                            <div class="col-md-4 col-lg-3">
+                                                <div class="gallery-item card-scout">
+                                                    <div class="gallery-image-container">
+                                                        <img src="@media.FilePath" 
+                                                             alt="@media.Caption" 
+                                                             class="gallery-image"
+                                                             data-bs-toggle="modal" 
+                                                             data-bs-target="#imageModal@(media.Id)"
+                                                             onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'300\' height=\'200\'%3E%3Crect fill=\'%23E8F5E1\' width=\'300\' height=\'200\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' text-anchor=\'middle\' dy=\'.3em\' fill=\'%232D5016\' font-family=\'Arial\' font-size=\'16\'%3EImage%3C/text%3E%3C/svg%3E';" />
+                                                    </div>
+                                                    @if (!string.IsNullOrEmpty(media.Caption))
+                                                    {
+                                                        <div class="gallery-caption">
+                                                            <small class="text-muted">@media.Caption</small>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Modal pour image individuelle -->
+                                            <div class="modal fade" id="imageModal@(media.Id)" tabindex="-1" aria-hidden="true">
+                                                <div class="modal-dialog modal-lg modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header" style="background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-medium) 100%); color: white;">
+                                                            <h6 class="modal-title">@(media.Caption ?? "Image")</h6>
+                                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body p-0 text-center">
+                                                            <img src="@media.FilePath" 
+                                                                 alt="@media.Caption" 
+                                                                 class="img-fluid"
+                                                                 style="max-height: 70vh; object-fit: contain;"
+                                                                 onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'800\' height=\'600\'%3E%3Crect fill=\'%23E8F5E1\' width=\'800\' height=\'600\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' text-anchor=\'middle\' dy=\'.3em\' fill=\'%232D5016\' font-family=\'Arial\' font-size=\'24\'%3EImage%3C/text%3E%3C/svg%3E';" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    }
+    else
+    {
+        <div class="col-12">
+            <div class="card-modern card-scout text-center p-5">
+                <div class="empty-state">
+                    <div class="empty-state-icon">
+                        <i class="bi bi-inbox" style="font-size: 4rem; color: var(--color-primary-soft);"></i>
+                    </div>
+                    <h3 class="empty-state-title">Aucun album disponible</h3>
+                    <p class="empty-state-text">Les albums photos seront bientôt disponibles.</p>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<style>
+    .album-preview {
+        border-radius: var(--radius-md);
+        overflow: hidden;
+    }
+    
+    .preview-image-container {
+        position: relative;
+        width: 100%;
+        padding-top: 75%; /* Ratio 4:3 */
+        overflow: hidden;
+        border-radius: var(--radius-sm);
+        background: var(--color-primary-soft);
+    }
+    
+    .preview-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform var(--transition-normal);
+    }
+    
+    .preview-image-container:hover .preview-image {
+        transform: scale(1.1);
+    }
+    
+    .gallery-item {
+        transition: all var(--transition-normal);
+        border: none;
+        padding: 0;
+        overflow: hidden;
+    }
+    
+    .gallery-item:hover {
+        transform: translateY(-4px);
+    }
+    
+    .gallery-image-container {
+        position: relative;
+        width: 100%;
+        padding-top: 100%; /* Ratio 1:1 */
+        overflow: hidden;
+        background: var(--color-primary-soft);
+        border-radius: var(--radius-md);
+    }
+    
+    .gallery-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        cursor: pointer;
+        transition: transform var(--transition-normal);
+    }
+    
+    .gallery-image:hover {
+        transform: scale(1.1);
+    }
+    
+    .gallery-caption {
+        padding: 0.5rem;
+        background: white;
+    }
+    
+    .empty-album {
+        border: 2px dashed var(--color-border);
+        border-radius: var(--radius-md);
+        background: var(--color-primary-soft);
+    }
+</style>
