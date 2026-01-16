@@ -1,0 +1,123 @@
+@model MangoTaikaDistrict.Domain.Entities.DemandeDroitRgpd
+@{
+    ViewData["Title"] = "Détails de la demande RGPD";
+    var user = ViewBag.User as MangoTaikaDistrict.Domain.Entities.Utilisateur;
+    var scouts = ViewBag.Scouts as List<MangoTaikaDistrict.Domain.Entities.Scout> ?? new();
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold mb-0"><i class="bi bi-shield-check me-2 text-primary"></i>Détails de la demande</h2>
+    <a asp-action="Index" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-1"></i>Retour
+    </a>
+</div>
+
+<div class="card-modern card mb-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Informations de la demande</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Utilisateur :</strong> @Model.Utilisateur.Nom @Model.Utilisateur.Prenoms</p>
+                <p><strong>Téléphone :</strong> @Model.Utilisateur.Telephone</p>
+                <p><strong>Email :</strong> @(Model.Utilisateur.Email ?? "-")</p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Type :</strong> 
+                    <span class="badge bg-@(Model.Type == MangoTaikaDistrict.Domain.Enums.TypeDemandeRgpd.SUPPRESSION ? "danger" : "info")">
+                        @Model.Type
+                    </span>
+                </p>
+                <p><strong>Date :</strong> @Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</p>
+                <p><strong>Statut :</strong> 
+                    @if (Model.Statut == MangoTaikaDistrict.Domain.Enums.StatutDemandeRgpd.TRAITEE)
+                    {
+                        <span class="badge bg-success">Traitée</span>
+                    }
+                    else if (Model.Statut == MangoTaikaDistrict.Domain.Enums.StatutDemandeRgpd.REJETEE)
+                    {
+                        <span class="badge bg-danger">Rejetée</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-warning">En attente</span>
+                    }
+                </p>
+            </div>
+        </div>
+        @if (!string.IsNullOrEmpty(Model.Raison))
+        {
+            <hr>
+            <p><strong>Raison :</strong> @Model.Raison</p>
+        }
+        @if (!string.IsNullOrEmpty(Model.Description))
+        {
+            <p><strong>Description :</strong> @Model.Description</p>
+        }
+        @if (!string.IsNullOrEmpty(Model.Reponse))
+        {
+            <hr>
+            <p><strong>Réponse :</strong> @Model.Reponse</p>
+            <p><strong>Traitée par :</strong> @(Model.TraitePar?.Nom ?? "-") le @(Model.TraiteLe?.ToString("dd/MM/yyyy HH:mm") ?? "-")</p>
+        }
+    </div>
+</div>
+
+@if (Model.Type == MangoTaikaDistrict.Domain.Enums.TypeDemandeRgpd.ACCES && user != null)
+{
+    <div class="card-modern card mb-4">
+        <div class="card-header bg-info text-white">
+            <h5 class="mb-0">Données de l'utilisateur</h5>
+        </div>
+        <div class="card-body">
+            <h6>Compte utilisateur</h6>
+            <ul>
+                <li>Nom : @user.Nom</li>
+                <li>Prénoms : @user.Prenoms</li>
+                <li>Téléphone : @user.Telephone</li>
+                <li>Email : @(user.Email ?? "-")</li>
+                <li>Date d'inscription : @user.CreatedAt.ToString("dd/MM/yyyy")</li>
+            </ul>
+
+            @if (scouts.Any())
+            {
+                <hr>
+                <h6>Profils scouts associés</h6>
+                @foreach (var scout in scouts)
+                {
+                    <div class="border rounded p-3 mb-2">
+                        <strong>@scout.Nom @scout.Prenoms</strong><br>
+                        <small>Matricule : @(scout.Matricule ?? "-") | Groupe : @scout.Groupe.Nom</small>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+}
+
+@if (Model.Statut == MangoTaikaDistrict.Domain.Enums.StatutDemandeRgpd.EN_ATTENTE || Model.Statut == MangoTaikaDistrict.Domain.Enums.StatutDemandeRgpd.EN_COURS)
+{
+    <div class="card-modern card">
+        <div class="card-header bg-warning text-dark">
+            <h5 class="mb-0">Traiter la demande</h5>
+        </div>
+        <div class="card-body">
+            <form method="post" asp-action="Traiter">
+                <input type="hidden" name="id" value="@Model.Id" />
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Réponse</label>
+                    <textarea name="reponse" class="form-control" rows="4" required placeholder="Votre réponse à la demande..."></textarea>
+                </div>
+                <div class="d-flex gap-2">
+                    <button type="submit" name="approuver" value="true" class="btn btn-success btn-modern">
+                        <i class="bi bi-check-circle me-1"></i>Approuver
+                    </button>
+                    <button type="submit" name="approuver" value="false" class="btn btn-danger btn-modern">
+                        <i class="bi bi-x-circle me-1"></i>Rejeter
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+}

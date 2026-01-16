@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using System.Diagnostics;
 
 namespace MangoTaikaDistrict.Domain.Entities;
@@ -22,4 +22,6 @@ public class Groupe
     public List<Unite> Unites { get; set; } = new();
     public List<Scout> Scouts { get; set; } = new();
     public List<Activite> Activites { get; set; } = new();
+    public List<Cotisation> Cotisations { get; set; } = new();
+    public List<Nomination> Nominations { get; set; } = new();
 }

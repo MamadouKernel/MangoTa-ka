@@ -1,0 +1,186 @@
+@model List<MangoTaikaDistrict.Domain.Entities.Cotisation>
+@{
+    ViewData["Title"] = "Gestion des Cotisations";
+    var groupes = ViewBag.Groupes as List<MangoTaikaDistrict.Domain.Entities.Groupe> ?? new();
+    Guid? selectedGroupeId = ViewBag.SelectedGroupeId as Guid?;
+    string periode = ViewBag.Periode as string ?? "";
+    string start = ViewBag.Start as string ?? "";
+    string end = ViewBag.End as string ?? "";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-1"><i class="bi bi-cash-coin me-2 text-success"></i>Cotisations</h2>
+        <p class="text-muted mb-0">Suivi des paiements et cotisations</p>
+    </div>
+    <div>
+        <a asp-area="Admin" asp-controller="Cotisations" asp-action="Create" class="btn btn-primary btn-modern me-2">
+            <i class="bi bi-plus-circle me-1"></i>Nouvelle Cotisation
+        </a>
+        <a asp-area="Admin" asp-controller="Cotisations" asp-action="Import" class="btn btn-success btn-modern">
+            <i class="bi bi-file-earmark-excel me-1"></i>Importer Excel
+        </a>
+    </div>
+</div>
+
+<!-- Filtres -->
+<div class="card-modern card mb-4">
+    <div class="card-body">
+        <h5 class="card-title mb-3"><i class="bi bi-funnel me-2"></i>Filtres</h5>
+        <form method="get" class="row g-3">
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Groupe</label>
+                <select name="groupeId" class="form-select form-modern">
+                    <option value="">-- Tous --</option>
+                    @foreach (var g in groupes)
+                    {
+                        var isSelected = selectedGroupeId.HasValue && g.Id == selectedGroupeId.Value;
+                        <option value="@g.Id" selected="@(isSelected ? "selected" : null)">@g.Nom</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Période</label>
+                <input type="text" name="periode" value="@periode" placeholder="Ex: 2026" class="form-control form-modern" />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label fw-semibold">Début</label>
+                <input type="date" name="start" value="@start" class="form-control form-modern" />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label fw-semibold">Fin</label>
+                <input type="date" name="end" value="@end" class="form-control form-modern" />
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary btn-modern me-2 w-100">
+                    <i class="bi bi-search me-1"></i>Filtrer
+                </button>
+            </div>
+        </form>
+        <div class="mt-3">
+            <a asp-area="Admin" asp-controller="Cotisations" asp-action="Index" class="btn btn-outline-secondary btn-sm">
+                <i class="bi bi-arrow-clockwise me-1"></i>Réinitialiser
+            </a>
+            @if (selectedGroupeId.HasValue || !string.IsNullOrEmpty(periode) || !string.IsNullOrEmpty(start) || !string.IsNullOrEmpty(end))
+            {
+                var routeValues = new Dictionary<string, string>();
+                if (selectedGroupeId.HasValue)
+                    routeValues["groupeId"] = selectedGroupeId.Value.ToString();
+                if (!string.IsNullOrEmpty(periode))
+                    routeValues["periode"] = periode;
+                if (!string.IsNullOrEmpty(start))
+                    routeValues["start"] = start;
+                if (!string.IsNullOrEmpty(end))
+                    routeValues["end"] = end;
+
+                <a asp-area="Admin" asp-controller="Reports" asp-action="ExportCotisationsExcel" asp-all-route-data="routeValues" 
+                   class="btn btn-outline-success btn-sm ms-2">
+                    <i class="bi bi-file-earmark-excel me-1"></i>Excel
+                </a>
+                <a asp-area="Admin" asp-controller="Reports" asp-action="ExportCotisationsCsv" asp-all-route-data="routeValues" 
+                   class="btn btn-outline-info btn-sm ms-2">
+                    <i class="bi bi-filetype-csv me-1"></i>CSV
+                </a>
+                <a asp-area="Admin" asp-controller="Reports" asp-action="ExportCotisationsPdfOfficial" asp-all-route-data="routeValues" 
+                   class="btn btn-outline-danger btn-sm ms-2">
+                    <i class="bi bi-file-pdf me-1"></i>PDF Officiel
+                </a>
+            }
+            else
+            {
+                <a asp-area="Admin" asp-controller="Reports" asp-action="ExportCotisationsExcel" 
+                   class="btn btn-outline-success btn-sm ms-2">
+                    <i class="bi bi-file-earmark-excel me-1"></i>Excel
+                </a>
+                <a asp-area="Admin" asp-controller="Reports" asp-action="ExportCotisationsCsv" 
+                   class="btn btn-outline-info btn-sm ms-2">
+                    <i class="bi bi-filetype-csv me-1"></i>CSV
+                </a>
+                <a asp-area="Admin" asp-controller="Reports" asp-action="ExportCotisationsPdfOfficial" 
+                   class="btn btn-outline-danger btn-sm ms-2">
+                    <i class="bi bi-file-pdf me-1"></i>PDF Officiel
+                </a>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Tableau -->
+<div class="card-modern card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-modern table-hover align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th><i class="bi bi-person me-1"></i>Scout</th>
+                        <th><i class="bi bi-people me-1"></i>Groupe</th>
+                        <th><i class="bi bi-calendar me-1"></i>Période</th>
+                        <th class="text-end"><i class="bi bi-currency-exchange me-1"></i>Montant Attendu</th>
+                        <th class="text-end"><i class="bi bi-cash me-1"></i>Montant Payé</th>
+                        <th><i class="bi bi-info-circle me-1"></i>Statut</th>
+                        <th><i class="bi bi-calendar-event me-1"></i>Date Enregistrement</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Any())
+                    {
+                        @foreach (var c in Model)
+                        {
+                            <tr>
+                                <td class="fw-semibold">@c.Scout?.Nom @c.Scout?.Prenoms</td>
+                                <td><span class="badge bg-info">@c.Groupe?.Nom</span></td>
+                                <td><span class="badge bg-secondary">@c.Periode</span></td>
+                                <td class="text-end fw-semibold">@c.MontantAttendu.ToString("N2") FCFA</td>
+                                <td class="text-end fw-semibold">@c.MontantPaye.ToString("N2") FCFA</td>
+                                <td>
+                                    @if (c.Statut == MangoTaikaDistrict.Domain.Enums.StatutCotisation.PAYE)
+                                    {
+                                        <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i>@c.Statut</span>
+                                    }
+                                    else if (c.Statut == MangoTaikaDistrict.Domain.Enums.StatutCotisation.PARTIEL)
+                                    {
+                                        <span class="badge bg-warning"><i class="bi bi-hourglass-split me-1"></i>@c.Statut</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger"><i class="bi bi-x-circle me-1"></i>@c.Statut</span>
+                                    }
+                                </td>
+                                <td>@c.DateEnregistrement.ToString("dd/MM/yyyy")</td>
+                                <td class="text-end">
+                                    <div class="btn-group" role="group">
+                                        <a asp-area="Admin" asp-controller="Cotisations" asp-action="Details" asp-route-id="@c.Id" 
+                                           class="btn btn-sm btn-outline-info" title="Détails">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <a asp-area="Admin" asp-controller="Cotisations" asp-action="Edit" asp-route-id="@c.Id" 
+                                           class="btn btn-sm btn-outline-primary" title="Modifier">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <a asp-area="Admin" asp-controller="Cotisations" asp-action="Delete" asp-route-id="@c.Id" 
+                                           class="btn btn-sm btn-outline-danger" title="Supprimer">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="8" class="text-center py-5">
+                                <i class="bi bi-inbox fs-1 text-muted d-block mb-2"></i>
+                                <p class="text-muted">Aucune cotisation trouvée</p>
+                                <a asp-area="Admin" asp-controller="Cotisations" asp-action="Create" class="btn btn-primary">
+                                    <i class="bi bi-plus-circle me-1"></i>Ajouter une cotisation
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

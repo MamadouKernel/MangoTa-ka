@@ -1,27 +1,135 @@
 @model MangoTaikaDistrict.Domain.Entities.Scout
 @{
-    ViewData["Title"] = "Modifier scout";
+    ViewData["Title"] = "Modifier un Scout";
     var groupes = ViewBag.Groupes as List<MangoTaikaDistrict.Domain.Entities.Groupe> ?? new();
 }
-<h2>Modifier un scout</h2>
 
-<form method="post">
-    <input type="hidden" asp-for="Id" />
-    <div>Matricule: <input asp-for="Matricule" /></div>
-    <div>Nom: <input asp-for="Nom" /></div>
-    <div>Prénoms: <input asp-for="Prenoms" /></div>
-    <div>Sexe: <input asp-for="Sexe" /></div>
-    <div>
-        Groupe:
-        <select asp-for="GroupeId">
-            @foreach (var g in groupes)
-            {
-                <option value="@g.Id" selected="@(g.Id == Model.GroupeId)">@g.Nom</option>
-            }
-        </select>
+<div class="mb-4">
+    <h2 class="fw-bold mb-1"><i class="bi bi-pencil-square me-2 text-primary"></i>Modifier un Scout</h2>
+    <p class="text-muted">Mettre à jour les informations du scout</p>
+</div>
+
+<div class="card-modern card">
+    <div class="card-body">
+        <form method="post" class="form-modern">
+            <input type="hidden" asp-for="Id" />
+            
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label asp-for="Matricule" class="form-label fw-semibold">
+                        <i class="bi bi-hash me-1"></i>Matricule
+                    </label>
+                    <input asp-for="Matricule" class="form-control" placeholder="Ex: SCOUT001" />
+                    <span asp-validation-for="Matricule" class="text-danger"></span>
+                </div>
+                
+                <div class="col-md-6">
+                    <label asp-for="Nom" class="form-label fw-semibold">
+                        <i class="bi bi-person me-1"></i>Nom *
+                    </label>
+                    <input asp-for="Nom" class="form-control" required />
+                    <span asp-validation-for="Nom" class="text-danger"></span>
+                </div>
+                
+                <div class="col-md-6">
+                    <label asp-for="Prenoms" class="form-label fw-semibold">
+                        <i class="bi bi-person-badge me-1"></i>Prénoms *
+                    </label>
+                    <input asp-for="Prenoms" class="form-control" required />
+                    <span asp-validation-for="Prenoms" class="text-danger"></span>
+                </div>
+                
+                <div class="col-md-6">
+                    <label asp-for="Sexe" class="form-label fw-semibold">
+                        <i class="bi bi-gender-ambiguous me-1"></i>Sexe
+                    </label>
+                    <select asp-for="Sexe" class="form-select">
+                        <option value="">-- Sélectionner --</option>
+                        <option value="M" selected="@(Model.Sexe == "M")">Masculin</option>
+                        <option value="F" selected="@(Model.Sexe == "F")">Féminin</option>
+                    </select>
+                    <span asp-validation-for="Sexe" class="text-danger"></span>
+                </div>
+                
+                <div class="col-md-6">
+                    <label asp-for="DateNaissance" class="form-label fw-semibold">
+                        <i class="bi bi-calendar-event me-1"></i>Date de naissance
+                    </label>
+                    <input asp-for="DateNaissance" type="date" class="form-control" 
+                           value="@(Model.DateNaissance?.ToString("yyyy-MM-dd"))" />
+                    <span asp-validation-for="DateNaissance" class="text-danger"></span>
+                </div>
+                
+                <div class="col-md-6">
+                    <label asp-for="LieuNaissance" class="form-label fw-semibold">
+                        <i class="bi bi-geo-alt me-1"></i>Lieu de naissance
+                    </label>
+                    <input asp-for="LieuNaissance" class="form-control" placeholder="Ex: Abidjan, Côte d'Ivoire" />
+                    <span asp-validation-for="LieuNaissance" class="text-danger"></span>
+                </div>
+                
+                <div class="col-md-12">
+                    <label asp-for="Adresse" class="form-label fw-semibold">
+                        <i class="bi bi-house me-1"></i>Adresse
+                    </label>
+                    <input asp-for="Adresse" class="form-control" placeholder="Adresse complète" />
+                    <span asp-validation-for="Adresse" class="text-danger"></span>
+                </div>
+                
+                <div class="col-md-6">
+                    <label asp-for="GpsLat" class="form-label fw-semibold">
+                        <i class="bi bi-geo me-1"></i>Latitude GPS
+                    </label>
+                    <input asp-for="GpsLat" type="number" step="0.000001" class="form-control" placeholder="Ex: -4.123456" />
+                    <span asp-validation-for="GpsLat" class="text-danger"></span>
+                </div>
+                
+                <div class="col-md-6">
+                    <label asp-for="GpsLng" class="form-label fw-semibold">
+                        <i class="bi bi-geo me-1"></i>Longitude GPS
+                    </label>
+                    <input asp-for="GpsLng" type="number" step="0.000001" class="form-control" placeholder="Ex: 15.123456" />
+                    <span asp-validation-for="GpsLng" class="text-danger"></span>
+                </div>
+                
+                <div class="col-md-6">
+                    <label asp-for="GroupeId" class="form-label fw-semibold">
+                        <i class="bi bi-people me-1"></i>Groupe *
+                    </label>
+                    <select asp-for="GroupeId" class="form-select" required>
+                        @foreach (var g in groupes)
+                        {
+                            <option value="@g.Id" selected="@(g.Id == Model.GroupeId)">@g.Nom</option>
+                        }
+                    </select>
+                    <span asp-validation-for="GroupeId" class="text-danger"></span>
+                </div>
+                
+                <div class="col-md-6">
+                    <label asp-for="Statut" class="form-label fw-semibold">
+                        <i class="bi bi-info-circle me-1"></i>Statut
+                    </label>
+                    <select asp-for="Statut" class="form-select">
+                        <option value="Actif" selected="@(Model.Statut == "Actif")">Actif</option>
+                        <option value="Inactif" selected="@(Model.Statut == "Inactif")">Inactif</option>
+                        <option value="Transféré" selected="@(Model.Statut == "Transféré")">Transféré</option>
+                    </select>
+                    <span asp-validation-for="Statut" class="text-danger"></span>
+                </div>
+            </div>
+            
+            <div class="mt-4 d-flex gap-2">
+                <button type="submit" class="btn btn-primary btn-modern">
+                    <i class="bi bi-check-circle me-1"></i>Sauvegarder
+                </button>
+                <a asp-area="Admin" asp-controller="Scouts" asp-action="Index" class="btn btn-outline-secondary btn-modern">
+                    <i class="bi bi-arrow-left me-1"></i>Retour
+                </a>
+            </div>
+        </form>
     </div>
-    <div>Statut: <input asp-for="Statut" /></div>
-    <button type="submit">Sauver</button>
-</form>
+</div>
 
-<p><a asp-area="Admin" asp-controller="Scouts" asp-action="Index">Retour</a></p>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

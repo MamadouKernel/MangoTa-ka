@@ -1,5 +1,57 @@
+/* ============================================
+   DESIGN MODERNE - MANGO TAIKA DISTRICT
+   Clean, Soft & Modern avec couleurs du logo
+   Vert & Blanc
+   ============================================ */
+
+/* Variables CSS - Couleurs du logo (VERT & BLANC) */
+:root {
+  /* Palette Vert - Basée sur le logo */
+  --color-primary: #2D5016;           /* Vert foncé principal */
+  --color-primary-medium: #4A7C2A;    /* Vert moyen */
+  --color-primary-light: #6BA644;     /* Vert clair */
+  --color-primary-lighter: #8FCB6B;   /* Vert très clair */
+  --color-primary-lightest: #B8E09A;  /* Vert le plus clair */
+  --color-primary-soft: #E8F5E1;     /* Vert très doux (background) */
+  
+  /* Blanc et nuances */
+  --color-white: #FFFFFF;
+  --color-white-soft: #FAFAFA;
+  --color-white-warm: #F5F5F5;
+  
+  /* Accents et compléments */
+  --color-accent: #4A7C2A;            /* Vert accent (même que primary-medium) */
+  --color-accent-light: #6BA644;       /* Vert accent clair */
+  --color-text-dark: #1A3009;          /* Vert très foncé pour textes */
+  --color-text-medium: #2D5016;        /* Vert foncé pour textes */
+  --color-text-light: #6B7A5F;          /* Gris-vert pour textes secondaires */
+  --color-border: #D4E4C8;              /* Vert très clair pour bordures */
+  
+  /* Ombres douces avec vert */
+  --shadow-sm: 0 2px 8px rgba(45, 80, 22, 0.08);
+  --shadow-md: 0 4px 16px rgba(45, 80, 22, 0.12);
+  --shadow-lg: 0 8px 32px rgba(45, 80, 22, 0.16);
+  --shadow-xl: 0 16px 48px rgba(45, 80, 22, 0.2);
+  
+  /* Transitions */
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Border radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+}
+
+/* ============================================
+   BASE & TYPOGRAPHY
+   ============================================ */
+
 html {
   font-size: 14px;
+  scroll-behavior: smooth;
 }
 
 @media (min-width: 768px) {
@@ -8,24 +60,838 @@ html {
   }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
-}
-
 body {
-  margin-bottom: 60px;
+  margin: 0;
+  font-family: 'Poppins', 'Myriad Pro', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: linear-gradient(135deg, var(--color-white-soft) 0%, var(--color-primary-soft) 30%, var(--color-white-soft) 70%, var(--color-white) 100%);
+  background-attachment: fixed;
+  color: var(--color-text-dark);
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+h1, h2, h3, h4, h5, h6, .fw-bold, .fw-semibold {
+  font-family: 'Poppins', 'Myriad Pro', sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+  color: var(--color-text-dark);
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+/* ============================================
+   MODERN NAVBAR - BLANC
+   ============================================ */
+
+.navbar {
+  background: white !important;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 2px 20px rgba(45, 80, 22, 0.1);
+  padding: 1.5rem 0;
+  transition: all var(--transition-normal);
+  border-bottom: 2px solid var(--color-primary-soft);
+}
+
+.navbar-brand {
+  font-weight: 700;
+  font-size: 1.5rem;
+  transition: transform var(--transition-fast);
+  color: var(--color-primary) !important;
+  padding: 0.5rem 0;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.navbar-brand:hover {
+  transform: scale(1.02);
+}
+
+.logo-nav {
+  height: 100px !important;
+  width: auto;
+  max-width: 350px;
+  transition: transform var(--transition-normal);
+  filter: drop-shadow(0 6px 20px rgba(45, 80, 22, 0.3));
+  background: linear-gradient(135deg, var(--color-primary-soft) 0%, white 100%);
+  padding: 0.75rem;
+  border-radius: var(--radius-lg);
+  border: 3px solid var(--color-primary-soft);
+  box-shadow: 0 4px 16px rgba(45, 80, 22, 0.15);
+}
+
+.logo-nav:hover {
+  transform: scale(1.08);
+  filter: drop-shadow(0 8px 24px rgba(45, 80, 22, 0.4));
+  box-shadow: 0 6px 24px rgba(45, 80, 22, 0.25);
+  border-color: var(--color-primary-light);
+}
+
+.brand-text {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-primary) !important;
+  letter-spacing: 0.5px;
+  margin-left: 0.75rem;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-medium) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.nav-link {
+  font-weight: 500;
+  padding: 0.75rem 1.25rem !important;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-normal);
+  position: relative;
+  color: var(--color-text-dark) !important;
+  font-size: 1rem;
+  margin: 0 0.25rem;
+  display: flex;
+  align-items: center;
+}
+
+.nav-link i {
+  font-size: 1.1rem;
+  margin-right: 0.5rem;
+  transition: transform var(--transition-fast);
+  color: var(--color-primary);
+}
+
+.nav-link:hover i {
+  transform: scale(1.15);
+  color: var(--color-primary-light);
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0.5rem;
+  left: 50%;
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+  border-radius: 2px;
+  transform: translateX(-50%);
+  transition: width var(--transition-normal);
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  width: 70%;
+}
+
+.nav-link:hover {
+  background: var(--color-primary-soft);
+  transform: translateY(-2px);
+  color: var(--color-primary) !important;
+  box-shadow: 0 4px 12px rgba(45, 80, 22, 0.15);
+}
+
+.nav-link.active {
+  color: var(--color-primary) !important;
+  font-weight: 600;
+}
+
+/* Navbar Toggler pour fond blanc */
+.navbar-toggler {
+  border: 2px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 0.75rem;
+  transition: all var(--transition-normal);
+}
+
+.navbar-toggler:hover {
+  background: var(--color-primary-soft);
+  border-color: var(--color-primary-light);
+}
+
+.navbar-toggler:focus {
+  box-shadow: 0 0 0 0.2rem rgba(45, 80, 22, 0.25);
+  outline: none;
+}
+
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(45, 80, 22, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+/* ============================================
+   MODERN BUTTONS - VERT & BLANC
+   ============================================ */
+
+.btn {
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  transition: all var(--transition-normal);
+  border: none;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.btn:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-medium) 100%);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, var(--color-primary-medium) 0%, var(--color-primary-light) 100%);
+  color: white;
+}
+
+.btn-success {
+  background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-primary-lighter) 100%);
+  color: white;
+}
+
+.btn-success:hover {
+  background: linear-gradient(135deg, var(--color-primary-lighter) 0%, var(--color-primary-light) 100%);
+  color: white;
+}
+
+.btn-warning {
+  background: linear-gradient(135deg, var(--color-primary-medium) 0%, var(--color-primary-light) 100%);
+  color: white;
+}
+
+.btn-warning:hover {
+  background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-primary-medium) 100%);
+  color: white;
+}
+
+.btn-outline-primary {
+  border: 2px solid var(--color-primary);
+  color: var(--color-primary);
+  background: transparent;
+}
+
+.btn-outline-primary:hover {
+  background: var(--color-primary);
+  color: white;
+}
+
+.btn-outline-light {
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  color: white;
+  background: transparent;
+}
+
+.btn-outline-light:hover {
+  background: white;
+  color: var(--color-primary);
+}
+
+.btn-light {
+  background: white;
+  color: var(--color-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-light:hover {
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  transform: translateY(-2px);
+}
+
+.btn-info {
+  background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-primary-lighter) 100%);
+  color: white;
+}
+
+.btn-info:hover {
+  background: linear-gradient(135deg, var(--color-primary-lighter) 0%, var(--color-primary-light) 100%);
+  color: white;
+}
+
+/* ============================================
+   MODERN CARDS - BLANC & VERT
+   ============================================ */
+
+.card {
+  border: none;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-normal);
+  overflow: hidden;
+  background: white;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.card-modern {
+  background: white;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-normal);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+}
+
+.card-modern:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-primary-light);
+}
+
+/* Glassmorphism Card */
+.card-modern-glass {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-normal);
+}
+
+.card-modern-glass:hover {
+  background: rgba(255, 255, 255, 1);
+  box-shadow: var(--shadow-xl);
+  transform: translateY(-4px);
+  border-color: var(--color-primary-light);
+}
+
+/* ============================================
+   MODERN FORMS - VERT
+   ============================================ */
+
+.form-control,
+.form-select {
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1rem;
+  transition: all var(--transition-normal);
+  background: white;
+  font-size: 0.95rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 0.2rem rgba(45, 80, 22, 0.15);
+  transform: translateY(-1px);
+  outline: none;
+}
+
+.form-floating > label {
+  color: var(--color-text-light);
+  font-weight: 500;
+}
+
+.form-floating > .form-control:focus ~ label,
+.form-floating > .form-control:not(:placeholder-shown) ~ label {
+  color: var(--color-primary);
+}
+
+/* ============================================
+   MODERN TABLES - VERT & BLANC
+   ============================================ */
+
+.table {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.table thead {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-medium) 100%);
+  color: white;
+}
+
+.table thead th {
+  border: none;
+  padding: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.5px;
+}
+
+.table tbody tr {
+  transition: all var(--transition-fast);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.table tbody tr:hover {
+  background: var(--color-primary-soft);
+  transform: scale(1.01);
+}
+
+.table tbody td {
+  padding: 1rem;
+  vertical-align: middle;
+}
+
+/* ============================================
+   MODERN BADGES - VERT
+   ============================================ */
+
+.badge {
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.75rem;
+  letter-spacing: 0.5px;
+}
+
+.badge-primary {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-medium) 100%);
+  color: white;
+}
+
+.badge-success {
+  background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-primary-lighter) 100%);
+  color: white;
+}
+
+.badge-warning {
+  background: linear-gradient(135deg, var(--color-primary-medium) 0%, var(--color-primary-light) 100%);
+  color: white;
+}
+
+/* ============================================
+   MODERN ALERTS - VERT & BLANC
+   ============================================ */
+
+.alert {
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 1rem 1.5rem;
+  box-shadow: var(--shadow-sm);
+  border-left: 4px solid;
+}
+
+.alert-primary {
+  background: rgba(45, 80, 22, 0.1);
+  border-left-color: var(--color-primary);
+  color: var(--color-text-dark);
+}
+
+.alert-success {
+  background: rgba(107, 166, 68, 0.1);
+  border-left-color: var(--color-primary-light);
+  color: var(--color-text-dark);
+}
+
+.alert-warning {
+  background: rgba(74, 124, 42, 0.1);
+  border-left-color: var(--color-primary-medium);
+  color: var(--color-text-dark);
+}
+
+.alert-info {
+  background: rgba(143, 203, 107, 0.1);
+  border-left-color: var(--color-primary-lighter);
+  color: var(--color-text-dark);
+}
+
+/* ============================================
+   MODERN FOOTER - VERT FONCÉ & BLANC
+   ============================================ */
+
+.modern-footer {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-text-dark) 100%);
+  color: white;
+  padding: 4rem 0 2rem;
+  margin-top: 5rem;
+}
+
+.modern-footer h4,
+.modern-footer h5,
+.modern-footer h6 {
+  color: white;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+.modern-footer .footer-links {
+  list-style: none;
+  padding: 0;
+}
+
+.modern-footer .footer-link {
+  color: rgba(255, 255, 255, 0.85) !important;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.75rem 0;
+  transition: all var(--transition-normal);
+  border-bottom: 2px solid transparent;
+  width: 100%;
+}
+
+.modern-footer .footer-link:hover {
+  color: white !important;
+  transform: translateX(8px);
+  border-bottom-color: rgba(255, 255, 255, 0.4);
+  padding-left: 0.5rem;
+}
+
+.modern-footer .footer-link i {
+  font-size: 1.2rem;
+  margin-right: 0.75rem;
+  transition: transform var(--transition-fast);
+  width: 24px;
+  text-align: center;
+}
+
+.modern-footer .footer-link:hover i {
+  transform: scale(1.2) rotate(5deg);
+}
+
+.logo-footer {
+  height: 70px !important;
+  width: auto;
+  filter: brightness(0) invert(1);
+  transition: transform var(--transition-normal);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2)) brightness(0) invert(1);
+}
+
+.logo-footer:hover {
+  transform: scale(1.08);
+}
+
+/* ============================================
+   HERO SECTION - VERT
+   ============================================ */
+
+.hero-section {
+  position: relative;
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.hero-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, 
+    rgba(45, 80, 22, 0.95) 0%, 
+    rgba(74, 124, 42, 0.9) 50%,
+    rgba(107, 166, 68, 0.85) 100%);
+  z-index: 1;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.1);
+  z-index: 1;
+}
+
+.gradient-text {
+  background: linear-gradient(120deg, white 0%, var(--color-primary-lightest) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.8s ease-out;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* ============================================
+   UTILITIES
+   ============================================ */
+
+.bg-soft-primary {
+  background: linear-gradient(135deg, var(--color-primary-soft) 0%, white 100%);
+}
+
+.bg-soft-accent {
+  background: linear-gradient(135deg, var(--color-primary-soft) 0%, white 100%);
+}
+
+.text-primary {
+  color: var(--color-primary) !important;
+}
+
+.text-accent {
+  color: var(--color-primary-medium) !important;
+}
+
+.shadow-soft {
+  box-shadow: var(--shadow-md);
+}
+
+.shadow-soft-lg {
+  box-shadow: var(--shadow-lg);
+}
+
+/* ============================================
+   SCROLLBAR - VERT
+   ============================================ */
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-primary-soft);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-medium) 100%);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, var(--color-primary-medium) 0%, var(--color-primary-light) 100%);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+  .hero-section {
+    min-height: 400px;
+  }
+  
+  .card-modern {
+    margin-bottom: 1.5rem;
+  }
+  
+  .logo-nav {
+    height: 60px !important;
+    max-width: 200px;
+  }
+  
+  .brand-text {
+    font-size: 1.2rem;
+  }
+  
+  .navbar {
+    padding: 1rem 0;
+  }
+  
+  .nav-link {
+    padding: 0.625rem 1rem !important;
+    font-size: 0.95rem;
+  }
+  
+  .logo-footer {
+    height: 50px !important;
+  }
+  
+  .footer-link {
+    font-size: 0.95rem;
+    padding: 0.625rem 0;
+  }
+}
+
+/* ============================================
+   FOCUS STATES
+   ============================================ */
+
+.btn:focus,
+.form-control:focus,
+.form-select:focus {
+  outline: none;
+  box-shadow: 0 0 0 0.2rem rgba(45, 80, 22, 0.25);
+}
+
+/* ============================================
+   LOADING STATES
+   ============================================ */
+
+.spinner-border {
+  width: 2rem;
+  height: 2rem;
+  border-width: 0.2em;
+  border-color: var(--color-primary);
+  border-right-color: transparent;
+}
+
+/* ============================================
+   CONTAINER MODERN
+   ============================================ */
+
+.container-fluid {
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1200px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container-fluid {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* ============================================
+   SPACING MODERN - SOFT DESIGN
+   ============================================ */
+
+section {
+  padding: 5rem 0;
+}
+
+@media (max-width: 768px) {
+  section {
+    padding: 3rem 0;
+  }
+}
+
+/* Liens améliorés */
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  font-weight: 500;
+}
+
+a:hover {
+  color: var(--color-primary-light);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+a:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Liens dans le contenu */
+.content-link {
+  color: var(--color-primary);
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-normal);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.content-link:hover {
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  text-decoration: none;
+  transform: translateX(4px);
+}
+
+.content-link i {
+  transition: transform var(--transition-fast);
+}
+
+.content-link:hover i {
+  transform: translateX(4px);
+}
+
+/* ============================================
+   OVERRIDE BOOTSTRAP COLORS
+   ============================================ */
+
+.bg-primary {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-medium) 100%) !important;
+}
+
+.text-primary {
+  color: var(--color-primary) !important;
+}
+
+.border-primary {
+  border-color: var(--color-primary) !important;
+}
+
+.bg-success {
+  background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-primary-lighter) 100%) !important;
+}
+
+.text-success {
+  color: var(--color-primary-light) !important;
 }

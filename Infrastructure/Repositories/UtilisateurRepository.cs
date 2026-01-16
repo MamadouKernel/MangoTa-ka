@@ -23,7 +23,32 @@ public class UtilisateurRepository : IUtilisateurRepository
             .ToListAsync();
     }
 
+    public async Task<List<Utilisateur>> GetPendingValidationAsync()
+    {
+        return await _db.Utilisateurs
+            .Where(u => !u.IsValidated && !u.IsActive)
+            .Include(u => u.UtilisateurRoles)
+                .ThenInclude(ur => ur.Role)
+            .OrderBy(u => u.CreatedAt)
+            .ToListAsync();
+    }
+
     public async Task AddAsync(Utilisateur user) => await _db.Utilisateurs.AddAsync(user);
+
+    public Task UpdateAsync(Utilisateur user)
+    {
+        _db.Utilisateurs.Update(user);
+        return Task.CompletedTask;
+    }
+
+    public async Task DeleteAsync(Guid id)
+    {
+        var user = await GetByIdAsync(id);
+        if (user != null)
+        {
+            _db.Utilisateurs.Remove(user);
+        }
+    }
 
     public Task SaveAsync() => _db.SaveChangesAsync();
 }

@@ -1,0 +1,455 @@
+/* ============================================
+   COMPOSANTS MODERNES ADDITIONNELS
+   Design Clean, Soft & Modern - VERT & BLANC
+   ============================================ */
+
+/* Stat Cards Modernes - VERT */
+.stat-card {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-normal);
+  border-left: 4px solid var(--color-primary);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--transition-normal);
+}
+
+.stat-card:hover::before {
+  transform: scaleX(1);
+}
+
+.stat-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-primary-light);
+}
+
+.stat-card .stat-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin: 0.5rem 0;
+  line-height: 1;
+}
+
+.stat-card .stat-label {
+  font-size: 0.9rem;
+  color: var(--color-text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+.stat-card .stat-icon {
+  font-size: 3rem;
+  color: var(--color-primary-soft);
+  margin-bottom: 1rem;
+}
+
+/* Feature Cards - VERT & BLANC */
+.feature-card {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: 2.5rem;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-normal);
+  text-align: center;
+  height: 100%;
+  border: 1px solid var(--color-border);
+}
+
+.feature-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-xl);
+  border-color: var(--color-primary);
+}
+
+.feature-card .feature-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1.5rem;
+  background: linear-gradient(135deg, var(--color-primary-soft) 0%, white 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  color: var(--color-primary);
+  transition: all var(--transition-normal);
+}
+
+.feature-card:hover .feature-icon {
+  transform: scale(1.1) rotate(5deg);
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-medium) 100%);
+  color: white;
+}
+
+/* Modern Input Groups */
+.input-group-modern {
+  position: relative;
+}
+
+.input-group-modern .form-control {
+  padding-left: 3rem;
+}
+
+.input-group-modern .input-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-light);
+  z-index: 10;
+}
+
+.input-group-modern .form-control:focus ~ .input-icon {
+  color: var(--color-primary);
+}
+
+/* Modern Dropdown - VERT */
+.dropdown-menu {
+  border: none;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  padding: 0.75rem;
+  margin-top: 0.75rem;
+  background: white;
+  border: 1px solid var(--color-border);
+  min-width: 220px;
+}
+
+.dropdown-item {
+  border-radius: var(--radius-md);
+  padding: 0.875rem 1.25rem;
+  transition: all var(--transition-normal);
+  font-weight: 500;
+  color: var(--color-text-dark);
+  font-size: 0.95rem;
+  margin-bottom: 0.25rem;
+  display: flex;
+  align-items: center;
+}
+
+.dropdown-item:last-child {
+  margin-bottom: 0;
+}
+
+.dropdown-item i {
+  font-size: 1.1rem;
+  margin-right: 0.75rem;
+  width: 20px;
+  text-align: center;
+  transition: transform var(--transition-fast);
+}
+
+.dropdown-item:hover {
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  transform: translateX(6px);
+  padding-left: 1.5rem;
+}
+
+.dropdown-item:hover i {
+  transform: scale(1.15);
+}
+
+.dropdown-item:active {
+  background: var(--color-primary-lightest);
+  color: var(--color-primary);
+}
+
+.dropdown-divider {
+  margin: 0.75rem 0;
+  border-color: var(--color-border);
+}
+
+/* Modern Pagination - VERT */
+.pagination {
+  gap: 0.5rem;
+}
+
+.page-link {
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1rem;
+  color: var(--color-primary);
+  font-weight: 600;
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+  background: white;
+}
+
+.page-link:hover {
+  background: var(--color-primary);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.page-item.active .page-link {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-medium) 100%);
+  color: white;
+  box-shadow: var(--shadow-md);
+}
+
+/* Modern Breadcrumb - VERT */
+.breadcrumb {
+  background: transparent;
+  padding: 0;
+  margin-bottom: 2rem;
+}
+
+.breadcrumb-item a {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: all var(--transition-fast);
+}
+
+.breadcrumb-item a:hover {
+  color: var(--color-primary-light);
+  text-decoration: underline;
+}
+
+.breadcrumb-item.active {
+  color: var(--color-text-light);
+}
+
+/* Modern Modal - VERT & BLANC */
+.modal-content {
+  border: none;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+}
+
+.modal-header {
+  border-bottom: 1px solid var(--color-border);
+  padding: 1.5rem;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-medium) 100%);
+  color: white;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.modal-header .btn-close {
+  filter: brightness(0) invert(1);
+}
+
+.modal-body {
+  padding: 2rem;
+  background: white;
+}
+
+.modal-footer {
+  border-top: 1px solid var(--color-border);
+  padding: 1.5rem;
+  background: var(--color-white-soft);
+}
+
+/* Modern Progress Bar - VERT */
+.progress {
+  height: 10px;
+  border-radius: var(--radius-sm);
+  background: var(--color-primary-soft);
+  overflow: hidden;
+}
+
+.progress-bar {
+  background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+  transition: width var(--transition-slow);
+}
+
+/* Modern Tabs - VERT */
+.nav-tabs {
+  border-bottom: 2px solid var(--color-border);
+}
+
+.nav-tabs .nav-link {
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: var(--color-text-light);
+  font-weight: 600;
+  padding: 1rem 1.5rem;
+  transition: all var(--transition-fast);
+  margin-right: 0.5rem;
+}
+
+.nav-tabs .nav-link:hover {
+  border-bottom-color: var(--color-primary-lightest);
+  color: var(--color-primary);
+  background: var(--color-primary-soft);
+}
+
+.nav-tabs .nav-link.active {
+  border-bottom-color: var(--color-primary);
+  color: var(--color-primary);
+  background: transparent;
+}
+
+/* Modern Tooltip - VERT */
+.tooltip {
+  font-size: 0.875rem;
+}
+
+.tooltip-inner {
+  background: var(--color-primary);
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 0.75rem;
+}
+
+/* Modern Spinner - VERT */
+.spinner-modern {
+  width: 3rem;
+  height: 3rem;
+  border: 4px solid var(--color-primary-soft);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Modern Divider - VERT */
+.divider-modern {
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--color-border) 50%, transparent 100%);
+  margin: 2rem 0;
+}
+
+/* Modern Section Title - VERT */
+.section-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 1rem;
+  position: relative;
+  padding-bottom: 1rem;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+  border-radius: 2px;
+}
+
+/* Modern Empty State - VERT */
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--color-text-light);
+}
+
+.empty-state-icon {
+  font-size: 4rem;
+  color: var(--color-primary-soft);
+  margin-bottom: 1rem;
+}
+
+.empty-state-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  margin-bottom: 0.5rem;
+}
+
+.empty-state-text {
+  font-size: 1rem;
+  color: var(--color-text-light);
+}
+
+/* Modern Loading Overlay - BLANC */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+/* Modern Gradient Backgrounds - VERT */
+.bg-gradient-primary {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-medium) 100%);
+}
+
+.bg-gradient-success {
+  background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-primary-lighter) 100%);
+}
+
+.bg-gradient-soft {
+  background: linear-gradient(135deg, var(--color-primary-soft) 0%, white 100%);
+}
+
+/* Modern Text Effects - VERT */
+.text-gradient {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Modern Shadows - VERT */
+.shadow-soft-sm {
+  box-shadow: 0 2px 4px rgba(45, 80, 22, 0.06);
+}
+
+.shadow-soft {
+  box-shadow: 0 4px 12px rgba(45, 80, 22, 0.1);
+}
+
+.shadow-soft-md {
+  box-shadow: 0 8px 24px rgba(45, 80, 22, 0.12);
+}
+
+.shadow-soft-lg {
+  box-shadow: 0 16px 48px rgba(45, 80, 22, 0.16);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .stat-card {
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .stat-card .stat-value {
+    font-size: 2rem;
+  }
+  
+  .feature-card {
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .section-title {
+    font-size: 2rem;
+  }
+}

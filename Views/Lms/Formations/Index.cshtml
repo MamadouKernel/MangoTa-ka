@@ -1,0 +1,72 @@
+@model List<MangoTaikaDistrict.Domain.Entities.Formation>
+@{
+    ViewData["Title"] = "Formations";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-1"><i class="bi bi-book me-2 text-primary"></i>Formations</h2>
+        <p class="text-muted mb-0">Parcourez et inscrivez-vous aux formations disponibles</p>
+    </div>
+    @if (User.IsInRole("SCOUT"))
+    {
+        <a asp-controller="MesFormations" asp-action="Index" class="btn btn-outline-primary btn-modern">
+            <i class="bi bi-list-check me-1"></i>Mes formations
+        </a>
+    }
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle me-2"></i>@TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-triangle me-2"></i>@TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="row g-4">
+    @foreach (var formation in Model.Where(f => f.EstActive))
+    {
+        <div class="col-md-6 col-lg-4">
+            <div class="card-modern card h-100">
+                @if (!string.IsNullOrEmpty(formation.ImageUrl))
+                {
+                    <img src="@formation.ImageUrl" class="card-img-top" alt="@formation.Titre" style="height: 200px; object-fit: cover;">
+                }
+                else
+                {
+                    <div class="card-img-top bg-primary bg-opacity-10 d-flex align-items-center justify-content-center" style="height: 200px;">
+                        <i class="bi bi-book fs-1 text-primary"></i>
+                    </div>
+                }
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">@formation.Titre</h5>
+                    <p class="card-text text-muted flex-grow-1">@(formation.Description.Length > 100 ? formation.Description.Substring(0, 100) + "..." : formation.Description)</p>
+                    <div class="mb-3">
+                        <span class="badge bg-info">@formation.Niveau</span>
+                        <span class="badge bg-secondary">@formation.DureeEstimee h</span>
+                    </div>
+                    <a asp-action="Details" asp-route-id="@formation.Id" class="btn btn-primary btn-modern w-100">
+                        <i class="bi bi-eye me-1"></i>Voir les détails
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@if (!Model.Any(f => f.EstActive))
+{
+    <div class="text-center py-5">
+        <i class="bi bi-inbox fs-1 text-muted d-block mb-3"></i>
+        <p class="text-muted">Aucune formation disponible pour le moment</p>
+    </div>
+}

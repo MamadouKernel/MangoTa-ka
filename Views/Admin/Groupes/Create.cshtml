@@ -1,17 +1,87 @@
-﻿@model MangoTaikaDistrict.Domain.Entities.Groupe
+@model MangoTaikaDistrict.Domain.Entities.Groupe
 @{
-    ViewData["Title"] = "Créer groupe";
+    ViewData["Title"] = "Créer un Groupe";
 }
-<h2>Créer un groupe</h2>
 
-<form method="post">
-    <div>Nom: <input asp-for="Nom" /></div>
-    <div>Adresse: <input asp-for="Adresse" /></div>
-    <div>Téléphone: <input asp-for="ContactTel" /></div>
-    <div>Email: <input asp-for="ContactEmail" /></div>
-    <div>GPS Lat: <input asp-for="GpsLat" /></div>
-    <div>GPS Lng: <input asp-for="GpsLng" /></div>
-    <button type="submit">Enregistrer</button>
-</form>
+<div class="mb-4">
+    <h2 class="fw-bold mb-1"><i class="bi bi-people me-2 text-success"></i>Créer un Groupe</h2>
+    <p class="text-muted">Ajouter un nouveau groupe au district</p>
+</div>
 
-<p><a asp-area="Admin" asp-controller="Groupes" asp-action="Index">Retour</a></p>
+<div class="card-modern card">
+    <div class="card-body">
+        <form method="post" class="form-modern">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label asp-for="Nom" class="form-label fw-semibold">
+                        <i class="bi bi-building me-1"></i>Nom du Groupe *
+                    </label>
+                    <input asp-for="Nom" class="form-control" required placeholder="Ex: Groupe Scout de..." />
+                    <span asp-validation-for="Nom" class="text-danger"></span>
+                </div>
+                
+                <div class="col-md-6">
+                    <label asp-for="Adresse" class="form-label fw-semibold">
+                        <i class="bi bi-geo-alt me-1"></i>Adresse
+                    </label>
+                    <input asp-for="Adresse" class="form-control" placeholder="Adresse complète" />
+                    <span asp-validation-for="Adresse" class="text-danger"></span>
+                </div>
+                
+                <div class="col-md-6">
+                    <label asp-for="ContactTel" class="form-label fw-semibold">
+                        <i class="bi bi-telephone me-1"></i>Téléphone
+                    </label>
+                    <input asp-for="ContactTel" class="form-control" placeholder="Ex: 0100000000" />
+                    <span asp-validation-for="ContactTel" class="text-danger"></span>
+                </div>
+                
+                <div class="col-md-6">
+                    <label asp-for="ContactEmail" class="form-label fw-semibold">
+                        <i class="bi bi-envelope me-1"></i>Email
+                    </label>
+                    <input asp-for="ContactEmail" type="email" class="form-control" placeholder="contact@groupe.local" />
+                    <span asp-validation-for="ContactEmail" class="text-danger"></span>
+                </div>
+                
+                <div class="col-md-6">
+                    <label asp-for="GpsLat" class="form-label fw-semibold">
+                        <i class="bi bi-geo me-1"></i>Latitude GPS
+                    </label>
+                    <input asp-for="GpsLat" type="number" step="0.000001" class="form-control" placeholder="Ex: -4.123456" />
+                    <span asp-validation-for="GpsLat" class="text-danger"></span>
+                </div>
+                
+                <div class="col-md-6">
+                    <label asp-for="GpsLng" class="form-label fw-semibold">
+                        <i class="bi bi-geo me-1"></i>Longitude GPS
+                    </label>
+                    <input asp-for="GpsLng" type="number" step="0.000001" class="form-control" placeholder="Ex: 15.123456" />
+                    <span asp-validation-for="GpsLng" class="text-danger"></span>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-check form-switch mt-4">
+                        <input asp-for="IsActive" class="form-check-input" type="checkbox" checked />
+                        <label asp-for="IsActive" class="form-check-label fw-semibold">
+                            <i class="bi bi-toggle-on me-1"></i>Groupe actif
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-4 d-flex gap-2">
+                <button type="submit" class="btn btn-primary btn-modern">
+                    <i class="bi bi-check-circle me-1"></i>Enregistrer
+                </button>
+                <a asp-area="Admin" asp-controller="Groupes" asp-action="Index" class="btn btn-outline-secondary btn-modern">
+                    <i class="bi bi-arrow-left me-1"></i>Retour
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

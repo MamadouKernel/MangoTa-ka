@@ -1,0 +1,60 @@
+@{
+    ViewData["Title"] = "Carte des Groupes";
+    Layout = "_Layout";
+}
+
+<div class="container-fluid p-0">
+    <div class="bg-primary text-white py-3 mb-3">
+        <div class="container">
+            <h2 class="mb-0"><i class="bi bi-geo-alt-fill me-2"></i>Carte des Groupes du District</h2>
+            <p class="mb-0">Découvrez la localisation de tous les groupes avec leurs informations</p>
+        </div>
+    </div>
+    <div id="map" style="height: 600px; width: 100%;"></div>
+</div>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+    // Initialiser la carte centrée sur Abidjan
+    var map = L.map('map').setView([5.3600, -4.0083], 12);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Charger les données des groupes
+    fetch('/Groups/MapData')
+        .then(response => response.json())
+        .then(data => {
+            data.forEach(groupe => {
+                var popupContent = `
+                    <div class="p-2" style="min-width: 250px;">
+                        <h6 class="fw-bold mb-2 text-primary">${groupe.nom}</h6>
+                        ${groupe.adresse ? `<p class="mb-1"><i class="bi bi-geo-alt"></i> ${groupe.adresse}</p>` : ''}
+                        ${groupe.contactTel ? `<p class="mb-1"><i class="bi bi-telephone"></i> ${groupe.contactTel}</p>` : ''}
+                        ${groupe.contactEmail ? `<p class="mb-1"><i class="bi bi-envelope"></i> ${groupe.contactEmail}</p>` : ''}
+                        <hr class="my-2">
+                        <h6 class="fw-semibold mb-2">Maitrise</h6>
+                        ${groupe.maitrise.cg ? `<p class="mb-1"><strong>CG:</strong> ${groupe.maitrise.cg}</p>` : ''}
+                        ${groupe.maitrise.adjoints && groupe.maitrise.adjoints.length > 0 ? 
+                            `<p class="mb-1"><strong>Adjoints:</strong> ${groupe.maitrise.adjoints.join(', ')}</p>` : ''}
+                        <h6 class="fw-semibold mb-2 mt-2">Chefs d'Unité</h6>
+                        ${groupe.maitrise.oisillons ? `<p class="mb-1"><strong>Oisillons:</strong> ${groupe.maitrise.oisillons}</p>` : ''}
+                        ${groupe.maitrise.louveteaux ? `<p class="mb-1"><strong>Louveteaux:</strong> ${groupe.maitrise.louveteaux}</p>` : ''}
+                        ${groupe.maitrise.eclaireurs ? `<p class="mb-1"><strong>Éclaireurs:</strong> ${groupe.maitrise.eclaireurs}</p>` : ''}
+                        ${groupe.maitrise.cheminots ? `<p class="mb-1"><strong>Cheminots:</strong> ${groupe.maitrise.cheminots}</p>` : ''}
+                        ${groupe.maitrise.routiers ? `<p class="mb-1"><strong>Routiers:</strong> ${groupe.maitrise.routiers}</p>` : ''}
+                    </div>
+                `;
+
+                L.marker([groupe.lat, groupe.lng])
+                    .addTo(map)
+                    .bindPopup(popupContent);
+            });
+        })
+        .catch(error => {
+            console.error('Erreur lors du chargement des données:', error);
+        });
+</script>

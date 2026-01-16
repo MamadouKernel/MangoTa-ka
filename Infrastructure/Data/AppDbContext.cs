@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using MangoTaikaDistrict.Domain.Entities;
 
 namespace MangoTaikaDistrict.Infrastructure.Data;
@@ -36,6 +36,25 @@ public class AppDbContext : DbContext
 
     public DbSet<Ticket> Tickets => Set<Ticket>();
     public DbSet<TicketMessage> TicketMessages => Set<TicketMessage>();
+
+    public DbSet<Cotisation> Cotisations => Set<Cotisation>();
+    public DbSet<Nomination> Nominations => Set<Nomination>();
+    public DbSet<ValidationNomination> ValidationsNomination => Set<ValidationNomination>();
+
+    public DbSet<MotCommissaire> MotsCommissaire => Set<MotCommissaire>();
+
+    public DbSet<Competence> Competences => Set<Competence>();
+    public DbSet<ScoutCompetence> ScoutCompetences => Set<ScoutCompetence>();
+    public DbSet<LivreOrPage> LivreOrPages => Set<LivreOrPage>();
+    public DbSet<DemandeDroitRgpd> DemandesDroitRgpd => Set<DemandeDroitRgpd>();
+    public DbSet<AscciStatus> AscciStatuses => Set<AscciStatus>();
+
+    // LMS
+    public DbSet<Formation> Formations => Set<Formation>();
+    public DbSet<ModuleFormation> ModulesFormation => Set<ModuleFormation>();
+    public DbSet<InscriptionFormation> InscriptionsFormation => Set<InscriptionFormation>();
+    public DbSet<ProgressionModule> ProgressionsModule => Set<ProgressionModule>();
+    public DbSet<Certificat> Certificats => Set<Certificat>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -102,5 +121,174 @@ public class AppDbContext : DbContext
             .HasOne(a => a.DemandeAutorisation)
             .WithOne(d => d.Activite)
             .HasForeignKey<DemandeAutorisation>(d => d.ActiviteId);
+
+        // Cotisation relations
+        modelBuilder.Entity<Cotisation>()
+            .HasOne(c => c.Scout)
+            .WithMany(s => s.Cotisations)
+            .HasForeignKey(c => c.ScoutId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Cotisation>()
+            .HasOne(c => c.Groupe)
+            .WithMany(g => g.Cotisations)
+            .HasForeignKey(c => c.GroupeId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Cotisation>()
+            .HasOne(c => c.EnregistrePar)
+            .WithMany()
+            .HasForeignKey(c => c.EnregistreParId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        // Nomination relations
+        modelBuilder.Entity<Nomination>()
+            .HasOne(n => n.Scout)
+            .WithMany(s => s.Nominations)
+            .HasForeignKey(n => n.ScoutId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Nomination>()
+            .HasOne(n => n.Groupe)
+            .WithMany(g => g.Nominations)
+            .HasForeignKey(n => n.GroupeId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Nomination>()
+            .HasOne(n => n.CreePar)
+            .WithMany()
+            .HasForeignKey(n => n.CreeParId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        modelBuilder.Entity<Nomination>()
+            .HasOne(n => n.AutoriteValidation)
+            .WithMany()
+            .HasForeignKey(n => n.AutoriteValidationId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        // ValidationNomination relations
+        modelBuilder.Entity<ValidationNomination>()
+            .HasOne(v => v.Nomination)
+            .WithMany(n => n.Validations)
+            .HasForeignKey(v => v.NominationId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<ValidationNomination>()
+            .HasOne(v => v.Valideur)
+            .WithMany()
+            .HasForeignKey(v => v.ValideurId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // MotCommissaire relations
+        modelBuilder.Entity<MotCommissaire>()
+            .HasOne(m => m.CreatedBy)
+            .WithMany()
+            .HasForeignKey(m => m.CreatedById)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // Utilisateur validation relations
+        modelBuilder.Entity<Utilisateur>()
+            .HasOne(u => u.ValidatedBy)
+            .WithMany()
+            .HasForeignKey(u => u.ValidatedById)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        // ScoutCompetence relations
+        modelBuilder.Entity<ScoutCompetence>()
+            .HasKey(x => x.Id);
+
+        modelBuilder.Entity<ScoutCompetence>()
+            .HasOne(sc => sc.Scout)
+            .WithMany()
+            .HasForeignKey(sc => sc.ScoutId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<ScoutCompetence>()
+            .HasOne(sc => sc.Competence)
+            .WithMany(c => c.ScoutCompetences)
+            .HasForeignKey(sc => sc.CompetenceId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // Scout - Utilisateur relation
+        modelBuilder.Entity<Scout>()
+            .HasOne(s => s.Utilisateur)
+            .WithMany(u => u.Scouts)
+            .HasForeignKey(s => s.UtilisateurId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        // DemandeDroitRgpd relations
+        modelBuilder.Entity<DemandeDroitRgpd>()
+            .HasOne(d => d.Utilisateur)
+            .WithMany(u => u.DemandesDroitRgpd)
+            .HasForeignKey(d => d.UtilisateurId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<DemandeDroitRgpd>()
+            .HasOne(d => d.TraitePar)
+            .WithMany()
+            .HasForeignKey(d => d.TraiteParId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        // AscciStatus relations
+        modelBuilder.Entity<AscciStatus>()
+            .HasOne(a => a.Scout)
+            .WithMany()
+            .HasForeignKey(a => a.ScoutId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<AscciStatus>()
+            .HasOne(a => a.VerifiePar)
+            .WithMany()
+            .HasForeignKey(a => a.VerifieParId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        // LMS Relations
+        modelBuilder.Entity<Formation>()
+            .HasOne(f => f.CreatedBy)
+            .WithMany()
+            .HasForeignKey(f => f.CreatedById)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        modelBuilder.Entity<ModuleFormation>()
+            .HasOne(m => m.Formation)
+            .WithMany(f => f.Modules)
+            .HasForeignKey(m => m.FormationId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<InscriptionFormation>()
+            .HasOne(i => i.Formation)
+            .WithMany(f => f.Inscriptions)
+            .HasForeignKey(i => i.FormationId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<InscriptionFormation>()
+            .HasOne(i => i.Scout)
+            .WithMany()
+            .HasForeignKey(i => i.ScoutId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<ProgressionModule>()
+            .HasOne(p => p.InscriptionFormation)
+            .WithMany(i => i.Progressions)
+            .HasForeignKey(p => p.InscriptionFormationId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<ProgressionModule>()
+            .HasOne(p => p.ModuleFormation)
+            .WithMany(m => m.Progressions)
+            .HasForeignKey(p => p.ModuleFormationId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Certificat>()
+            .HasOne(c => c.InscriptionFormation)
+            .WithMany(i => i.Certificats)
+            .HasForeignKey(c => c.InscriptionFormationId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Certificat>()
+            .HasOne(c => c.EmisPar)
+            .WithMany()
+            .HasForeignKey(c => c.EmisParId)
+            .OnDelete(DeleteBehavior.SetNull);
     }
 }

@@ -1,4 +1,4 @@
-﻿using MangoTaikaDistrict.Domain.Entities;
+using MangoTaikaDistrict.Domain.Entities;
 using MangoTaikaDistrict.Domain.Enums;
 using MangoTaikaDistrict.Infrastructure.Security;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +18,7 @@ public static class DbSeeder
                 new Role{ Code = RoleCode.ADMIN, Libelle="Administrateur" },
                 new Role{ Code = RoleCode.GESTIONNAIRE, Libelle="Gestionnaire" },
                 new Role{ Code = RoleCode.SUPERVISEUR, Libelle="Superviseur" },
+                new Role{ Code = RoleCode.RESPONSABLE_GROUPE, Libelle="Responsable de Groupe" },
                 new Role{ Code = RoleCode.SCOUT, Libelle="Scout" },
                 new Role{ Code = RoleCode.PARENT, Libelle="Parent" },
                 new Role{ Code = RoleCode.CONSULTANT, Libelle="Consultant" }
@@ -54,6 +55,39 @@ public static class DbSeeder
             });
 
             await db.SaveChangesAsync();
+        }
+        else
+        {
+            // Corriger le hash si c'est un placeholder
+            if (admin.PasswordHash == null || 
+                admin.PasswordHash.Contains("CHANGE_ME") || 
+                admin.PasswordHash.Contains("PLACEHOLDER") ||
+                !admin.PasswordHash.StartsWith("PBKDF2$"))
+            {
+                admin.PasswordHash = password.Hash("Admin@2026");
+                admin.IsActive = true;
+                await db.SaveChangesAsync();
+            }
+
+            // S'assurer que l'admin a le rôle ADMIN
+            var hasAdminRole = await db.UtilisateurRoles
+                .Include(ur => ur.Role)
+                .AnyAsync(ur => ur.UtilisateurId == admin.Id && ur.Role.Code == RoleCode.ADMIN);
+
+            if (!hasAdminRole)
+            {
+                var adminRoleId = await db.Roles
+                    .Where(r => r.Code == RoleCode.ADMIN)
+                    .Select(r => r.Id)
+                    .FirstAsync();
+
+                db.UtilisateurRoles.Add(new UtilisateurRole
+                {
+                    UtilisateurId = admin.Id,
+                    RoleId = adminRoleId
+                });
+                await db.SaveChangesAsync();
+            }
         }
 
         // Circuit default

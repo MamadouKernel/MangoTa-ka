@@ -1,4 +1,4 @@
-﻿using QuestPDF.Fluent;
+using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 using MangoTaikaDistrict.Domain.Entities;
@@ -216,11 +216,11 @@ public class ScoutsOfficialPdfDocument : IDocument
 
             col.Item().AlignCenter().PaddingTop(8).Text(x =>
             {
-                x.Span("Page ");
-                x.CurrentPageNumber();
-                x.Span(" / ");
-                x.TotalPages();
-            }).FontSize(9).FontColor(Colors.Grey.Darken2);
+                x.Span("Page ").FontSize(9).FontColor(Colors.Grey.Darken2);
+                x.CurrentPageNumber().FontSize(9).FontColor(Colors.Grey.Darken2);
+                x.Span(" / ").FontSize(9).FontColor(Colors.Grey.Darken2);
+                x.TotalPages().FontSize(9).FontColor(Colors.Grey.Darken2);
+            });
         });
     }
 }

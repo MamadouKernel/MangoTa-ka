@@ -23,5 +23,12 @@ public interface IContentRepository
     Task<LivreOrMessage?> GetGuestbookAsync(Guid id);
     Task AddGuestbookAsync(LivreOrMessage m);
 
+    // Livre d'or pages préremplies
+    Task<List<LivreOrPage>> GetLivreOrPagesAsync();
+    Task<LivreOrPage?> GetLivreOrPageAsync(Guid id);
+    Task AddLivreOrPageAsync(LivreOrPage page);
+    Task UpdateLivreOrPageAsync(LivreOrPage page);
+    Task DeleteLivreOrPageAsync(Guid id);
+
     Task SaveAsync();
 }

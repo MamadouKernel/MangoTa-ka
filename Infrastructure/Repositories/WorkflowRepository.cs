@@ -16,7 +16,7 @@ public class WorkflowRepository : IWorkflowRepository
 
     public Task<Activite?> GetActiviteAsync(Guid id) =>
         _db.Activites.Include(a => a.Groupe)
-          .Include(a => a.DemandeAutorisation).ThenInclude(d => d.Validations).ThenInclude(v => v.Valideur)
+          .Include(a => a.DemandeAutorisation!).ThenInclude(d => d.Validations).ThenInclude(v => v.Valideur!)
           .FirstOrDefaultAsync(a => a.Id == id);
 
     public async Task<List<DemandeAutorisation>> GetDemandesEnAttenteAsync(string roleCode)

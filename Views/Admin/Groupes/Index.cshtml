@@ -1,34 +1,94 @@
 @model List<MangoTaikaDistrict.Domain.Entities.Groupe>
 @{
-    ViewData["Title"] = "Groupes";
+    ViewData["Title"] = "Gestion des Groupes";
 }
-<h2>Groupes</h2>
 
-<p><a asp-area="Admin" asp-controller="Groupes" asp-action="Create">+ Nouveau groupe</a></p>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-1"><i class="bi bi-people me-2 text-success"></i>Groupes</h2>
+        <p class="text-muted mb-0">Gestion des groupes du district</p>
+    </div>
+    <div>
+        <a asp-area="Admin" asp-controller="Groupes" asp-action="Create" class="btn btn-primary btn-modern">
+            <i class="bi bi-plus-circle me-1"></i>Nouveau Groupe
+        </a>
+    </div>
+</div>
 
-<table border="1" cellpadding="6">
-    <thead>
-        <tr>
-            <th>Nom</th>
-            <th>Téléphone</th>
-            <th>Email</th>
-            <th>Actif</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var g in Model)
-        {
-            <tr>
-                <td>@g.Nom</td>
-                <td>@g.ContactTel</td>
-                <td>@g.ContactEmail</td>
-                <td>@g.IsActive</td>
-                <td>
-                    <a asp-area="Admin" asp-controller="Groupes" asp-action="Edit" asp-route-id="@g.Id">Modifier</a> |
-                    <a asp-area="Admin" asp-controller="Groupes" asp-action="Delete" asp-route-id="@g.Id">Supprimer</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<div class="card-modern card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-modern table-hover align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th><i class="bi bi-building me-1"></i>Nom</th>
+                        <th><i class="bi bi-geo-alt me-1"></i>Adresse</th>
+                        <th><i class="bi bi-telephone me-1"></i>Contact</th>
+                        <th><i class="bi bi-info-circle me-1"></i>Statut</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Any())
+                    {
+                        @foreach (var g in Model)
+                        {
+                            <tr>
+                                <td class="fw-semibold">@g.Nom</td>
+                                <td>@(g.Adresse ?? "-")</td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(g.ContactTel))
+                                    {
+                                        <div><i class="bi bi-telephone me-1"></i>@g.ContactTel</div>
+                                    }
+                                    @if (!string.IsNullOrEmpty(g.ContactEmail))
+                                    {
+                                        <div><i class="bi bi-envelope me-1"></i>@g.ContactEmail</div>
+                                    }
+                                    @if (string.IsNullOrEmpty(g.ContactTel) && string.IsNullOrEmpty(g.ContactEmail))
+                                    {
+                                        <span class="text-muted">-</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (g.IsActive)
+                                    {
+                                        <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i>Actif</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary"><i class="bi bi-x-circle me-1"></i>Inactif</span>
+                                    }
+                                </td>
+                                <td class="text-end">
+                                    <div class="btn-group" role="group">
+                                        <a asp-area="Admin" asp-controller="Groupes" asp-action="Edit" asp-route-id="@g.Id" 
+                                           class="btn btn-sm btn-outline-primary" title="Modifier">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <a asp-area="Admin" asp-controller="Groupes" asp-action="Delete" asp-route-id="@g.Id" 
+                                           class="btn btn-sm btn-outline-danger" title="Supprimer">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center py-5">
+                                <i class="bi bi-inbox fs-1 text-muted d-block mb-2"></i>
+                                <p class="text-muted">Aucun groupe enregistré</p>
+                                <a asp-area="Admin" asp-controller="Groupes" asp-action="Create" class="btn btn-primary">
+                                    <i class="bi bi-plus-circle me-1"></i>Ajouter le premier groupe
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

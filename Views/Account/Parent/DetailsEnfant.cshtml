@@ -1,0 +1,158 @@
+@{
+    ViewData["Title"] = "Détails de l'enfant";
+    Layout = "_Layout";
+    var scout = ViewBag.Scout as MangoTaikaDistrict.Domain.Entities.Scout;
+    var competences = ViewBag.Competences as List<MangoTaikaDistrict.Domain.Entities.ScoutCompetence> ?? new();
+    var cotisations = ViewBag.Cotisations as List<MangoTaikaDistrict.Domain.Entities.Cotisation> ?? new();
+    var nominations = ViewBag.Nominations as List<MangoTaikaDistrict.Domain.Entities.Nomination> ?? new();
+}
+
+@if (scout == null)
+{
+    <div class="alert alert-danger">Scout introuvable.</div>
+    return;
+}
+
+<div class="container mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold mb-0"><i class="bi bi-person me-2 text-primary"></i>@scout.Nom @scout.Prenoms</h2>
+        <a asp-action="MesEnfants" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-1"></i>Retour
+        </a>
+    </div>
+
+    <!-- Informations générales -->
+    <div class="card-modern card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0"><i class="bi bi-info-circle me-2"></i>Informations générales</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Matricule :</strong> @(scout.Matricule ?? "-")</p>
+                    <p><strong>Groupe :</strong> @scout.Groupe.Nom</p>
+                    <p><strong>Branche :</strong> @(scout.Unite?.Branche ?? "-")</p>
+                    <p><strong>Statut :</strong> <span class="badge bg-info">@scout.Statut</span></p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Date de naissance :</strong> @(scout.DateNaissance?.ToString("dd/MM/yyyy") ?? "-")</p>
+                    <p><strong>Lieu de naissance :</strong> @(scout.LieuNaissance ?? "-")</p>
+                    <p><strong>Adresse :</strong> @(scout.Adresse ?? "-")</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Compétences -->
+    @if (competences.Any())
+    {
+        <div class="card-modern card mb-4">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="bi bi-award me-2"></i>Compétences</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    @foreach (var comp in competences)
+                    {
+                        <div class="col-md-4 mb-3">
+                            <div class="border rounded p-3">
+                                <h6 class="fw-semibold">@comp.Competence.Libelle</h6>
+                                <p class="text-muted small mb-1">@comp.Competence.Description</p>
+                                @if (!string.IsNullOrEmpty(comp.Niveau))
+                                {
+                                    <span class="badge bg-secondary">@comp.Niveau</span>
+                                }
+                                @if (comp.DateAcquisition.HasValue)
+                                {
+                                    <p class="text-muted small mb-0 mt-2">
+                                        <i class="bi bi-calendar me-1"></i>Acquise le @comp.DateAcquisition.Value.ToString("dd/MM/yyyy")
+                                    </p>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- Cotisations -->
+    @if (cotisations.Any())
+    {
+        <div class="card-modern card mb-4">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="mb-0"><i class="bi bi-cash-coin me-2"></i>Cotisations</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-modern">
+                        <thead>
+                            <tr>
+                                <th>Période</th>
+                                <th>Montant attendu</th>
+                                <th>Montant payé</th>
+                                <th>Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var cot in cotisations)
+                            {
+                                <tr>
+                                    <td>@cot.Periode</td>
+                                    <td>@cot.MontantAttendu.ToString("N0") FCFA</td>
+                                    <td>@cot.MontantPaye.ToString("N0") FCFA</td>
+                                    <td>
+                                        <span class="badge bg-@(cot.Statut == MangoTaikaDistrict.Domain.Enums.StatutCotisation.PAYE ? "success" : cot.Statut == MangoTaikaDistrict.Domain.Enums.StatutCotisation.PARTIEL ? "warning" : "danger")">
+                                            @cot.Statut
+                                        </span>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- Nominations -->
+    @if (nominations.Any())
+    {
+        <div class="card-modern card mb-4">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0"><i class="bi bi-briefcase me-2"></i>Nominations</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-modern">
+                        <thead>
+                            <tr>
+                                <th>Poste</th>
+                                <th>Groupe</th>
+                                <th>Date début</th>
+                                <th>Date fin</th>
+                                <th>Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var nom in nominations)
+                            {
+                                <tr>
+                                    <td>@nom.Poste</td>
+                                    <td>@nom.Groupe.Nom</td>
+                                    <td>@nom.DateDebut.ToString("dd/MM/yyyy")</td>
+                                    <td>@(nom.DateFin?.ToString("dd/MM/yyyy") ?? "En cours")</td>
+                                    <td>
+                                        <span class="badge bg-@(nom.Statut == MangoTaikaDistrict.Domain.Enums.StatutNomination.VALIDEE ? "success" : "warning")">
+                                            @nom.Statut
+                                        </span>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+</div>

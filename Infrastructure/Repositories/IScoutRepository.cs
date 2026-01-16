@@ -6,7 +6,9 @@ public interface IScoutRepository
 {
     Task<List<Scout>> GetAllAsync();
     Task<Scout?> GetByIdAsync(Guid id);
+    Task<List<Scout>> GetByUtilisateurIdAsync(Guid utilisateurId);
     Task AddAsync(Scout s);
+    Task UpdateAsync(Scout s);
     Task DeleteAsync(Scout s);
     Task SaveAsync();
 }

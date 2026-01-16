@@ -2,26 +2,100 @@
 @{
     ViewData["Title"] = "Livre d'or";
     var messages = ViewBag.Messages as List<MangoTaikaDistrict.Domain.Entities.LivreOrMessage> ?? new();
+    var pagesPreremplies = ViewBag.PagesPreremplies as List<MangoTaikaDistrict.Domain.Entities.LivreOrPage> ?? new();
 }
 
-<h2>Livre d’or</h2>
+<div class="container mb-5">
+    <h2 class="fw-bold mb-4"><i class="bi bi-book me-2 text-warning"></i>Livre d'or</h2>
 
-@if (TempData["ok"] != null)
-{
-    <p style="color:green;">@TempData["ok"]</p>
-}
+    @if (TempData["ok"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle me-2"></i>@TempData["ok"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
 
-<form method="post" style="border:1px solid #eee;padding:12px;">
-    <div>Auteur: <input asp-for="Auteur" /></div>
-    <div>Message: <textarea asp-for="Message" rows="4" cols="50"></textarea></div>
-    <button type="submit">Envoyer</button>
-</form>
+    <!-- Pages préremplies avec images d'anciens commissaires/CG/CAD -->
+    @if (pagesPreremplies.Any())
+    {
+        <div class="mb-5">
+            <h3 class="fw-semibold mb-3"><i class="bi bi-images me-2"></i>Histoire du District</h3>
+            <div class="row g-4">
+                @foreach (var pageItem in pagesPreremplies)
+                {
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card-modern card h-100">
+                            @if (!string.IsNullOrEmpty(pageItem.PhotoUrl))
+                            {
+                                <img src="@pageItem.PhotoUrl" class="card-img-top" alt="@pageItem.Titre" style="height: 200px; object-fit: cover;" />
+                            }
+                            <div class="card-body">
+                                <h5 class="card-title">@pageItem.Titre</h5>
+                                <p class="card-text">@Html.Raw(pageItem.Contenu.Replace("\n", "<br/>"))</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
 
-<h3>Messages validés</h3>
-@foreach (var m in messages)
-{
-    <div style="border-bottom:1px solid #eee;margin:10px 0;padding:6px 0;">
-        <b>@m.Auteur</b> <small>(@m.CreatedAt.ToString("dd/MM/yyyy"))</small>
-        <p>@m.Message</p>
+    <!-- Formulaire pour laisser un message -->
+    <div class="card-modern card mb-4">
+        <div class="card-body">
+            <h4 class="card-title mb-3"><i class="bi bi-pencil me-2"></i>Laissez votre message</h4>
+            <form method="post">
+                <div class="mb-3">
+                    <label asp-for="Auteur" class="form-label fw-semibold">Votre nom *</label>
+                    <input asp-for="Auteur" class="form-control form-modern" placeholder="Votre nom" />
+                    <span asp-validation-for="Auteur" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Message" class="form-label fw-semibold">Votre message *</label>
+                    <textarea asp-for="Message" class="form-control form-modern" rows="4" placeholder="Votre message..."></textarea>
+                    <span asp-validation-for="Message" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn btn-primary btn-modern">
+                    <i class="bi bi-send me-2"></i>Envoyer
+                </button>
+            </form>
+        </div>
     </div>
+
+    <!-- Messages validés -->
+    @if (messages.Any())
+    {
+        <div class="mt-5">
+            <h3 class="fw-semibold mb-3"><i class="bi bi-chat-dots me-2"></i>Messages validés</h3>
+            <div class="row g-3">
+                @foreach (var m in messages)
+                {
+                    <div class="col-12">
+                        <div class="card-modern card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h6 class="card-title mb-0 fw-bold">@m.Auteur</h6>
+                                    <small class="text-muted">
+                                        <i class="bi bi-calendar me-1"></i>@m.CreatedAt.ToString("dd/MM/yyyy")
+                                    </small>
+                                </div>
+                                <p class="card-text mb-0">@Html.Raw(m.Message.Replace("\n", "<br/>"))</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle me-2"></i>Aucun message validé pour le moment.
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

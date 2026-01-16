@@ -1,0 +1,115 @@
+@model MangoTaikaDistrict.Models.Auth.RegisterVm
+@{
+    ViewData["Title"] = "S'inscrire";
+    Layout = "_Layout";
+}
+
+<div class="container">
+    <div class="row justify-content-center align-items-center min-vh-100 py-5">
+        <div class="col-md-6 col-lg-5">
+            <div class="card-modern card shadow-lg border-0">
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <i class="bi bi-person-plus-fill text-primary" style="font-size: 3rem;"></i>
+                        <h2 class="fw-bold mt-3 mb-1">Inscription</h2>
+                        <p class="text-muted">Rejoignez MangoTaikaDistrict</p>
+                    </div>
+
+                    @if (TempData["Success"] != null)
+                    {
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <i class="bi bi-check-circle me-2"></i>@TempData["Success"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+
+                    <form method="post">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="Telephone" class="form-label fw-semibold">
+                                <i class="bi bi-telephone me-1"></i>Téléphone *
+                            </label>
+                            <input asp-for="Telephone" class="form-control form-modern" placeholder="Ex: 0100000000" />
+                            <span asp-validation-for="Telephone" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Nom" class="form-label fw-semibold">Nom *</label>
+                                <input asp-for="Nom" class="form-control form-modern" />
+                                <span asp-validation-for="Nom" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Prenoms" class="form-label fw-semibold">Prénoms *</label>
+                                <input asp-for="Prenoms" class="form-control form-modern" />
+                                <span asp-validation-for="Prenoms" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label fw-semibold">
+                                <i class="bi bi-envelope me-1"></i>Email (optionnel)
+                            </label>
+                            <input asp-for="Email" type="email" class="form-control form-modern" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Role" class="form-label fw-semibold">
+                                <i class="bi bi-person-badge me-1"></i>Rôle *
+                            </label>
+                            <select asp-for="Role" class="form-select form-modern">
+                                <option value="">-- Sélectionner --</option>
+                                <option value="SCOUT">Scout</option>
+                                <option value="PARENT">Parent/Tuteur</option>
+                                <option value="CONSULTANT">Consultant</option>
+                            </select>
+                            <span asp-validation-for="Role" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Password" class="form-label fw-semibold">
+                                <i class="bi bi-lock me-1"></i>Mot de passe *
+                            </label>
+                            <input asp-for="Password" type="password" class="form-control form-modern" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="ConfirmPassword" class="form-label fw-semibold">
+                                <i class="bi bi-lock-fill me-1"></i>Confirmer le mot de passe *
+                            </label>
+                            <input asp-for="ConfirmPassword" type="password" class="form-control form-modern" />
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="form-check">
+                                <input asp-for="Consentement" class="form-check-input" type="checkbox" />
+                                <label asp-for="Consentement" class="form-check-label">
+                                    J'accepte le traitement de mes données personnelles conformément à la réglementation en vigueur (Loi ivoirienne sur la protection des données - ARTCI)
+                                </label>
+                                <span asp-validation-for="Consentement" class="text-danger d-block"></span>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-modern w-100 py-2 mb-3">
+                            <i class="bi bi-person-plus me-2"></i>S'inscrire
+                        </button>
+
+                        <div class="text-center">
+                            <small class="text-muted">
+                                Déjà inscrit ? <a asp-action="Login">Se connecter</a>
+                            </small>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -13,6 +13,7 @@ public class GuestbookController : Controller
     public async Task<IActionResult> Index()
     {
         ViewBag.Messages = await _content.GetGuestbookPublicAsync();
+        ViewBag.PagesPreremplies = await _content.GetLivreOrPagesAsync();
         return View(new LivreOrMessage());
     }
 

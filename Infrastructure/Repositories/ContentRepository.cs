@@ -47,5 +47,28 @@ public class ContentRepository : IContentRepository
     public Task<LivreOrMessage?> GetGuestbookAsync(Guid id) => _db.LivreOr.FirstOrDefaultAsync(x => x.Id == id);
     public Task AddGuestbookAsync(LivreOrMessage m) => _db.LivreOr.AddAsync(m).AsTask();
 
+    public Task<List<LivreOrPage>> GetLivreOrPagesAsync() =>
+        _db.LivreOrPages.Where(p => p.IsActive).OrderBy(p => p.Ordre).ToListAsync();
+
+    public Task<LivreOrPage?> GetLivreOrPageAsync(Guid id) =>
+        _db.LivreOrPages.FirstOrDefaultAsync(p => p.Id == id);
+
+    public Task AddLivreOrPageAsync(LivreOrPage page) => _db.LivreOrPages.AddAsync(page).AsTask();
+
+    public Task UpdateLivreOrPageAsync(LivreOrPage page)
+    {
+        _db.LivreOrPages.Update(page);
+        return Task.CompletedTask;
+    }
+
+    public async Task DeleteLivreOrPageAsync(Guid id)
+    {
+        var page = await GetLivreOrPageAsync(id);
+        if (page != null)
+        {
+            _db.LivreOrPages.Remove(page);
+        }
+    }
+
     public Task SaveAsync() => _db.SaveChangesAsync();
 }

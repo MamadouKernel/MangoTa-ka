@@ -1,22 +1,464 @@
 @{
     ViewData["Title"] = "Dashboard";
+    var repartitionSexe = ViewBag.RepartitionSexe as Dictionary<string, int> ?? new();
+    var repartitionStatut = ViewBag.RepartitionStatut as Dictionary<string, int> ?? new();
+    var topGroupes = ViewBag.TopGroupes as Dictionary<string, int> ?? new();
+    var evolutionCotisations = ViewBag.EvolutionCotisations as Dictionary<string, decimal> ?? new();
+    string start = ViewBag.Start as string ?? "";
+    string end = ViewBag.End as string ?? "";
+    var pendingUsersCount = ViewBag.PendingUsersCount as int? ?? 0;
+    var pendingRgpdCount = ViewBag.PendingRgpdCount as int? ?? 0;
+    var expiredAscciCount = ViewBag.ExpiredAscciCount as int? ?? 0;
+    var expiringSoonAscciCount = ViewBag.ExpiringSoonAscciCount as int? ?? 0;
 }
 
-<h2>Dashboard</h2>
-<p>Bienvenue dans le backoffice MangoTaikaDistrict.</p>
+<div class="mb-4">
+    <h2 class="fw-bold mb-2"><i class="bi bi-speedometer2 me-2"></i>Tableau de Bord</h2>
+    <p class="text-muted">Vue d'ensemble de votre district</p>
+</div>
 
-<form method="post" asp-controller="Account" asp-action="Logout" asp-area="">
-    <button type="submit">D�connexion</button>
-</form>
+<!-- Alertes importantes -->
+@if (User.IsInRole("ADMIN") || User.IsInRole("GESTIONNAIRE"))
+{
+    @if (pendingUsersCount > 0 || pendingRgpdCount > 0 || expiredAscciCount > 0 || expiringSoonAscciCount > 0)
+    {
+        <div class="row g-3 mb-4">
+            @if (pendingUsersCount > 0)
+            {
+                <div class="col-md-6">
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <h6 class="alert-heading"><i class="bi bi-exclamation-triangle me-2"></i>Action requise</h6>
+                        <p class="mb-2">@pendingUsersCount utilisateur(s) en attente de validation</p>
+                        <a asp-area="Admin" asp-controller="Users" asp-action="Pending" class="btn btn-sm btn-warning">
+                            <i class="bi bi-arrow-right me-1"></i>Voir les utilisateurs
+                        </a>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                </div>
+            }
+            @if (pendingRgpdCount > 0)
+            {
+                <div class="col-md-6">
+                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                        <h6 class="alert-heading"><i class="bi bi-info-circle me-2"></i>Demandes RGPD</h6>
+                        <p class="mb-2">@pendingRgpdCount demande(s) RGPD en attente de traitement</p>
+                        <a asp-area="Admin" asp-controller="Rgpd" asp-action="Index" class="btn btn-sm btn-info">
+                            <i class="bi bi-arrow-right me-1"></i>Traiter les demandes
+                        </a>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                </div>
+            }
+            @if (expiredAscciCount > 0)
+            {
+                <div class="col-md-6">
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <h6 class="alert-heading"><i class="bi bi-shield-exclamation me-2"></i>Cartes ASCCI expirées</h6>
+                        <p class="mb-2">@expiredAscciCount carte(s) ASCCI expirée(s)</p>
+                        <a asp-area="Admin" asp-controller="Ascci" asp-action="Index" class="btn btn-sm btn-danger">
+                            <i class="bi bi-arrow-right me-1"></i>Vérifier les statuts
+                        </a>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                </div>
+            }
+            @if (expiringSoonAscciCount > 0)
+            {
+                <div class="col-md-6">
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <h6 class="alert-heading"><i class="bi bi-clock-history me-2"></i>Cartes ASCCI expirant bientôt</h6>
+                        <p class="mb-2">@expiringSoonAscciCount carte(s) ASCCI expirant dans les 30 prochains jours</p>
+                        <a asp-area="Admin" asp-controller="Ascci" asp-action="Index" class="btn btn-sm btn-warning">
+                            <i class="bi bi-arrow-right me-1"></i>Vérifier les statuts
+                        </a>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+}
 
-<ul>
-    <li><a asp-area="Admin" asp-controller="Groupes" asp-action="Index">Groupes</a></li>
-    <li><a asp-area="Admin" asp-controller="Scouts" asp-action="Index">Scouts</a></li>
-    <li><a asp-area="Admin" asp-controller="Authorizations" asp-action="Activites">Activités & Autorisations</a></li>
-    <li><a asp-area="Admin" asp-controller="Tickets" asp-action="Index">Support / Tickets</a></li>
-    <li><a asp-area="Admin" asp-controller="Content" asp-action="News">Contenu (News)</a></li>
-    <li><a asp-area="Admin" asp-controller="Content" asp-action="Albums">Galerie (Albums)</a></li>
-    <li><a asp-area="Admin" asp-controller="Content" asp-action="Guestbook">Modération Livre d'or</a></li>
-    <li><a asp-area="Admin" asp-controller="Reports" asp-action="Index">Reporting</a></li>
-</ul>
+<!-- Filtres par période -->
+<div class="card-modern card mb-4">
+    <div class="card-body">
+        <h5 class="card-title mb-3"><i class="bi bi-funnel me-2"></i>Filtres</h5>
+        <form method="get" class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">Date début</label>
+                <input type="date" name="start" value="@start" class="form-control form-modern" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">Date fin</label>
+                <input type="date" name="end" value="@end" class="form-control form-modern" />
+            </div>
+            <div class="col-md-4 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary btn-modern me-2">
+                    <i class="bi bi-search me-1"></i>Appliquer
+                </button>
+                <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="btn btn-outline-secondary btn-modern">
+                    <i class="bi bi-arrow-clockwise me-1"></i>Réinitialiser
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
 
+<!-- Statistiques principales -->
+<div class="row g-4 mb-4">
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="stat-icon bg-primary bg-opacity-10 text-primary">
+                <i class="bi bi-person-badge"></i>
+            </div>
+            <div class="stat-label">Total Scouts</div>
+            <div class="stat-value">@ViewBag.TotalScouts</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="stat-icon bg-success bg-opacity-10 text-success">
+                <i class="bi bi-people"></i>
+            </div>
+            <div class="stat-label">Total Groupes</div>
+            <div class="stat-value">@ViewBag.TotalGroupes</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="stat-icon bg-info bg-opacity-10 text-info">
+                <i class="bi bi-calendar-event"></i>
+            </div>
+            <div class="stat-label">Total Activités</div>
+            <div class="stat-value">@ViewBag.TotalActivites</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="stat-icon bg-warning bg-opacity-10 text-warning">
+                <i class="bi bi-ticket-perforated"></i>
+            </div>
+            <div class="stat-label">Total Tickets</div>
+            <div class="stat-value">@ViewBag.TotalTickets</div>
+        </div>
+    </div>
+</div>
+
+<!-- Statistiques Cotisations -->
+<div class="row g-4 mb-4">
+    <div class="col-md-2">
+        <div class="stat-card" style="border-left-color: #4A7C2A;">
+            <div class="stat-icon bg-success bg-opacity-10 text-success">
+                <i class="bi bi-cash-stack"></i>
+            </div>
+            <div class="stat-label">Total Cotisations</div>
+            <div class="stat-value">@ViewBag.TotalCotisations</div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="stat-card" style="border-left-color: #6BA644;">
+            <div class="stat-icon bg-success bg-opacity-10 text-success">
+                <i class="bi bi-check-circle"></i>
+            </div>
+            <div class="stat-label">Payées</div>
+            <div class="stat-value text-success">@ViewBag.CotisationsPayees</div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="stat-card" style="border-left-color: #8FCB6B;">
+            <div class="stat-icon bg-warning bg-opacity-10 text-warning">
+                <i class="bi bi-hourglass-split"></i>
+            </div>
+            <div class="stat-label">Partielles</div>
+            <div class="stat-value text-warning">@ViewBag.CotisationsPartielles</div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="stat-card" style="border-left-color: #2D5016;">
+            <div class="stat-icon bg-danger bg-opacity-10 text-danger">
+                <i class="bi bi-x-circle"></i>
+            </div>
+            <div class="stat-label">Impayées</div>
+            <div class="stat-value text-danger">@ViewBag.CotisationsImpayees</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-card" style="border-left-color: #6BA644;">
+            <div class="stat-icon bg-info bg-opacity-10 text-info">
+                <i class="bi bi-percent"></i>
+            </div>
+            <div class="stat-label">Taux de Cotisation</div>
+            <div class="stat-value text-info">@(((decimal)ViewBag.TauxCotisation).ToString("N1"))%</div>
+            <small class="text-muted">
+                @(((decimal)ViewBag.MontantTotalPaye).ToString("N2")) / @(((decimal)ViewBag.MontantTotalAttendu).ToString("N2")) FCFA
+            </small>
+        </div>
+    </div>
+</div>
+
+<!-- Graphiques -->
+<div class="row g-4 mb-4">
+    <div class="col-lg-6">
+        <div class="card-modern card h-100">
+            <div class="card-header bg-white border-0 pb-0">
+                <h5 class="fw-bold mb-0"><i class="bi bi-pie-chart me-2 text-primary"></i>Répartition par Sexe</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="chartSexe" style="max-height:300px;"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card-modern card h-100">
+            <div class="card-header bg-white border-0 pb-0">
+                <h5 class="fw-bold mb-0"><i class="bi bi-bar-chart me-2 text-success"></i>Répartition par Statut</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="chartStatut" style="max-height:300px;"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card-modern card h-100">
+            <div class="card-header bg-white border-0 pb-0">
+                <h5 class="fw-bold mb-0"><i class="bi bi-trophy me-2 text-warning"></i>Top 5 Groupes</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="chartTopGroupes" style="max-height:300px;"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card-modern card h-100">
+            <div class="card-header bg-white border-0 pb-0">
+                <h5 class="fw-bold mb-0"><i class="bi bi-graph-up-arrow me-2 text-info"></i>Évolution Cotisations (6 derniers mois)</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="chartEvolutionCotisations" style="max-height:300px;"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Graphique répartition par sexe (camembert)
+    const ctxSexe = document.getElementById('chartSexe');
+    if (ctxSexe) {
+        const dataSexe = {
+            labels: [@Html.Raw(string.Join(",", repartitionSexe.Keys.Select(k => $"'{k}'")))],
+            datasets: [{
+                data: [@string.Join(",", repartitionSexe.Values)],
+                backgroundColor: [
+                    '#2D5016',
+                    '#4A7C2A',
+                    '#6BA644',
+                    '#8FCB6B',
+                    '#B8E09A'
+                ],
+                borderWidth: 2,
+                borderColor: '#FFFFFF'
+            }]
+        };
+        new Chart(ctxSexe, {
+            type: 'pie',
+            data: dataSexe,
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 15,
+                            font: {
+                                size: 12
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // Graphique répartition par statut (barres)
+    const ctxStatut = document.getElementById('chartStatut');
+    if (ctxStatut) {
+        const dataStatut = {
+            labels: [@Html.Raw(string.Join(",", repartitionStatut.Keys.Select(k => $"'{k}'")))],
+            datasets: [{
+                label: 'Nombre de scouts',
+                data: [@string.Join(",", repartitionStatut.Values)],
+                backgroundColor: '#2D5016',
+                borderColor: '#4A7C2A',
+                borderWidth: 2,
+                borderRadius: 8
+            }]
+        };
+        new Chart(ctxStatut, {
+            type: 'bar',
+            data: dataStatut,
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(0,0,0,0.05)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+    }
+
+    // Graphique Top 5 groupes (barres)
+    const ctxTopGroupes = document.getElementById('chartTopGroupes');
+    if (ctxTopGroupes) {
+        const dataTopGroupes = {
+            labels: [@Html.Raw(string.Join(",", topGroupes.Keys.Select(k => $"'{k}'")))],
+            datasets: [{
+                label: 'Nombre de scouts',
+                data: [@string.Join(",", topGroupes.Values)],
+                backgroundColor: '#4A7C2A',
+                borderColor: '#6BA644',
+                borderWidth: 2,
+                borderRadius: 8
+            }]
+        };
+        new Chart(ctxTopGroupes, {
+            type: 'bar',
+            data: dataTopGroupes,
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(0,0,0,0.05)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+    }
+
+    // Graphique évolution cotisations (ligne)
+    const ctxEvolution = document.getElementById('chartEvolutionCotisations');
+    if (ctxEvolution) {
+        const dataEvolution = {
+            labels: [@Html.Raw(string.Join(",", evolutionCotisations.Keys.Select(k => $"'{k}'")))],
+            datasets: [{
+                label: 'Montant payé (FCFA)',
+                data: [@string.Join(",", evolutionCotisations.Values)],
+                borderColor: '#4A7C2A',
+                backgroundColor: 'rgba(74, 124, 42, 0.1)',
+                borderWidth: 3,
+                fill: true,
+                tension: 0.4,
+                pointRadius: 5,
+                pointHoverRadius: 7,
+                pointBackgroundColor: '#4A7C2A',
+                pointBorderColor: '#FFFFFF',
+                pointBorderWidth: 2
+            }]
+        };
+        new Chart(ctxEvolution, {
+            type: 'line',
+            data: dataEvolution,
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(0,0,0,0.05)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        labels: {
+                            padding: 15,
+                            font: {
+                                size: 12
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+</script>
+
+<!-- Liens rapides vers nouvelles fonctionnalités -->
+@if (User.IsInRole("ADMIN") || User.IsInRole("GESTIONNAIRE"))
+{
+    <div class="row g-4 mt-4">
+        <div class="col-12">
+            <div class="card-modern card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="bi bi-lightning-charge me-2"></i>Accès rapide</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <a asp-area="Admin" asp-controller="Users" asp-action="Pending" class="btn btn-outline-warning w-100">
+                                <i class="bi bi-person-check me-1"></i>Utilisateurs en attente
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a asp-area="Admin" asp-controller="Rgpd" asp-action="Index" class="btn btn-outline-primary w-100">
+                                <i class="bi bi-shield-check me-1"></i>Demandes RGPD
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a asp-controller="Groups" asp-action="Map" class="btn btn-outline-success w-100">
+                                <i class="bi bi-geo-alt me-1"></i>Carte des groupes
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a asp-area="Admin" asp-controller="Ascci" asp-action="Index" class="btn btn-outline-primary w-100">
+                                <i class="bi bi-shield-check me-1"></i>Vérification ASCCI
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a asp-controller="MyData" asp-action="Index" class="btn btn-outline-info w-100">
+                                <i class="bi bi-person-badge me-1"></i>Mes données
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

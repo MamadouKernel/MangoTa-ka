@@ -1,13 +1,51 @@
-﻿@model MangoTaikaDistrict.Domain.Entities.Groupe
+@model MangoTaikaDistrict.Domain.Entities.Groupe
 @{
-    ViewData["Title"] = "Supprimer groupe";
+    ViewData["Title"] = "Supprimer un Groupe";
 }
-<h2>Supprimer</h2>
-<p>Confirmer suppression du groupe: <b>@Model.Nom</b> ?</p>
 
-<form method="post" asp-action="DeleteConfirmed">
-    <input type="hidden" name="id" value="@Model.Id" />
-    <button type="submit">Oui, supprimer</button>
-</form>
+<div class="mb-4">
+    <h2 class="fw-bold mb-1 text-danger"><i class="bi bi-exclamation-triangle me-2"></i>Supprimer un Groupe</h2>
+    <p class="text-muted">Confirmer la suppression</p>
+</div>
 
-<p><a asp-area="Admin" asp-controller="Groupes" asp-action="Index">Annuler</a></p>
+<div class="card-modern card border-danger">
+    <div class="card-body">
+        <div class="alert alert-warning" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i><strong>Attention !</strong> Cette action est irréversible. Tous les scouts et données associées seront affectés.
+        </div>
+        
+        <div class="mb-4">
+            <p class="mb-2">Êtes-vous sûr de vouloir supprimer le groupe suivant ?</p>
+            <div class="p-3 bg-light rounded">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-people fs-3 text-success me-3"></i>
+                    <div>
+                        <h5 class="mb-1">@Model.Nom</h5>
+                        <small class="text-muted">
+                            @if (!string.IsNullOrEmpty(Model.Adresse))
+                            {
+                                <span><i class="bi bi-geo-alt me-1"></i>@Model.Adresse</span>
+                            }
+                            @if (!string.IsNullOrEmpty(Model.ContactTel))
+                            {
+                                <span class="ms-2"><i class="bi bi-telephone me-1"></i>@Model.ContactTel</span>
+                            }
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <form method="post" asp-action="Delete">
+            <input type="hidden" name="id" value="@Model.Id" />
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-danger btn-modern">
+                    <i class="bi bi-trash me-1"></i>Oui, supprimer
+                </button>
+                <a asp-area="Admin" asp-controller="Groupes" asp-action="Index" class="btn btn-outline-secondary btn-modern">
+                    <i class="bi bi-x-circle me-1"></i>Annuler
+                </a>
+            </div>
+        </form>
+    </div>
+</div>

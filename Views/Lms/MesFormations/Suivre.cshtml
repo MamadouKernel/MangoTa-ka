@@ -1,0 +1,155 @@
+@model MangoTaikaDistrict.Domain.Entities.InscriptionFormation
+@{
+    ViewData["Title"] = "Suivre la formation";
+}
+
+<div class="mb-4">
+    <a asp-action="Index" class="btn btn-outline-secondary mb-3">
+        <i class="bi bi-arrow-left me-1"></i>Retour à mes formations
+    </a>
+    <h2 class="fw-bold mb-1">@Model.Formation.Titre</h2>
+    <p class="text-muted">@Model.Formation.Description</p>
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle me-2"></i>@TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="row">
+    <div class="col-lg-9">
+        <div class="card-modern card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="bi bi-list-ol me-2"></i>Modules de la formation</h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group">
+                    @foreach (var module in Model.Formation.Modules.OrderBy(m => m.Ordre))
+                    {
+                        var progression = Model.Progressions.FirstOrDefault(p => p.ModuleFormationId == module.Id);
+                        var estComplete = progression?.EstComplete == true;
+
+                        <div class="list-group-item @(estComplete ? "bg-light" : "")">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-2">
+                                        @if (estComplete)
+                                        {
+                                            <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="bi bi-circle me-2"></i>
+                                        }
+                                        @module.Titre
+                                        @if (module.EstObligatoire)
+                                        {
+                                            <span class="badge bg-warning ms-2">Obligatoire</span>
+                                        }
+                                    </h6>
+                                    @if (!string.IsNullOrEmpty(module.Description))
+                                    {
+                                        <p class="mb-2 text-muted">@module.Description</p>
+                                    }
+                                    @if (!string.IsNullOrEmpty(module.Contenu))
+                                    {
+                                        <div class="mb-2">@Html.Raw(module.Contenu)</div>
+                                    }
+                                    @if (!string.IsNullOrEmpty(module.VideoUrl))
+                                    {
+                                        <div class="mb-2">
+                                            <a href="@module.VideoUrl" target="_blank" class="btn btn-sm btn-outline-primary">
+                                                <i class="bi bi-play-circle me-1"></i>Voir la vidéo
+                                            </a>
+                                        </div>
+                                    }
+                                    @if (!string.IsNullOrEmpty(module.DocumentUrl))
+                                    {
+                                        <div class="mb-2">
+                                            <a href="@module.DocumentUrl" target="_blank" class="btn btn-sm btn-outline-secondary">
+                                                <i class="bi bi-file-earmark-pdf me-1"></i>Télécharger le document
+                                            </a>
+                                        </div>
+                                    }
+                                    <small class="text-muted">
+                                        <i class="bi bi-clock me-1"></i>@module.DureeEstimee min
+                                        @if (progression != null && progression.DateCompletion.HasValue)
+                                        {
+                                            <span class="ms-2">
+                                                <i class="bi bi-check me-1"></i>Complété le @progression.DateCompletion.Value.ToString("dd/MM/yyyy")
+                                            </span>
+                                        }
+                                    </small>
+                                </div>
+                                <div class="ms-3">
+                                    @if (!estComplete)
+                                    {
+                                        <form method="post" asp-action="MarquerModuleComplete" class="d-inline">
+                                            <input type="hidden" name="inscriptionId" value="@Model.Id" />
+                                            <input type="hidden" name="moduleId" value="@module.Id" />
+                                            <button type="submit" class="btn btn-sm btn-success">
+                                                <i class="bi bi-check-circle me-1"></i>Marquer comme complété
+                                            </button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-success">Complété</span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="card-modern card mb-4">
+            <div class="card-body">
+                <h5 class="card-title mb-3">Progression</h5>
+                @{
+                    var modulesCompletes = Model.Progressions.Count(p => p.EstComplete);
+                    var totalModules = Model.Formation.Modules.Count;
+                    var pourcentage = totalModules > 0 ? (modulesCompletes * 100 / totalModules) : 0;
+                }
+                <div class="text-center mb-3">
+                    <h3 class="text-primary">@pourcentage%</h3>
+                    <p class="text-muted small">@modulesCompletes / @totalModules modules complétés</p>
+                </div>
+                <div class="progress mb-3" style="height: 20px;">
+                    <div class="progress-bar @(Model.Statut == MangoTaikaDistrict.Domain.Enums.StatutInscription.COMPLETE ? "bg-success" : "bg-primary")" 
+                         role="progressbar" style="width: @pourcentage%" 
+                         aria-valuenow="@pourcentage" aria-valuemin="0" aria-valuemax="100">
+                        @pourcentage%
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <strong>Statut :</strong>
+                    <span class="badge @(Model.Statut == MangoTaikaDistrict.Domain.Enums.StatutInscription.COMPLETE ? "bg-success" : Model.Statut == MangoTaikaDistrict.Domain.Enums.StatutInscription.EN_COURS ? "bg-info" : "bg-secondary")">
+                        @Model.Statut
+                    </span>
+                </div>
+                @if (Model.Statut == MangoTaikaDistrict.Domain.Enums.StatutInscription.COMPLETE)
+                {
+                    <div class="alert alert-success">
+                        <h6><i class="bi bi-trophy me-2"></i>Formation complétée !</h6>
+                        @if (Model.Certificats.Any(c => c.EstValide))
+                        {
+                            <a href="@Model.Certificats.First(c => c.EstValide).UrlCertificat" target="_blank" class="btn btn-success btn-sm w-100 mt-2">
+                                <i class="bi bi-award me-1"></i>Télécharger le certificat
+                            </a>
+                        }
+                        else
+                        {
+                            <p class="small mb-0">Votre certificat sera généré prochainement par un administrateur.</p>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

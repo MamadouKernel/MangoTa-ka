@@ -121,6 +121,49 @@ namespace MangoTaikaDistrict.Infrastructure.Data.Migrations
                     b.ToTable("Albums");
                 });
 
+            modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.AscciStatus", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("DateExpiration")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("DateVerification")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("NumeroCarte")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Observations")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("ScoutId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Statut")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("VerifieParId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ScoutId");
+
+                    b.HasIndex("VerifieParId");
+
+                    b.ToTable("AscciStatuses");
+                });
+
             modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.Assurance", b =>
                 {
                     b.Property<Guid>("Id")
@@ -218,6 +261,46 @@ namespace MangoTaikaDistrict.Infrastructure.Data.Migrations
                     b.ToTable("CartesScout");
                 });
 
+            modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.Certificat", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("DateEmission")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("DateExpiration")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("EmisParId")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("EstValide")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid>("InscriptionFormationId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("NumeroCertificat")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("UrlCertificat")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmisParId");
+
+                    b.HasIndex("InscriptionFormationId");
+
+                    b.ToTable("Certificats");
+                });
+
             modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.CircuitEtape", b =>
                 {
                     b.Property<Guid>("Id")
@@ -267,6 +350,34 @@ namespace MangoTaikaDistrict.Infrastructure.Data.Migrations
                     b.ToTable("CircuitsValidation");
                 });
 
+            modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.Competence", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Libelle")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Competences");
+                });
+
             modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.Consentement", b =>
                 {
                     b.Property<Guid>("Id")
@@ -294,6 +405,60 @@ namespace MangoTaikaDistrict.Infrastructure.Data.Migrations
                     b.HasIndex("UtilisateurId");
 
                     b.ToTable("Consentements");
+                });
+
+            modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.Cotisation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("DateEnregistrement")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("DatePaiement")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("EnregistreParId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("GroupeId")
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal>("MontantAttendu")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal>("MontantPaye")
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("Observations")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Periode")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("ScoutId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Statut")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EnregistreParId");
+
+                    b.HasIndex("GroupeId");
+
+                    b.HasIndex("ScoutId");
+
+                    b.ToTable("Cotisations");
                 });
 
             modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.DemandeAutorisation", b =>
@@ -325,6 +490,51 @@ namespace MangoTaikaDistrict.Infrastructure.Data.Migrations
                     b.HasIndex("DemandeurId");
 
                     b.ToTable("DemandesAutorisation");
+                });
+
+            modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.DemandeDroitRgpd", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Raison")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Reponse")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Statut")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("TraiteLe")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("TraiteParId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UtilisateurId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TraiteParId");
+
+                    b.HasIndex("UtilisateurId");
+
+                    b.ToTable("DemandesDroitRgpd");
                 });
 
             modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.Document", b =>
@@ -376,6 +586,58 @@ namespace MangoTaikaDistrict.Infrastructure.Data.Migrations
                     b.ToTable("Documents");
                 });
 
+            modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.Formation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Contenu")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedById")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("DureeEstimee")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("EstActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("EstPublique")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Niveau")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("OrdreAffichage")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Titre")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedById");
+
+                    b.ToTable("Formations");
+                });
+
             modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.Groupe", b =>
                 {
                     b.Property<Guid>("Id")
@@ -415,6 +677,51 @@ namespace MangoTaikaDistrict.Infrastructure.Data.Migrations
                     b.ToTable("Groupes");
                 });
 
+            modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.InscriptionFormation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Commentaire")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("DateCompletion")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("DateDebut")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("DateInscription")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("FormationId")
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal?>("NoteFinale")
+                        .HasColumnType("numeric");
+
+                    b.Property<Guid>("ScoutId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Statut")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FormationId");
+
+                    b.HasIndex("ScoutId");
+
+                    b.ToTable("InscriptionsFormation");
+                });
+
             modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.LivreOrMessage", b =>
                 {
                     b.Property<Guid>("Id")
@@ -448,6 +755,40 @@ namespace MangoTaikaDistrict.Infrastructure.Data.Migrations
                     b.ToTable("LivreOr");
                 });
 
+            modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.LivreOrPage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Contenu")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("Ordre")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("PhotoUrl")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Titre")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LivreOrPages");
+                });
+
             modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.Media", b =>
                 {
                     b.Property<Guid>("Id")
@@ -476,6 +817,157 @@ namespace MangoTaikaDistrict.Infrastructure.Data.Migrations
                     b.HasIndex("AlbumId");
 
                     b.ToTable("Medias");
+                });
+
+            modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.ModuleFormation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Contenu")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("DocumentUrl")
+                        .HasColumnType("text");
+
+                    b.Property<int>("DureeEstimee")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("EstObligatoire")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid>("FormationId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Ordre")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Titre")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("VideoUrl")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FormationId");
+
+                    b.ToTable("ModulesFormation");
+                });
+
+            modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.MotCommissaire", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Annee")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Contenu")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedById")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("DateDebut")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("DateFin")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("PhotoUrl")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Titre")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedById");
+
+                    b.ToTable("MotsCommissaire");
+                });
+
+            modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.Nomination", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("AutoriteValidationId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreeParId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("CurrentStep")
+                        .HasColumnType("integer");
+
+                    b.Property<DateOnly>("DateDebut")
+                        .HasColumnType("date");
+
+                    b.Property<DateOnly?>("DateFin")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Fonction")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("GroupeId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Observations")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Poste")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("ScoutId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Statut")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AutoriteValidationId");
+
+                    b.HasIndex("CreeParId");
+
+                    b.HasIndex("GroupeId");
+
+                    b.HasIndex("ScoutId");
+
+                    b.ToTable("Nominations");
                 });
 
             modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.Parent", b =>
@@ -516,6 +1008,51 @@ namespace MangoTaikaDistrict.Infrastructure.Data.Migrations
                     b.ToTable("ParentScouts");
                 });
 
+            modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.ProgressionModule", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Commentaire")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("DateCompletion")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("DateDebut")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("EstComplete")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid>("InscriptionFormationId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ModuleFormationId")
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal?>("Note")
+                        .HasColumnType("numeric");
+
+                    b.Property<int>("TempsConsacre")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InscriptionFormationId");
+
+                    b.HasIndex("ModuleFormationId");
+
+                    b.ToTable("ProgressionsModule");
+                });
+
             modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.Role", b =>
                 {
                     b.Property<Guid>("Id")
@@ -540,14 +1077,26 @@ namespace MangoTaikaDistrict.Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<string>("Adresse")
+                        .HasColumnType("text");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<DateOnly?>("DateNaissance")
                         .HasColumnType("date");
 
+                    b.Property<decimal?>("GpsLat")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal?>("GpsLng")
+                        .HasColumnType("numeric");
+
                     b.Property<Guid>("GroupeId")
                         .HasColumnType("uuid");
+
+                    b.Property<string>("LieuNaissance")
+                        .HasColumnType("text");
 
                     b.Property<string>("Matricule")
                         .HasColumnType("text");
@@ -573,6 +1122,9 @@ namespace MangoTaikaDistrict.Infrastructure.Data.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid?>("UtilisateurId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
 
                     b.HasIndex("GroupeId");
@@ -582,7 +1134,53 @@ namespace MangoTaikaDistrict.Infrastructure.Data.Migrations
 
                     b.HasIndex("UniteId");
 
+                    b.HasIndex("UtilisateurId");
+
                     b.ToTable("Scouts");
+                });
+
+            modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.ScoutCompetence", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("CertificatUrl")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("CompetenceId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateOnly?>("DateAcquisition")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Niveau")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Observations")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("ScoutId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("ScoutId1")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompetenceId");
+
+                    b.HasIndex("ScoutId");
+
+                    b.HasIndex("ScoutId1");
+
+                    b.ToTable("ScoutCompetences");
                 });
 
             modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.Ticket", b =>
@@ -698,8 +1296,14 @@ namespace MangoTaikaDistrict.Infrastructure.Data.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
+                    b.Property<bool>("IsValidated")
+                        .HasColumnType("boolean");
+
                     b.Property<bool>("MfaEnabled")
                         .HasColumnType("boolean");
+
+                    b.Property<string>("MfaSecret")
+                        .HasColumnType("text");
 
                     b.Property<string>("Nom")
                         .IsRequired()
@@ -720,10 +1324,18 @@ namespace MangoTaikaDistrict.Infrastructure.Data.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<DateTime?>("ValidatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("ValidatedById")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Telephone")
                         .IsUnique();
+
+                    b.HasIndex("ValidatedById");
 
                     b.ToTable("Utilisateurs");
                 });
@@ -776,6 +1388,39 @@ namespace MangoTaikaDistrict.Infrastructure.Data.Migrations
                     b.ToTable("Validations");
                 });
 
+            modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.ValidationNomination", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Commentaire")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("DecidedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Decision")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("NominationId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("StepOrder")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("ValideurId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NominationId");
+
+                    b.HasIndex("ValideurId");
+
+                    b.ToTable("ValidationsNomination");
+                });
+
             modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.Activite", b =>
                 {
                     b.HasOne("MangoTaikaDistrict.Domain.Entities.Utilisateur", "CreatedBy")
@@ -804,6 +1449,24 @@ namespace MangoTaikaDistrict.Infrastructure.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("CreatedBy");
+                });
+
+            modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.AscciStatus", b =>
+                {
+                    b.HasOne("MangoTaikaDistrict.Domain.Entities.Scout", "Scout")
+                        .WithMany()
+                        .HasForeignKey("ScoutId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MangoTaikaDistrict.Domain.Entities.Utilisateur", "VerifiePar")
+                        .WithMany()
+                        .HasForeignKey("VerifieParId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Scout");
+
+                    b.Navigation("VerifiePar");
                 });
 
             modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.Assurance", b =>
@@ -837,6 +1500,24 @@ namespace MangoTaikaDistrict.Infrastructure.Data.Migrations
                     b.Navigation("Scout");
                 });
 
+            modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.Certificat", b =>
+                {
+                    b.HasOne("MangoTaikaDistrict.Domain.Entities.Utilisateur", "EmisPar")
+                        .WithMany()
+                        .HasForeignKey("EmisParId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("MangoTaikaDistrict.Domain.Entities.InscriptionFormation", "InscriptionFormation")
+                        .WithMany("Certificats")
+                        .HasForeignKey("InscriptionFormationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("EmisPar");
+
+                    b.Navigation("InscriptionFormation");
+                });
+
             modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.CircuitEtape", b =>
                 {
                     b.HasOne("MangoTaikaDistrict.Domain.Entities.CircuitValidation", "CircuitValidation")
@@ -859,6 +1540,32 @@ namespace MangoTaikaDistrict.Infrastructure.Data.Migrations
                     b.Navigation("Utilisateur");
                 });
 
+            modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.Cotisation", b =>
+                {
+                    b.HasOne("MangoTaikaDistrict.Domain.Entities.Utilisateur", "EnregistrePar")
+                        .WithMany()
+                        .HasForeignKey("EnregistreParId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("MangoTaikaDistrict.Domain.Entities.Groupe", "Groupe")
+                        .WithMany("Cotisations")
+                        .HasForeignKey("GroupeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("MangoTaikaDistrict.Domain.Entities.Scout", "Scout")
+                        .WithMany("Cotisations")
+                        .HasForeignKey("ScoutId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("EnregistrePar");
+
+                    b.Navigation("Groupe");
+
+                    b.Navigation("Scout");
+                });
+
             modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.DemandeAutorisation", b =>
                 {
                     b.HasOne("MangoTaikaDistrict.Domain.Entities.Activite", "Activite")
@@ -878,6 +1585,24 @@ namespace MangoTaikaDistrict.Infrastructure.Data.Migrations
                     b.Navigation("Demandeur");
                 });
 
+            modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.DemandeDroitRgpd", b =>
+                {
+                    b.HasOne("MangoTaikaDistrict.Domain.Entities.Utilisateur", "TraitePar")
+                        .WithMany()
+                        .HasForeignKey("TraiteParId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("MangoTaikaDistrict.Domain.Entities.Utilisateur", "Utilisateur")
+                        .WithMany("DemandesDroitRgpd")
+                        .HasForeignKey("UtilisateurId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TraitePar");
+
+                    b.Navigation("Utilisateur");
+                });
+
             modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.Document", b =>
                 {
                     b.HasOne("MangoTaikaDistrict.Domain.Entities.Utilisateur", "UploadedBy")
@@ -887,6 +1612,35 @@ namespace MangoTaikaDistrict.Infrastructure.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("UploadedBy");
+                });
+
+            modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.Formation", b =>
+                {
+                    b.HasOne("MangoTaikaDistrict.Domain.Entities.Utilisateur", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("CreatedBy");
+                });
+
+            modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.InscriptionFormation", b =>
+                {
+                    b.HasOne("MangoTaikaDistrict.Domain.Entities.Formation", "Formation")
+                        .WithMany("Inscriptions")
+                        .HasForeignKey("FormationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MangoTaikaDistrict.Domain.Entities.Scout", "Scout")
+                        .WithMany()
+                        .HasForeignKey("ScoutId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Formation");
+
+                    b.Navigation("Scout");
                 });
 
             modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.LivreOrMessage", b =>
@@ -907,6 +1661,61 @@ namespace MangoTaikaDistrict.Infrastructure.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Album");
+                });
+
+            modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.ModuleFormation", b =>
+                {
+                    b.HasOne("MangoTaikaDistrict.Domain.Entities.Formation", "Formation")
+                        .WithMany("Modules")
+                        .HasForeignKey("FormationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Formation");
+                });
+
+            modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.MotCommissaire", b =>
+                {
+                    b.HasOne("MangoTaikaDistrict.Domain.Entities.Utilisateur", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("CreatedBy");
+                });
+
+            modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.Nomination", b =>
+                {
+                    b.HasOne("MangoTaikaDistrict.Domain.Entities.Utilisateur", "AutoriteValidation")
+                        .WithMany()
+                        .HasForeignKey("AutoriteValidationId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("MangoTaikaDistrict.Domain.Entities.Utilisateur", "CreePar")
+                        .WithMany()
+                        .HasForeignKey("CreeParId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("MangoTaikaDistrict.Domain.Entities.Groupe", "Groupe")
+                        .WithMany("Nominations")
+                        .HasForeignKey("GroupeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("MangoTaikaDistrict.Domain.Entities.Scout", "Scout")
+                        .WithMany("Nominations")
+                        .HasForeignKey("ScoutId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("AutoriteValidation");
+
+                    b.Navigation("CreePar");
+
+                    b.Navigation("Groupe");
+
+                    b.Navigation("Scout");
                 });
 
             modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.Parent", b =>
@@ -939,6 +1748,25 @@ namespace MangoTaikaDistrict.Infrastructure.Data.Migrations
                     b.Navigation("Scout");
                 });
 
+            modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.ProgressionModule", b =>
+                {
+                    b.HasOne("MangoTaikaDistrict.Domain.Entities.InscriptionFormation", "InscriptionFormation")
+                        .WithMany("Progressions")
+                        .HasForeignKey("InscriptionFormationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MangoTaikaDistrict.Domain.Entities.ModuleFormation", "ModuleFormation")
+                        .WithMany("Progressions")
+                        .HasForeignKey("ModuleFormationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("InscriptionFormation");
+
+                    b.Navigation("ModuleFormation");
+                });
+
             modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.Scout", b =>
                 {
                     b.HasOne("MangoTaikaDistrict.Domain.Entities.Groupe", "Groupe")
@@ -951,9 +1779,39 @@ namespace MangoTaikaDistrict.Infrastructure.Data.Migrations
                         .WithMany("Scouts")
                         .HasForeignKey("UniteId");
 
+                    b.HasOne("MangoTaikaDistrict.Domain.Entities.Utilisateur", "Utilisateur")
+                        .WithMany("Scouts")
+                        .HasForeignKey("UtilisateurId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.Navigation("Groupe");
 
                     b.Navigation("Unite");
+
+                    b.Navigation("Utilisateur");
+                });
+
+            modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.ScoutCompetence", b =>
+                {
+                    b.HasOne("MangoTaikaDistrict.Domain.Entities.Competence", "Competence")
+                        .WithMany("ScoutCompetences")
+                        .HasForeignKey("CompetenceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("MangoTaikaDistrict.Domain.Entities.Scout", "Scout")
+                        .WithMany()
+                        .HasForeignKey("ScoutId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MangoTaikaDistrict.Domain.Entities.Scout", null)
+                        .WithMany("ScoutCompetences")
+                        .HasForeignKey("ScoutId1");
+
+                    b.Navigation("Competence");
+
+                    b.Navigation("Scout");
                 });
 
             modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.Ticket", b =>
@@ -1004,6 +1862,16 @@ namespace MangoTaikaDistrict.Infrastructure.Data.Migrations
                     b.Navigation("Groupe");
                 });
 
+            modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.Utilisateur", b =>
+                {
+                    b.HasOne("MangoTaikaDistrict.Domain.Entities.Utilisateur", "ValidatedBy")
+                        .WithMany()
+                        .HasForeignKey("ValidatedById")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("ValidatedBy");
+                });
+
             modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.UtilisateurRole", b =>
                 {
                     b.HasOne("MangoTaikaDistrict.Domain.Entities.Role", "Role")
@@ -1042,6 +1910,25 @@ namespace MangoTaikaDistrict.Infrastructure.Data.Migrations
                     b.Navigation("Valideur");
                 });
 
+            modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.ValidationNomination", b =>
+                {
+                    b.HasOne("MangoTaikaDistrict.Domain.Entities.Nomination", "Nomination")
+                        .WithMany("Validations")
+                        .HasForeignKey("NominationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MangoTaikaDistrict.Domain.Entities.Utilisateur", "Valideur")
+                        .WithMany()
+                        .HasForeignKey("ValideurId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Nomination");
+
+                    b.Navigation("Valideur");
+                });
+
             modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.Activite", b =>
                 {
                     b.Navigation("DemandeAutorisation");
@@ -1057,18 +1944,51 @@ namespace MangoTaikaDistrict.Infrastructure.Data.Migrations
                     b.Navigation("Etapes");
                 });
 
+            modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.Competence", b =>
+                {
+                    b.Navigation("ScoutCompetences");
+                });
+
             modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.DemandeAutorisation", b =>
                 {
                     b.Navigation("Validations");
+                });
+
+            modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.Formation", b =>
+                {
+                    b.Navigation("Inscriptions");
+
+                    b.Navigation("Modules");
                 });
 
             modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.Groupe", b =>
                 {
                     b.Navigation("Activites");
 
+                    b.Navigation("Cotisations");
+
+                    b.Navigation("Nominations");
+
                     b.Navigation("Scouts");
 
                     b.Navigation("Unites");
+                });
+
+            modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.InscriptionFormation", b =>
+                {
+                    b.Navigation("Certificats");
+
+                    b.Navigation("Progressions");
+                });
+
+            modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.ModuleFormation", b =>
+                {
+                    b.Navigation("Progressions");
+                });
+
+            modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.Nomination", b =>
+                {
+                    b.Navigation("Validations");
                 });
 
             modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.Parent", b =>
@@ -1081,6 +2001,12 @@ namespace MangoTaikaDistrict.Infrastructure.Data.Migrations
                     b.Navigation("Assurances");
 
                     b.Navigation("Cartes");
+
+                    b.Navigation("Cotisations");
+
+                    b.Navigation("Nominations");
+
+                    b.Navigation("ScoutCompetences");
                 });
 
             modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.Ticket", b =>
@@ -1095,6 +2021,10 @@ namespace MangoTaikaDistrict.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("MangoTaikaDistrict.Domain.Entities.Utilisateur", b =>
                 {
+                    b.Navigation("DemandesDroitRgpd");
+
+                    b.Navigation("Scouts");
+
                     b.Navigation("UtilisateurRoles");
                 });
 #pragma warning restore 612, 618

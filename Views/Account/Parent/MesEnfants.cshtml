@@ -1,0 +1,69 @@
+@{
+    ViewData["Title"] = "Mes enfants";
+    Layout = "_Layout";
+    var enfants = ViewBag.Enfants as List<MangoTaikaDistrict.Domain.Entities.Scout> ?? new();
+}
+
+<div class="container mb-5">
+    <h2 class="fw-bold mb-4"><i class="bi bi-people me-2 text-primary"></i>Mes enfants</h2>
+
+    @if (enfants.Any())
+    {
+        <div class="row g-4">
+            @foreach (var enfant in enfants)
+            {
+                <div class="col-md-6 col-lg-4">
+                    <div class="card-modern card h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div>
+                                    <h5 class="card-title mb-1">@enfant.Nom @enfant.Prenoms</h5>
+                                    <p class="text-muted mb-0 small">
+                                        <i class="bi bi-building me-1"></i>@enfant.Groupe.Nom
+                                    </p>
+                                </div>
+                                <span class="badge bg-@(enfant.Statut == "Actif" ? "success" : "secondary")">
+                                    @enfant.Statut
+                                </span>
+                            </div>
+
+                            <div class="mb-3">
+                                @if (enfant.Unite != null)
+                                {
+                                    <p class="mb-1">
+                                        <i class="bi bi-tree me-1"></i><strong>Branche:</strong> @enfant.Unite.Branche
+                                    </p>
+                                }
+                                @if (!string.IsNullOrEmpty(enfant.Matricule))
+                                {
+                                    <p class="mb-1">
+                                        <i class="bi bi-hash me-1"></i><strong>Matricule:</strong> @enfant.Matricule
+                                    </p>
+                                }
+                                @if (enfant.DateNaissance.HasValue)
+                                {
+                                    <p class="mb-1">
+                                        <i class="bi bi-calendar me-1"></i><strong>Né(e) le:</strong> @enfant.DateNaissance.Value.ToString("dd/MM/yyyy")
+                                    </p>
+                                }
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <a asp-action="DetailsEnfant" asp-route-id="@enfant.Id" class="btn btn-primary btn-modern">
+                                    <i class="bi bi-eye me-1"></i>Voir les détails
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle me-2"></i>
+            Aucun enfant associé à votre compte. Contactez un administrateur pour lier vos enfants à votre compte.
+        </div>
+    }
+</div>
