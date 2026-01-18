@@ -1,0 +1,48 @@
+@model MangoTaikaDistrict.Domain.Entities.Scout
+@{
+    ViewData["Title"] = "Supprimer un Scout";
+}
+
+<div class="mb-4">
+    <h2 class="fw-bold mb-1 text-danger"><i class="bi bi-exclamation-triangle me-2"></i>Supprimer un Scout</h2>
+    <p class="text-muted">Confirmer la suppression</p>
+</div>
+
+<div class="card-modern card border-danger">
+    <div class="card-body">
+        <div class="alert alert-warning" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i><strong>Attention !</strong> Cette action est irréversible.
+        </div>
+        
+        <div class="mb-4">
+            <p class="mb-2">Êtes-vous sûr de vouloir supprimer le scout suivant ?</p>
+            <div class="p-3 bg-light rounded">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-person-badge fs-3 text-primary me-3"></i>
+                    <div>
+                        <h5 class="mb-1">@Model.Nom @Model.Prenoms</h5>
+                        <small class="text-muted">
+                            @if (!string.IsNullOrEmpty(Model.Matricule))
+                            {
+                                <span>Matricule: @Model.Matricule</span>
+                            }
+                            <span class="ms-2">Groupe: @Model.Groupe?.Nom</span>
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <form method="post" asp-action="Delete">
+            <input type="hidden" name="id" value="@Model.Id" />
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-danger btn-modern">
+                    <i class="bi bi-trash me-1"></i>Oui, supprimer
+                </button>
+                <a asp-area="Admin" asp-controller="Scouts" asp-action="Index" class="btn btn-outline-secondary btn-modern">
+                    <i class="bi bi-x-circle me-1"></i>Annuler
+                </a>
+            </div>
+        </form>
+    </div>
+</div>

@@ -19,6 +19,12 @@ public class UsersController : Controller
         _auth = auth;
     }
 
+    public async Task<IActionResult> Index()
+    {
+        var validated = await _users.GetAllValidatedAsync();
+        return View(validated);
+    }
+
     public async Task<IActionResult> Pending()
     {
         var pending = await _users.GetPendingValidationAsync();

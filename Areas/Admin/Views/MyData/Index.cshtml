@@ -1,0 +1,383 @@
+@{
+    ViewData["Title"] = "Mes données (RGPD)";
+    var user = ViewBag.User as MangoTaikaDistrict.Domain.Entities.Utilisateur;
+    var scout = ViewBag.Scout as MangoTaikaDistrict.Domain.Entities.Scout;
+    var scouts = ViewBag.Scouts as List<MangoTaikaDistrict.Domain.Entities.Scout> ?? new();
+    var competences = ViewBag.Competences as List<MangoTaikaDistrict.Domain.Entities.ScoutCompetence> ?? new();
+    var demandes = ViewBag.Demandes as List<MangoTaikaDistrict.Domain.Entities.DemandeDroitRgpd> ?? new();
+}
+
+<div class="mb-4">
+    <h2 class="fw-bold mb-1"><i class="bi bi-shield-check me-2 text-primary"></i>Mes données personnelles (RGPD)</h2>
+    <p class="text-muted mb-0">Consultez et gérez vos données personnelles conformément au RGPD</p>
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle me-2"></i>@TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-triangle me-2"></i>@TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<!-- Données utilisateur -->
+<div class="card-modern card mb-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0"><i class="bi bi-person me-2"></i>Informations du compte</h5>
+    </div>
+    <div class="card-body">
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label fw-semibold text-muted">Nom</label>
+                <div class="fs-5 fw-semibold">@user?.Nom</div>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-semibold text-muted">Prénoms</label>
+                <div class="fs-5">@user?.Prenoms</div>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-semibold text-muted">Téléphone</label>
+                <div><i class="bi bi-telephone me-1"></i>@user?.Telephone</div>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-semibold text-muted">Email</label>
+                <div><i class="bi bi-envelope me-1"></i>@(user?.Email ?? "-")</div>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-semibold text-muted">Date d'inscription</label>
+                <div><i class="bi bi-calendar me-1"></i>@user?.CreatedAt.ToString("dd/MM/yyyy")</div>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-semibold text-muted">Compte validé</label>
+                <div>
+                    @if (user?.IsValidated == true)
+                    {
+                        <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i>Oui</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-warning"><i class="bi bi-clock-history me-1"></i>En attente</span>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Données scout (si l'utilisateur est un scout) -->
+@if (scout != null)
+{
+    <div class="card-modern card mb-4">
+        <div class="card-header bg-success text-white">
+            <h5 class="mb-0"><i class="bi bi-tree me-2"></i>Informations scoutes</h5>
+        </div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold text-muted">Matricule</label>
+                    <div>
+                        @if (!string.IsNullOrEmpty(scout.Matricule))
+                        {
+                            <span class="badge bg-secondary">@scout.Matricule</span>
+                        }
+                        else
+                        {
+                            <span class="text-muted">-</span>
+                        }
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold text-muted">Groupe</label>
+                    <div><span class="badge bg-info">@scout.Groupe?.Nom</span></div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold text-muted">Branche</label>
+                    <div>@(scout.Unite?.Branche ?? "-")</div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold text-muted">Statut</label>
+                    <div><span class="badge bg-primary">@scout.Statut</span></div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold text-muted">Date de naissance</label>
+                    <div>@(scout.DateNaissance?.ToString("dd/MM/yyyy") ?? "-")</div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold text-muted">Lieu de naissance</label>
+                    <div>@(scout.LieuNaissance ?? "-")</div>
+                </div>
+                @if (!string.IsNullOrEmpty(scout.Adresse))
+                {
+                    <div class="col-md-12">
+                        <label class="form-label fw-semibold text-muted">Adresse</label>
+                        <div><i class="bi bi-geo-alt me-1"></i>@scout.Adresse</div>
+                    </div>
+                }
+            </div>
+
+            @if (competences.Any())
+            {
+                <hr class="my-3">
+                <h6 class="fw-semibold mb-3"><i class="bi bi-award me-2"></i>Compétences</h6>
+                <div class="row g-2">
+                    @foreach (var comp in competences)
+                    {
+                        <div class="col-md-4">
+                            <div class="p-2 border rounded">
+                                <strong>@comp.Competence?.Libelle</strong>
+                                @if (!string.IsNullOrEmpty(comp.Niveau))
+                                {
+                                    <br><small class="text-muted">Niveau: @comp.Niveau</small>
+                                }
+                                @if (comp.DateAcquisition.HasValue)
+                                {
+                                    <br><small class="text-muted">Acquise le: @comp.DateAcquisition.Value.ToString("dd/MM/yyyy")</small>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+}
+
+<!-- Demandes RGPD -->
+<div class="card-modern card mb-4">
+    <div class="card-header bg-info text-white">
+        <h5 class="mb-0"><i class="bi bi-shield-check me-2"></i>Mes demandes RGPD</h5>
+    </div>
+    <div class="card-body">
+        @if (demandes.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-modern table-hover align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th><i class="bi bi-tag me-1"></i>Type</th>
+                            <th><i class="bi bi-calendar me-1"></i>Date</th>
+                            <th><i class="bi bi-info-circle me-1"></i>Statut</th>
+                            <th><i class="bi bi-chat-left-text me-1"></i>Réponse</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var demande in demandes.OrderByDescending(d => d.CreatedAt))
+                        {
+                            <tr>
+                                <td>
+                                    @if (demande.Type == MangoTaikaDistrict.Domain.Enums.TypeDemandeRgpd.SUPPRESSION)
+                                    {
+                                        <span class="badge bg-danger"><i class="bi bi-trash me-1"></i>Suppression</span>
+                                    }
+                                    else if (demande.Type == MangoTaikaDistrict.Domain.Enums.TypeDemandeRgpd.ACCES)
+                                    {
+                                        <span class="badge bg-info"><i class="bi bi-eye me-1"></i>Accès</span>
+                                    }
+                                    else if (demande.Type == MangoTaikaDistrict.Domain.Enums.TypeDemandeRgpd.RECTIFICATION)
+                                    {
+                                        <span class="badge bg-warning"><i class="bi bi-pencil me-1"></i>Rectification</span>
+                                    }
+                                    else if (demande.Type == MangoTaikaDistrict.Domain.Enums.TypeDemandeRgpd.OPPOSITION)
+                                    {
+                                        <span class="badge bg-secondary"><i class="bi bi-x-circle me-1"></i>Opposition</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">@demande.Type</span>
+                                    }
+                                </td>
+                                <td>
+                                    <i class="bi bi-calendar-event me-1 text-primary"></i>
+                                    @demande.CreatedAt.ToString("dd/MM/yyyy")<br>
+                                    <small class="text-muted">@demande.CreatedAt.ToString("HH:mm")</small>
+                                </td>
+                                <td>
+                                    @if (demande.Statut == MangoTaikaDistrict.Domain.Enums.StatutDemandeRgpd.TRAITEE)
+                                    {
+                                        <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i>Traitée</span>
+                                    }
+                                    else if (demande.Statut == MangoTaikaDistrict.Domain.Enums.StatutDemandeRgpd.REJETEE)
+                                    {
+                                        <span class="badge bg-danger"><i class="bi bi-x-circle me-1"></i>Rejetée</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning"><i class="bi bi-clock-history me-1"></i>En attente</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(demande.Reponse))
+                                    {
+                                        <span>@demande.Reponse</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">-</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-4">
+                <i class="bi bi-inbox fs-1 text-muted d-block mb-2"></i>
+                <p class="text-muted">Aucune demande enregistrée</p>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Actions RGPD -->
+<div class="card-modern card">
+    <div class="card-header bg-warning text-dark">
+        <h5 class="mb-0"><i class="bi bi-exclamation-triangle me-2"></i>Exercer mes droits RGPD</h5>
+    </div>
+    <div class="card-body">
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="p-3 border rounded h-100">
+                    <h6 class="fw-bold mb-2"><i class="bi bi-eye me-2 text-info"></i>Droit d'accès</h6>
+                    <p class="text-muted small mb-3">Consulter toutes mes données personnelles enregistrées dans le système</p>
+                    <form method="post" asp-area="Admin" asp-controller="MyData" asp-action="RequestAccess" class="d-inline">
+                        <button type="submit" class="btn btn-outline-info btn-modern">
+                            <i class="bi bi-download me-1"></i>Demander un export
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="p-3 border rounded h-100">
+                    <h6 class="fw-bold mb-2"><i class="bi bi-pencil me-2 text-warning"></i>Droit de rectification</h6>
+                    <p class="text-muted small mb-3">Corriger des informations erronées ou obsolètes</p>
+                    <button type="button" class="btn btn-outline-warning btn-modern" data-bs-toggle="modal" data-bs-target="#rectificationModal">
+                        <i class="bi bi-pencil me-1"></i>Demander une correction
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="p-3 border rounded h-100">
+                    <h6 class="fw-bold mb-2"><i class="bi bi-x-circle me-2 text-secondary"></i>Droit d'opposition</h6>
+                    <p class="text-muted small mb-3">Refuser le traitement de mes données personnelles</p>
+                    <button type="button" class="btn btn-outline-secondary btn-modern" data-bs-toggle="modal" data-bs-target="#oppositionModal">
+                        <i class="bi bi-x-circle me-1"></i>Faire opposition
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="p-3 border rounded h-100">
+                    <h6 class="fw-bold mb-2"><i class="bi bi-trash me-2 text-danger"></i>Droit à l'oubli</h6>
+                    <p class="text-muted small mb-3">Demander la suppression définitive de mes données</p>
+                    <button type="button" class="btn btn-outline-danger btn-modern" data-bs-toggle="modal" data-bs-target="#suppressionModal">
+                        <i class="bi bi-trash me-1"></i>Demander la suppression
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Rectification -->
+<div class="modal fade" id="rectificationModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-dark">
+                <h5 class="modal-title"><i class="bi bi-pencil me-2"></i>Demande de rectification</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post" asp-area="Admin" asp-controller="MyData" asp-action="RequestRectification">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Champ à corriger *</label>
+                        <input type="text" name="field" class="form-control" required placeholder="Ex: Email, Téléphone, Adresse" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Nouvelle valeur *</label>
+                        <input type="text" name="newValue" class="form-control" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Description (optionnel)</label>
+                        <textarea name="description" class="form-control" rows="3" placeholder="Expliquez pourquoi cette correction est nécessaire..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-warning btn-modern">
+                        <i class="bi bi-send me-1"></i>Envoyer la demande
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Opposition -->
+<div class="modal fade" id="oppositionModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-secondary text-white">
+                <h5 class="modal-title"><i class="bi bi-x-circle me-2"></i>Demande d'opposition</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post" asp-area="Admin" asp-controller="MyData" asp-action="RequestOpposition">
+                <div class="modal-body">
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        <strong>Attention !</strong> En faisant opposition, vous refusez le traitement de vos données personnelles. Cela peut affecter votre accès à certains services.
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Raison (optionnel)</label>
+                        <textarea name="reason" class="form-control" rows="3" placeholder="Expliquez les raisons de votre opposition..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-secondary btn-modern">
+                        <i class="bi bi-check-circle me-1"></i>Confirmer l'opposition
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Suppression -->
+<div class="modal fade" id="suppressionModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title"><i class="bi bi-trash me-2"></i>Demande de suppression</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post" asp-area="Admin" asp-controller="MyData" asp-action="RequestDeletion">
+                <div class="modal-body">
+                    <div class="alert alert-danger">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        <strong>Attention !</strong> La suppression de vos données est irréversible. Vous perdrez l'accès à votre compte et à tous les services associés.
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Raison (optionnel)</label>
+                        <textarea name="reason" class="form-control" rows="3" placeholder="Expliquez les raisons de votre demande de suppression..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-danger btn-modern">
+                        <i class="bi bi-trash me-1"></i>Confirmer la suppression
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

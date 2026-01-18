@@ -1,0 +1,131 @@
+@model List<MangoTaikaDistrict.Domain.Entities.DemandeAutorisation>
+@{
+    ViewData["Title"] = "Demandes en Attente";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-1"><i class="bi bi-clock-history me-2 text-warning"></i>Demandes en Attente</h2>
+        <p class="text-muted mb-0">Gérer les demandes d'autorisation nécessitant une validation</p>
+    </div>
+    <div>
+        <a asp-area="Admin" asp-controller="Authorizations" asp-action="Activites" class="btn btn-outline-secondary btn-modern">
+            <i class="bi bi-arrow-left me-1"></i>Retour aux activités
+        </a>
+    </div>
+</div>
+
+@if (TempData["err"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-triangle me-2"></i>@TempData["err"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle me-2"></i>@TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="card-modern card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-modern table-hover align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th><i class="bi bi-calendar-event me-1"></i>Activité</th>
+                        <th><i class="bi bi-people me-1"></i>Groupe</th>
+                        <th><i class="bi bi-person me-1"></i>Demandeur</th>
+                        <th><i class="bi bi-calendar me-1"></i>Date de création</th>
+                        <th><i class="bi bi-list-ol me-1"></i>Étape actuelle</th>
+                        <th><i class="bi bi-info-circle me-1"></i>Statut</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Any())
+                    {
+                        @foreach (var d in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <strong>@d.Activite?.Titre</strong>
+                                    @if (!string.IsNullOrEmpty(d.Activite?.TypeActivite))
+                                    {
+                                        <br><small class="text-muted"><i class="bi bi-tag me-1"></i>@d.Activite.TypeActivite</small>
+                                    }
+                                    @if (d.Activite?.DateDebut != null)
+                                    {
+                                        <br><small class="text-muted">
+                                            <i class="bi bi-calendar-event me-1"></i>@d.Activite.DateDebut.ToString("dd/MM/yyyy HH:mm")
+                                        </small>
+                                    }
+                                </td>
+                                <td>
+                                    <span class="badge bg-info">@d.Activite?.Groupe?.Nom</span>
+                                </td>
+                                <td>
+                                    <strong>@d.Demandeur?.Nom @d.Demandeur?.Prenoms</strong>
+                                    @if (!string.IsNullOrEmpty(d.Demandeur?.Email))
+                                    {
+                                        <br><small class="text-muted">@d.Demandeur.Email</small>
+                                    }
+                                </td>
+                                <td>
+                                    <i class="bi bi-calendar me-1 text-primary"></i>
+                                    @d.CreatedAt.ToString("dd/MM/yyyy")<br>
+                                    <small class="text-muted">@d.CreatedAt.ToString("HH:mm")</small>
+                                </td>
+                                <td>
+                                    <span class="badge bg-secondary">Étape @d.CurrentStep</span>
+                                </td>
+                                <td>
+                                    @switch (d.Statut)
+                                    {
+                                        case MangoTaikaDistrict.Domain.Enums.StatutDemande.BROUILLON:
+                                            <span class="badge bg-secondary"><i class="bi bi-file-earmark me-1"></i>Brouillon</span>
+                                            break;
+                                        case MangoTaikaDistrict.Domain.Enums.StatutDemande.SOUMISE:
+                                            <span class="badge bg-info"><i class="bi bi-send me-1"></i>Soumise</span>
+                                            break;
+                                        case MangoTaikaDistrict.Domain.Enums.StatutDemande.EN_ATTENTE:
+                                            <span class="badge bg-warning"><i class="bi bi-clock-history me-1"></i>En attente</span>
+                                            break;
+                                        case MangoTaikaDistrict.Domain.Enums.StatutDemande.VALIDEE:
+                                            <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i>Validée</span>
+                                            break;
+                                        case MangoTaikaDistrict.Domain.Enums.StatutDemande.REJETEE:
+                                            <span class="badge bg-danger"><i class="bi bi-x-circle me-1"></i>Rejetée</span>
+                                            break;
+                                        default:
+                                            <span class="badge bg-secondary">@d.Statut</span>
+                                            break;
+                                    }
+                                </td>
+                                <td class="text-end">
+                                    <a asp-area="Admin" asp-controller="Authorizations" asp-action="Details" asp-route-id="@d.Id" 
+                                       class="btn btn-sm btn-primary btn-modern">
+                                        <i class="bi bi-eye me-1"></i>Ouvrir
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center py-5">
+                                <i class="bi bi-inbox fs-1 text-muted d-block mb-2"></i>
+                                <p class="text-muted">Aucune demande en attente</p>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

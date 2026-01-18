@@ -1,0 +1,251 @@
+@model List<MangoTaikaDistrict.Domain.Entities.Ticket>
+@{
+    ViewData["Title"] = "Gestion des Tickets";
+    var totalTickets = Model.Count;
+    var ticketsOuverts = Model.Count(t => t.Statut == MangoTaikaDistrict.Domain.Enums.StatutTicket.OUVERT);
+    var ticketsEnCours = Model.Count(t => t.Statut == MangoTaikaDistrict.Domain.Enums.StatutTicket.EN_COURS);
+    var ticketsResolus = Model.Count(t => t.Statut == MangoTaikaDistrict.Domain.Enums.StatutTicket.RESOLU);
+    var ticketsFermes = Model.Count(t => t.Statut == MangoTaikaDistrict.Domain.Enums.StatutTicket.FERME);
+    var ticketsIncidents = Model.Count(t => t.Type == MangoTaikaDistrict.Domain.Enums.TypeTicket.INCIDENT);
+    var ticketsDemandes = Model.Count(t => t.Type == MangoTaikaDistrict.Domain.Enums.TypeTicket.DEMANDE);
+    var ticketsHautePriorite = Model.Count(t => t.Priorite == MangoTaikaDistrict.Domain.Enums.PrioriteTicket.HAUTE);
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-1"><i class="bi bi-ticket-perforated me-2 text-primary"></i>Tickets</h2>
+        <p class="text-muted mb-0">Gérer les tickets de support et demandes</p>
+    </div>
+    <div>
+        <a asp-area="Admin" asp-controller="Tickets" asp-action="Create" class="btn btn-primary btn-modern">
+            <i class="bi bi-plus-circle me-1"></i>Nouveau ticket
+        </a>
+    </div>
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle me-2"></i>@TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-triangle me-2"></i>@TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<!-- Statistiques -->
+<div class="row g-4 mb-4">
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="stat-icon bg-primary bg-opacity-10 text-primary">
+                <i class="bi bi-ticket-perforated"></i>
+            </div>
+            <div class="stat-label">Total Tickets</div>
+            <div class="stat-value">@totalTickets</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card" style="border-left-color: #28a745;">
+            <div class="stat-icon bg-success bg-opacity-10 text-success">
+                <i class="bi bi-circle"></i>
+            </div>
+            <div class="stat-label">Ouverts</div>
+            <div class="stat-value text-success">@ticketsOuverts</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card" style="border-left-color: #17a2b8;">
+            <div class="stat-icon bg-info bg-opacity-10 text-info">
+                <i class="bi bi-clock-history"></i>
+            </div>
+            <div class="stat-label">En cours</div>
+            <div class="stat-value text-info">@ticketsEnCours</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card" style="border-left-color: #dc3545;">
+            <div class="stat-icon bg-danger bg-opacity-10 text-danger">
+                <i class="bi bi-arrow-up"></i>
+            </div>
+            <div class="stat-label">Haute priorité</div>
+            <div class="stat-value text-danger">@ticketsHautePriorite</div>
+        </div>
+    </div>
+</div>
+
+<!-- Répartition par type -->
+<div class="row g-4 mb-4">
+    <div class="col-md-6">
+        <div class="card-modern card">
+            <div class="card-body">
+                <h6 class="fw-bold mb-3"><i class="bi bi-pie-chart me-2"></i>Répartition par Type</h6>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span><i class="bi bi-exclamation-triangle me-2 text-danger"></i>Incidents</span>
+                    <span class="badge bg-danger">@ticketsIncidents</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <span><i class="bi bi-question-circle me-2 text-info"></i>Demandes</span>
+                    <span class="badge bg-info">@ticketsDemandes</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card-modern card">
+            <div class="card-body">
+                <h6 class="fw-bold mb-3"><i class="bi bi-bar-chart me-2"></i>Répartition par Statut</h6>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span><i class="bi bi-circle me-2 text-success"></i>Ouverts</span>
+                    <span class="badge bg-success">@ticketsOuverts</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span><i class="bi bi-clock-history me-2 text-info"></i>En cours</span>
+                    <span class="badge bg-info">@ticketsEnCours</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span><i class="bi bi-check-circle me-2 text-primary"></i>Résolus</span>
+                    <span class="badge bg-primary">@ticketsResolus</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <span><i class="bi bi-x-circle me-2 text-secondary"></i>Fermés</span>
+                    <span class="badge bg-secondary">@ticketsFermes</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Liste des tickets -->
+<div class="card-modern card">
+    <div class="card-header bg-white border-0 pb-0">
+        <h5 class="fw-bold mb-0"><i class="bi bi-list-ul me-2"></i>Liste des Tickets</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-modern table-hover align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th><i class="bi bi-calendar me-1"></i>Date</th>
+                        <th><i class="bi bi-tag me-1"></i>Type</th>
+                        <th><i class="bi bi-file-text me-1"></i>Sujet</th>
+                        <th><i class="bi bi-flag me-1"></i>Priorité</th>
+                        <th><i class="bi bi-info-circle me-1"></i>Statut</th>
+                        <th><i class="bi bi-person me-1"></i>Créé par</th>
+                        <th><i class="bi bi-person-check me-1"></i>Assigné à</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Any())
+                    {
+                        @foreach (var t in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <i class="bi bi-calendar-event me-1 text-primary"></i>
+                                    @t.CreatedAt.ToString("dd/MM/yyyy")<br>
+                                    <small class="text-muted">@t.CreatedAt.ToString("HH:mm")</small>
+                                </td>
+                                <td>
+                                    @if (t.Type == MangoTaikaDistrict.Domain.Enums.TypeTicket.INCIDENT)
+                                    {
+                                        <span class="badge bg-danger"><i class="bi bi-exclamation-triangle me-1"></i>Incident</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-info"><i class="bi bi-question-circle me-1"></i>Demande</span>
+                                    }
+                                </td>
+                                <td>
+                                    <strong>@t.Sujet</strong>
+                                    @if (!string.IsNullOrEmpty(t.Description) && t.Description.Length > 50)
+                                    {
+                                        <br><small class="text-muted">@(t.Description.Substring(0, 50))...</small>
+                                    }
+                                </td>
+                                <td>
+                                    @switch (t.Priorite)
+                                    {
+                                        case MangoTaikaDistrict.Domain.Enums.PrioriteTicket.BASSE:
+                                            <span class="badge bg-secondary"><i class="bi bi-arrow-down me-1"></i>Basse</span>
+                                            break;
+                                        case MangoTaikaDistrict.Domain.Enums.PrioriteTicket.MOYENNE:
+                                            <span class="badge bg-warning"><i class="bi bi-dash me-1"></i>Moyenne</span>
+                                            break;
+                                        case MangoTaikaDistrict.Domain.Enums.PrioriteTicket.HAUTE:
+                                            <span class="badge bg-danger"><i class="bi bi-arrow-up me-1"></i>Haute</span>
+                                            break;
+                                        default:
+                                            <span class="badge bg-secondary">@t.Priorite</span>
+                                            break;
+                                    }
+                                </td>
+                                <td>
+                                    @switch (t.Statut)
+                                    {
+                                        case MangoTaikaDistrict.Domain.Enums.StatutTicket.OUVERT:
+                                            <span class="badge bg-success"><i class="bi bi-circle me-1"></i>Ouvert</span>
+                                            break;
+                                        case MangoTaikaDistrict.Domain.Enums.StatutTicket.EN_COURS:
+                                            <span class="badge bg-info"><i class="bi bi-clock-history me-1"></i>En cours</span>
+                                            break;
+                                        case MangoTaikaDistrict.Domain.Enums.StatutTicket.RESOLU:
+                                            <span class="badge bg-primary"><i class="bi bi-check-circle me-1"></i>Résolu</span>
+                                            break;
+                                        case MangoTaikaDistrict.Domain.Enums.StatutTicket.FERME:
+                                            <span class="badge bg-secondary"><i class="bi bi-x-circle me-1"></i>Fermé</span>
+                                            break;
+                                        default:
+                                            <span class="badge bg-secondary">@t.Statut</span>
+                                            break;
+                                    }
+                                </td>
+                                <td>
+                                    <strong>@t.CreatedBy?.Nom @t.CreatedBy?.Prenoms</strong>
+                                    @if (!string.IsNullOrEmpty(t.CreatedBy?.Email))
+                                    {
+                                        <br><small class="text-muted">@t.CreatedBy.Email</small>
+                                    }
+                                </td>
+                                <td>
+                                    @if (t.AssignedTo != null)
+                                    {
+                                        <span class="badge bg-primary">@t.AssignedTo.Nom @t.AssignedTo.Prenoms</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Non assigné</span>
+                                    }
+                                </td>
+                                <td class="text-end">
+                                    <a asp-area="Admin" asp-controller="Tickets" asp-action="Details" asp-route-id="@t.Id" 
+                                       class="btn btn-sm btn-primary btn-modern">
+                                        <i class="bi bi-eye me-1"></i>Détails
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="8" class="text-center py-5">
+                                <i class="bi bi-inbox fs-1 text-muted d-block mb-2"></i>
+                                <p class="text-muted">Aucun ticket enregistré</p>
+                                <a asp-area="Admin" asp-controller="Tickets" asp-action="Create" class="btn btn-primary">
+                                    <i class="bi bi-plus-circle me-1"></i>Créer le premier ticket
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

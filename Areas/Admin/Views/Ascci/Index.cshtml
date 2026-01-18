@@ -1,0 +1,176 @@
+@{
+    ViewData["Title"] = "Vérification Statut ASCCI";
+    var allStatuses = ViewBag.AllStatuses as List<MangoTaikaDistrict.Domain.Entities.AscciStatus> ?? new();
+    var expired = ViewBag.Expired as List<MangoTaikaDistrict.Domain.Entities.AscciStatus> ?? new();
+    var expiringSoon = ViewBag.ExpiringSoon as List<MangoTaikaDistrict.Domain.Entities.AscciStatus> ?? new();
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-1"><i class="bi bi-shield-check me-2 text-primary"></i>Vérification Statut ASCCI</h2>
+        <p class="text-muted mb-0">Gérer les statuts ASCCI des scouts</p>
+    </div>
+    <div>
+        <a href="https://adhesion.scoutascci.org/" target="_blank" class="btn btn-outline-primary btn-modern">
+            <i class="bi bi-link-45deg me-1"></i>Plateforme SYGESCA
+        </a>
+    </div>
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle me-2"></i>@TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<!-- Alertes -->
+@if (expired.Any() || expiringSoon.Any())
+{
+    <div class="row g-3 mb-4">
+        @if (expired.Any())
+        {
+            <div class="col-12">
+                <div class="alert alert-danger">
+                    <h6 class="alert-heading"><i class="bi bi-exclamation-triangle me-2"></i>@expired.Count carte(s) expirée(s)</h6>
+                    <p class="mb-0">@expired.Count scout(s) ont une carte ASCCI expirée nécessitant un renouvellement.</p>
+                </div>
+            </div>
+        }
+        @if (expiringSoon.Any())
+        {
+            <div class="col-12">
+                <div class="alert alert-warning">
+                    <h6 class="alert-heading"><i class="bi bi-clock me-2"></i>@expiringSoon.Count carte(s) expirant bientôt</h6>
+                    <p class="mb-0">@expiringSoon.Count scout(s) ont une carte ASCCI qui expire dans les 30 prochains jours.</p>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+<!-- Statistiques -->
+<div class="row g-4 mb-4">
+    <div class="col-md-3">
+        <div class="card-modern card text-center">
+            <div class="card-body">
+                <h3 class="text-primary">@allStatuses.Count</h3>
+                <p class="text-muted mb-0">Total vérifiés</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card-modern card text-center">
+            <div class="card-body">
+                <h3 class="text-success">@allStatuses.Count(s => s.Statut == "Valide")</h3>
+                <p class="text-muted mb-0">Valides</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card-modern card text-center">
+            <div class="card-body">
+                <h3 class="text-danger">@expired.Count</h3>
+                <p class="text-muted mb-0">Expirées</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card-modern card text-center">
+            <div class="card-body">
+                <h3 class="text-warning">@expiringSoon.Count</h3>
+                <p class="text-muted mb-0">Expirant bientôt</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Liste des statuts -->
+<div class="card-modern card">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0"><i class="bi bi-list-ul me-2"></i>Liste des vérifications</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-modern table-hover align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Scout</th>
+                        <th>Numéro de carte</th>
+                        <th>Statut</th>
+                        <th>Date vérification</th>
+                        <th>Date expiration</th>
+                        <th>Vérifié par</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (allStatuses.Any())
+                    {
+                        @foreach (var status in allStatuses)
+                        {
+                            <tr>
+                                <td>
+                                    <strong>@status.Scout.Nom @status.Scout.Prenoms</strong><br>
+                                    <small class="text-muted">@status.Scout.Matricule</small>
+                                </td>
+                                <td>@(status.NumeroCarte ?? "-")</td>
+                                <td>
+                                    @if (status.Statut == "Valide")
+                                    {
+                                        <span class="badge bg-success">@status.Statut</span>
+                                    }
+                                    else if (status.Statut == "Expiré")
+                                    {
+                                        <span class="badge bg-danger">@status.Statut</span>
+                                    }
+                                    else if (status.Statut == "Invalide")
+                                    {
+                                        <span class="badge bg-danger">@status.Statut</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning">@status.Statut</span>
+                                    }
+                                </td>
+                                <td>@(status.DateVerification?.ToString("dd/MM/yyyy") ?? "-")</td>
+                                <td>
+                                    @if (status.DateExpiration.HasValue)
+                                    {
+                                        var today = DateTime.UtcNow.Date;
+                                        var in30Days = DateTime.UtcNow.AddDays(30).Date;
+                                        var expirationDate = status.DateExpiration.Value.Date;
+                                        var isExpired = expirationDate < today;
+                                        var isExpiringSoon = expirationDate <= in30Days && !isExpired;
+                                        <span class="@(isExpired ? "text-danger" : isExpiringSoon ? "text-warning" : "")">
+                                            @status.DateExpiration.Value.ToString("dd/MM/yyyy")
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">-</span>
+                                    }
+                                </td>
+                                <td>@(status.VerifiePar?.Nom ?? "-")</td>
+                                <td class="text-end">
+                                    <a asp-action="CheckScout" asp-route-scoutId="@status.ScoutId" class="btn btn-sm btn-primary btn-modern">
+                                        <i class="bi bi-pencil me-1"></i>Modifier
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center text-muted py-4">
+                                <i class="bi bi-info-circle me-2"></i>Aucune vérification enregistrée
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

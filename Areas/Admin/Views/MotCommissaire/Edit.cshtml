@@ -1,0 +1,102 @@
+@model MangoTaikaDistrict.Domain.Entities.MotCommissaire
+@{
+    ViewData["Title"] = "Modifier le Mot du Commissaire";
+}
+
+<div class="mb-4">
+    <h2 class="fw-bold mb-1"><i class="bi bi-pencil-square me-2 text-primary"></i>Modifier le Mot du Commissaire</h2>
+    <p class="text-muted">Éditer le message annuel du commissaire de district</p>
+</div>
+
+<div class="card-modern card">
+    <div class="card-body">
+        @if (!string.IsNullOrEmpty(Model.PhotoUrl))
+        {
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Photo actuelle</label>
+                <div>
+                    <img src="@Model.PhotoUrl" alt="Photo" class="img-thumbnail" style="max-width: 200px;" />
+                </div>
+            </div>
+        }
+
+        <form method="post" enctype="multipart/form-data" class="form-modern">
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="CreatedById" />
+            <input type="hidden" asp-for="CreatedAt" />
+            <input type="hidden" asp-for="PhotoUrl" />
+
+            <div class="row g-3">
+                <div class="col-md-12">
+                    <label asp-for="Titre" class="form-label fw-semibold">
+                        <i class="bi bi-heading me-1"></i>Titre *
+                    </label>
+                    <input asp-for="Titre" class="form-control" required />
+                    <span asp-validation-for="Titre" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="Annee" class="form-label fw-semibold">
+                        <i class="bi bi-calendar-year me-1"></i>Année *
+                    </label>
+                    <input asp-for="Annee" type="number" class="form-control" required min="2020" max="2100" />
+                    <span asp-validation-for="Annee" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">
+                        <i class="bi bi-image me-1"></i>Nouvelle Photo (optionnel)
+                    </label>
+                    <input type="file" name="photo" accept="image/*" class="form-control" />
+                    <small class="text-muted">Laisser vide pour conserver la photo actuelle</small>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="DateDebut" class="form-label fw-semibold">
+                        <i class="bi bi-calendar-event me-1"></i>Date début *
+                    </label>
+                    <input asp-for="DateDebut" type="date" class="form-control" required />
+                    <span asp-validation-for="DateDebut" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="DateFin" class="form-label fw-semibold">
+                        <i class="bi bi-calendar-x me-1"></i>Date fin *
+                    </label>
+                    <input asp-for="DateFin" type="date" class="form-control" required />
+                    <span asp-validation-for="DateFin" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-12">
+                    <label asp-for="Contenu" class="form-label fw-semibold">
+                        <i class="bi bi-text-paragraph me-1"></i>Contenu *
+                    </label>
+                    <textarea asp-for="Contenu" class="form-control" rows="10" required></textarea>
+                    <span asp-validation-for="Contenu" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-check">
+                        <input asp-for="IsActive" class="form-check-input" type="checkbox" />
+                        <label asp-for="IsActive" class="form-check-label">
+                            Activer ce mot
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4 d-flex gap-2">
+                <button type="submit" class="btn btn-primary btn-modern">
+                    <i class="bi bi-check-circle me-1"></i>Enregistrer
+                </button>
+                <a asp-action="Index" class="btn btn-outline-secondary btn-modern">
+                    <i class="bi bi-arrow-left me-1"></i>Retour
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

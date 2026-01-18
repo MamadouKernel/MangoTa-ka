@@ -1,0 +1,183 @@
+@model MangoTaikaDistrict.Domain.Entities.Nomination
+@{
+    ViewData["Title"] = "Détails de la Nomination";
+}
+
+<div class="mb-4">
+    <h2 class="fw-bold mb-1"><i class="bi bi-info-circle me-2 text-warning"></i>Détails de la Nomination</h2>
+    <p class="text-muted">Informations complètes</p>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card-modern card">
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold text-muted">Scout</label>
+                        <div class="fs-5 fw-semibold">
+                            <i class="bi bi-person me-2 text-primary"></i>@Model.Scout?.Nom @Model.Scout?.Prenoms
+                        </div>
+                        @if (!string.IsNullOrEmpty(Model.Scout?.Matricule))
+                        {
+                            <small class="text-muted">Matricule: @Model.Scout.Matricule</small>
+                        }
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold text-muted">Groupe</label>
+                        <div class="fs-5">
+                            <span class="badge bg-info fs-6">@Model.Groupe?.Nom</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold text-muted">Poste</label>
+                        <div class="fs-5">
+                            <span class="badge bg-primary fs-6"><i class="bi bi-briefcase me-1"></i>@Model.Poste</span>
+                        </div>
+                    </div>
+                    @if (!string.IsNullOrEmpty(Model.Fonction))
+                    {
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted">Fonction</label>
+                            <div class="fs-6">@Model.Fonction</div>
+                        </div>
+                    }
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold text-muted">Date Début</label>
+                        <div class="fs-6">
+                            <i class="bi bi-calendar-event me-1"></i>@Model.DateDebut.ToString("dd/MM/yyyy")
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold text-muted">Date Fin</label>
+                        <div class="fs-6">
+                            @if (Model.DateFin.HasValue)
+                            {
+                                <i class="bi bi-calendar-check me-1"></i>@Model.DateFin.Value.ToString("dd/MM/yyyy")
+                            }
+                            else
+                            {
+                                <span class="text-muted">-</span>
+                            }
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold text-muted">Statut</label>
+                        <div>
+                            @if (Model.Statut == MangoTaikaDistrict.Domain.Enums.StatutNomination.VALIDEE)
+                            {
+                                <span class="badge bg-success fs-6"><i class="bi bi-check-circle me-1"></i>@Model.Statut</span>
+                            }
+                            else if (Model.Statut == MangoTaikaDistrict.Domain.Enums.StatutNomination.EN_ATTENTE || Model.Statut == MangoTaikaDistrict.Domain.Enums.StatutNomination.SOUMISE)
+                            {
+                                <span class="badge bg-warning fs-6"><i class="bi bi-hourglass-split me-1"></i>@Model.Statut</span>
+                            }
+                            else if (Model.Statut == MangoTaikaDistrict.Domain.Enums.StatutNomination.REJETEE)
+                            {
+                                <span class="badge bg-danger fs-6"><i class="bi bi-x-circle me-1"></i>@Model.Statut</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary fs-6">@Model.Statut</span>
+                            }
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold text-muted">Créé par</label>
+                        <div class="fs-6">
+                            @(Model.CreePar?.Nom ?? "-") @(Model.CreePar?.Prenoms ?? "")
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold text-muted">Date de création</label>
+                        <div class="fs-6">
+                            <i class="bi bi-calendar me-1"></i>@Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")
+                        </div>
+                    </div>
+                    @if (!string.IsNullOrEmpty(Model.Observations))
+                    {
+                        <div class="col-12">
+                            <label class="form-label fw-semibold text-muted">Observations</label>
+                            <div class="p-3 bg-light rounded">
+                                @Model.Observations
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        @if (Model.Validations.Any())
+        {
+            <div class="card-modern card mt-4">
+                <div class="card-body">
+                    <h5 class="card-title mb-3"><i class="bi bi-clock-history me-2"></i>Historique des validations</h5>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Étape</th>
+                                    <th>Validateur</th>
+                                    <th>Décision</th>
+                                    <th>Commentaire</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var v in Model.Validations.OrderBy(v => v.StepOrder))
+                                {
+                                    <tr>
+                                        <td><span class="badge bg-secondary">@v.StepOrder</span></td>
+                                        <td>@v.Valideur?.Nom @v.Valideur?.Prenoms</td>
+                                        <td>
+                                            @if (v.Decision == MangoTaikaDistrict.Domain.Enums.DecisionValidation.APPROUVE)
+                                            {
+                                                <span class="badge bg-success">@v.Decision</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-danger">@v.Decision</span>
+                                            }
+                                        </td>
+                                        <td>@(v.Commentaire ?? "-")</td>
+                                        <td>@v.DecidedAt.ToString("dd/MM/yyyy HH:mm")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="col-lg-4">
+        <div class="card-modern card">
+            <div class="card-body">
+                <h5 class="card-title mb-3">Actions</h5>
+                <div class="d-grid gap-2">
+                    @if (Model.Statut == MangoTaikaDistrict.Domain.Enums.StatutNomination.BROUILLON)
+                    {
+                        <form method="post" asp-action="Soumettre" class="d-grid">
+                            <input type="hidden" name="id" value="@Model.Id" />
+                            <button type="submit" class="btn btn-success btn-modern">
+                                <i class="bi bi-send me-1"></i>Soumettre pour validation
+                            </button>
+                        </form>
+                    }
+                    <a asp-area="Admin" asp-controller="Nominations" asp-action="Edit" asp-route-id="@Model.Id" 
+                       class="btn btn-primary btn-modern">
+                        <i class="bi bi-pencil me-1"></i>Modifier
+                    </a>
+                    <a asp-area="Admin" asp-controller="Nominations" asp-action="Delete" asp-route-id="@Model.Id" 
+                       class="btn btn-outline-danger btn-modern">
+                        <i class="bi bi-trash me-1"></i>Supprimer
+                    </a>
+                    <a asp-area="Admin" asp-controller="Nominations" asp-action="Index" 
+                       class="btn btn-outline-secondary btn-modern">
+                        <i class="bi bi-arrow-left me-1"></i>Retour à la liste
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

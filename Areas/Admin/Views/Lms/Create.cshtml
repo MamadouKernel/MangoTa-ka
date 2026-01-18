@@ -1,0 +1,86 @@
+@model MangoTaikaDistrict.Domain.Entities.Formation
+@{
+    ViewData["Title"] = "Créer une Formation";
+}
+
+<div class="mb-4">
+    <h2 class="fw-bold mb-1"><i class="bi bi-book me-2 text-primary"></i>Créer une Formation</h2>
+    <p class="text-muted">Ajouter une nouvelle formation au LMS</p>
+</div>
+
+<div class="card-modern card">
+    <div class="card-body">
+        <form method="post" class="form-modern">
+            <div class="row g-3">
+                <div class="col-md-12">
+                    <label asp-for="Titre" class="form-label fw-semibold">Titre *</label>
+                    <input asp-for="Titre" class="form-control" required />
+                    <span asp-validation-for="Titre" class="text-danger"></span>
+                </div>
+                
+                <div class="col-md-12">
+                    <label asp-for="Description" class="form-label fw-semibold">Description *</label>
+                    <textarea asp-for="Description" class="form-control" rows="3" required></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                
+                <div class="col-md-12">
+                    <label asp-for="Contenu" class="form-label fw-semibold">Contenu</label>
+                    <textarea asp-for="Contenu" class="form-control" rows="10"></textarea>
+                    <small class="text-muted">Contenu HTML ou Markdown</small>
+                </div>
+                
+                <div class="col-md-6">
+                    <label asp-for="ImageUrl" class="form-label fw-semibold">URL de l'image</label>
+                    <input asp-for="ImageUrl" class="form-control" type="url" />
+                </div>
+                
+                <div class="col-md-3">
+                    <label asp-for="DureeEstimee" class="form-label fw-semibold">Durée estimée (heures)</label>
+                    <input asp-for="DureeEstimee" class="form-control" type="number" min="1" />
+                </div>
+                
+                <div class="col-md-3">
+                    <label asp-for="Niveau" class="form-label fw-semibold">Niveau</label>
+                    <select asp-for="Niveau" class="form-select">
+                        <option value="Débutant">Débutant</option>
+                        <option value="Intermédiaire">Intermédiaire</option>
+                        <option value="Avancé">Avancé</option>
+                    </select>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-check form-switch mt-4">
+                        <input asp-for="EstActive" class="form-check-input" type="checkbox" checked />
+                        <label asp-for="EstActive" class="form-check-label fw-semibold">Formation active</label>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-check form-switch mt-4">
+                        <input asp-for="EstPublique" class="form-check-input" type="checkbox" />
+                        <label asp-for="EstPublique" class="form-check-label fw-semibold">Formation publique</label>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <label asp-for="OrdreAffichage" class="form-label fw-semibold">Ordre d'affichage</label>
+                    <input asp-for="OrdreAffichage" class="form-control" type="number" value="0" />
+                </div>
+            </div>
+            
+            <div class="mt-4 d-flex gap-2">
+                <button type="submit" class="btn btn-primary btn-modern">
+                    <i class="bi bi-check-circle me-1"></i>Enregistrer
+                </button>
+                <a asp-area="Admin" asp-controller="Lms" asp-action="Index" class="btn btn-outline-secondary btn-modern">
+                    <i class="bi bi-arrow-left me-1"></i>Retour
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

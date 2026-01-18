@@ -33,6 +33,17 @@ public class UtilisateurRepository : IUtilisateurRepository
             .ToListAsync();
     }
 
+    public async Task<List<Utilisateur>> GetAllValidatedAsync()
+    {
+        return await _db.Utilisateurs
+            .Where(u => u.IsValidated && u.IsActive)
+            .Include(u => u.UtilisateurRoles)
+                .ThenInclude(ur => ur.Role)
+            .Include(u => u.ValidatedBy)
+            .OrderByDescending(u => u.ValidatedAt ?? u.CreatedAt)
+            .ToListAsync();
+    }
+
     public async Task AddAsync(Utilisateur user) => await _db.Utilisateurs.AddAsync(user);
 
     public Task UpdateAsync(Utilisateur user)

@@ -1,0 +1,195 @@
+@model MangoTaikaDistrict.Domain.Entities.Scout
+@{
+    ViewData["Title"] = "Détails du Scout";
+}
+
+<div class="mb-4">
+    <h2 class="fw-bold mb-1"><i class="bi bi-info-circle me-2 text-primary"></i>Détails du Scout</h2>
+    <p class="text-muted">Informations complètes</p>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card-modern card">
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold text-muted">Nom</label>
+                        <div class="fs-5 fw-semibold">
+                            <i class="bi bi-person me-2 text-primary"></i>@Model.Nom
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold text-muted">Prénoms</label>
+                        <div class="fs-5">@Model.Prenoms</div>
+                    </div>
+                    @if (!string.IsNullOrEmpty(Model.Matricule))
+                    {
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted">Matricule</label>
+                            <div>
+                                <span class="badge bg-secondary fs-6">@Model.Matricule</span>
+                            </div>
+                        </div>
+                    }
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold text-muted">Groupe</label>
+                        <div>
+                            <span class="badge bg-info fs-6">@Model.Groupe?.Nom</span>
+                        </div>
+                    </div>
+                    @if (!string.IsNullOrEmpty(Model.Sexe))
+                    {
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted">Sexe</label>
+                            <div class="fs-6">@Model.Sexe</div>
+                        </div>
+                    }
+                    @if (Model.DateNaissance.HasValue)
+                    {
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-muted">Date de naissance</label>
+                            <div class="fs-6">
+                                <i class="bi bi-calendar-event me-1"></i>@Model.DateNaissance.Value.ToString("dd/MM/yyyy")
+                            </div>
+                        </div>
+                    }
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold text-muted">Statut</label>
+                        <div>
+                            @if (Model.Statut == "Actif")
+                            {
+                                <span class="badge bg-success fs-6"><i class="bi bi-check-circle me-1"></i>@Model.Statut</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary fs-6">@Model.Statut</span>
+                            }
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold text-muted">Date d'inscription</label>
+                        <div class="fs-6">
+                            <i class="bi bi-calendar me-1"></i>@Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @if (Model.Cotisations.Any())
+        {
+            <div class="card-modern card mt-4">
+                <div class="card-body">
+                    <h5 class="card-title mb-3"><i class="bi bi-cash-coin me-2"></i>Cotisations (@Model.Cotisations.Count)</h5>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Période</th>
+                                    <th>Montant</th>
+                                    <th>Statut</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var c in Model.Cotisations.Take(5))
+                                {
+                                    <tr>
+                                        <td>@c.Periode</td>
+                                        <td>@c.MontantPaye.ToString("N2") / @c.MontantAttendu.ToString("N2") FCFA</td>
+                                        <td>
+                                            @if (c.Statut == MangoTaikaDistrict.Domain.Enums.StatutCotisation.PAYE)
+                                            {
+                                                <span class="badge bg-success">@c.Statut</span>
+                                            }
+                                            else if (c.Statut == MangoTaikaDistrict.Domain.Enums.StatutCotisation.PARTIEL)
+                                            {
+                                                <span class="badge bg-warning">@c.Statut</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-danger">@c.Statut</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    @if (Model.Cotisations.Count > 5)
+                    {
+                        <small class="text-muted">Et @(Model.Cotisations.Count - 5) autre(s)...</small>
+                    }
+                </div>
+            </div>
+        }
+
+        @if (Model.Nominations.Any())
+        {
+            <div class="card-modern card mt-4">
+                <div class="card-body">
+                    <h5 class="card-title mb-3"><i class="bi bi-award me-2"></i>Nominations (@Model.Nominations.Count)</h5>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Poste</th>
+                                    <th>Date Début</th>
+                                    <th>Statut</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var n in Model.Nominations.Take(5))
+                                {
+                                    <tr>
+                                        <td>@n.Poste</td>
+                                        <td>@n.DateDebut.ToString("dd/MM/yyyy")</td>
+                                        <td>
+                                            @if (n.Statut == MangoTaikaDistrict.Domain.Enums.StatutNomination.VALIDEE)
+                                            {
+                                                <span class="badge bg-success">@n.Statut</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-warning">@n.Statut</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    @if (Model.Nominations.Count > 5)
+                    {
+                        <small class="text-muted">Et @(Model.Nominations.Count - 5) autre(s)...</small>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+    <div class="col-lg-4">
+        <div class="card-modern card">
+            <div class="card-body">
+                <h5 class="card-title mb-3">Actions</h5>
+                <div class="d-grid gap-2">
+                    <a asp-area="Admin" asp-controller="Scouts" asp-action="Edit" asp-route-id="@Model.Id" 
+                       class="btn btn-primary btn-modern">
+                        <i class="bi bi-pencil me-1"></i>Modifier
+                    </a>
+                    <a asp-area="Admin" asp-controller="Ascci" asp-action="CheckScout" asp-route-scoutId="@Model.Id" 
+                       class="btn btn-outline-primary btn-modern">
+                        <i class="bi bi-shield-check me-1"></i>Vérifier ASCCI
+                    </a>
+                    <a asp-area="Admin" asp-controller="Scouts" asp-action="Delete" asp-route-id="@Model.Id" 
+                       class="btn btn-outline-danger btn-modern">
+                        <i class="bi bi-trash me-1"></i>Supprimer
+                    </a>
+                    <a asp-area="Admin" asp-controller="Scouts" asp-action="Index" 
+                       class="btn btn-outline-secondary btn-modern">
+                        <i class="bi bi-arrow-left me-1"></i>Retour à la liste
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

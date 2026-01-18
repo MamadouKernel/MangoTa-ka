@@ -1,0 +1,13 @@
+@{
+    var album = ViewBag.Album as MangoTaikaDistrict.Domain.Entities.Album;
+}
+<h2>Upload média — @album?.Titre</h2>
+
+<form method="post" enctype="multipart/form-data">
+    <input type="hidden" name="albumId" value="@album?.Id" />
+    <div>Fichier: <input type="file" name="file" /></div>
+    <div>Caption: <input type="text" name="caption" /></div>
+    <button type="submit">Uploader</button>
+</form>
+
+<p><a asp-area="Admin" asp-controller="Content" asp-action="Albums">Retour</a></p>

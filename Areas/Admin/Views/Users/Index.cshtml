@@ -1,0 +1,130 @@
+@model List<MangoTaikaDistrict.Domain.Entities.Utilisateur>
+@{
+    ViewData["Title"] = "Gestion des Utilisateurs";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-1"><i class="bi bi-people me-2 text-primary"></i>Utilisateurs validés</h2>
+        <p class="text-muted mb-0">Liste de tous les utilisateurs validés du système</p>
+    </div>
+    <div>
+        <a asp-area="Admin" asp-controller="Users" asp-action="Pending" class="btn btn-warning btn-modern">
+            <i class="bi bi-person-check me-1"></i>En attente
+        </a>
+    </div>
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle me-2"></i>@TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-triangle me-2"></i>@TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (Model.Any())
+{
+    <div class="card-modern card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-modern table-hover align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th><i class="bi bi-person me-1"></i>Nom & Prénoms</th>
+                            <th><i class="bi bi-telephone me-1"></i>Téléphone</th>
+                            <th><i class="bi bi-envelope me-1"></i>Email</th>
+                            <th><i class="bi bi-shield-check me-1"></i>Rôles</th>
+                            <th><i class="bi bi-calendar me-1"></i>Date d'inscription</th>
+                            <th><i class="bi bi-check-circle me-1"></i>Validé par</th>
+                            <th><i class="bi bi-clock me-1"></i>Date validation</th>
+                            <th><i class="bi bi-info-circle me-1"></i>Statut</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <strong>@user.Nom @user.Prenoms</strong>
+                                </td>
+                                <td>@user.Telephone</td>
+                                <td>@(user.Email ?? "-")</td>
+                                <td>
+                                    @foreach (var role in user.UtilisateurRoles)
+                                    {
+                                        <span class="badge bg-secondary me-1">@role.Role.Libelle</span>
+                                    }
+                                </td>
+                                <td>
+                                    <i class="bi bi-calendar-event me-1 text-primary"></i>
+                                    @user.CreatedAt.ToString("dd/MM/yyyy")<br>
+                                    <small class="text-muted">@user.CreatedAt.ToString("HH:mm")</small>
+                                </td>
+                                <td>
+                                    @if (user.ValidatedBy != null)
+                                    {
+                                        <div>
+                                            <i class="bi bi-person-check me-1 text-success"></i>
+                                            <strong>@user.ValidatedBy.Nom @user.ValidatedBy.Prenoms</strong>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">-</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (user.ValidatedAt.HasValue)
+                                    {
+                                        <i class="bi bi-calendar-check me-1 text-success"></i>
+                                        @user.ValidatedAt.Value.ToString("dd/MM/yyyy")<br>
+                                        <small class="text-muted">@user.ValidatedAt.Value.ToString("HH:mm")</small>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">-</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (user.IsActive && user.IsValidated)
+                                    {
+                                        <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i>Actif</span>
+                                    }
+                                    else if (!user.IsActive)
+                                    {
+                                        <span class="badge bg-danger"><i class="bi bi-x-circle me-1"></i>Inactif</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning"><i class="bi bi-clock-history me-1"></i>En attente</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="card-modern card">
+        <div class="card-body text-center py-5">
+            <i class="bi bi-inbox fs-1 text-muted d-block mb-3"></i>
+            <p class="text-muted">Aucun utilisateur validé pour le moment</p>
+            <a asp-area="Admin" asp-controller="Users" asp-action="Pending" class="btn btn-primary">
+                <i class="bi bi-person-check me-1"></i>Voir les utilisateurs en attente
+            </a>
+        </div>
+    </div>
+}

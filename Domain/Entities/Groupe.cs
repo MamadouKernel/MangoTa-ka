@@ -14,6 +14,8 @@ public class Groupe
     public decimal? GpsLat { get; set; }
     public decimal? GpsLng { get; set; }
 
+    public string? LogoUrl { get; set; } // URL du logo du groupe
+
     public bool IsActive { get; set; } = true;
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

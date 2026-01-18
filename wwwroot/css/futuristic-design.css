@@ -1,0 +1,708 @@
+/* ============================================
+   DESIGN FUTURISTE - MANGO TAÏKA DISTRICT
+   Système de design moderne à couper le souffle
+   ============================================ */
+
+:root {
+  /* Effets de lumière et glow */
+  --glow-primary: 0 0 20px rgba(107, 166, 68, 0.3);
+  --glow-primary-strong: 0 0 40px rgba(107, 166, 68, 0.5);
+  --glow-white: 0 0 30px rgba(255, 255, 255, 0.4);
+  
+  /* Animations fluides */
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+  --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+  
+  /* Profondeur et élévation */
+  --elevation-1: 0 2px 4px rgba(45, 80, 22, 0.08);
+  --elevation-2: 0 4px 8px rgba(45, 80, 22, 0.12);
+  --elevation-3: 0 8px 16px rgba(45, 80, 22, 0.16);
+  --elevation-4: 0 16px 32px rgba(45, 80, 22, 0.24);
+  --elevation-5: 0 24px 48px rgba(45, 80, 22, 0.32);
+}
+
+/* ============================================
+   ANIMATIONS FUTURISTES GLOBALES
+   ============================================ */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Application des animations */
+.fade-in-up {
+  animation: fadeInUp 0.6s var(--ease-out-expo) forwards;
+}
+
+.fade-in-scale {
+  animation: fadeInScale 0.5s var(--ease-out-back) forwards;
+}
+
+/* ============================================
+   CARDS FUTURISTES AMÉLIORÉES
+   ============================================ */
+
+.card-modern,
+.card-modern-glass {
+  position: relative;
+  overflow: visible;
+  transform-style: preserve-3d;
+  transition: all 0.4s var(--ease-out-quart);
+}
+
+.card-modern::before,
+.card-modern-glass::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-primary-lighter) 100%);
+  border-radius: var(--radius-lg);
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.4s var(--ease-out-quart);
+  filter: blur(8px);
+}
+
+.card-modern:hover::before,
+.card-modern-glass:hover::before {
+  opacity: 0.3;
+}
+
+.card-modern:hover,
+.card-modern-glass:hover {
+  transform: translateY(-8px) scale(1.01);
+  box-shadow: var(--elevation-5), var(--glow-primary);
+}
+
+.card-modern .card-header,
+.card-modern-glass .card-header {
+  background: linear-gradient(135deg, rgba(45, 80, 22, 0.03) 0%, rgba(107, 166, 68, 0.05) 100%);
+  border-bottom: 2px solid rgba(45, 80, 22, 0.1);
+  padding: var(--spacing-lg) var(--spacing-xl);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+/* ============================================
+   BOUTONS FUTURISTES
+   ============================================ */
+
+.btn {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  transition: all 0.4s var(--ease-out-back);
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s var(--ease-out-expo), height 0.6s var(--ease-out-expo);
+  z-index: -1;
+}
+
+.btn:hover::before {
+  width: 400px;
+  height: 400px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-medium) 50%, var(--color-primary-light) 100%);
+  background-size: 200% 100%;
+  border: none;
+  box-shadow: var(--elevation-2), 0 0 20px rgba(107, 166, 68, 0.3);
+}
+
+.btn-primary:hover {
+  background-position: 100% 0;
+  transform: translateY(-3px);
+  box-shadow: var(--elevation-4), var(--glow-primary-strong);
+}
+
+.btn-primary:active {
+  transform: translateY(-1px);
+}
+
+.btn-outline-primary {
+  border: 2px solid var(--color-primary);
+  background: transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-outline-primary::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+  transition: left 0.4s var(--ease-out-expo);
+  z-index: -1;
+}
+
+.btn-outline-primary:hover::after {
+  left: 0;
+}
+
+.btn-outline-primary:hover {
+  color: white;
+  border-color: var(--color-primary-light);
+  transform: translateY(-3px);
+  box-shadow: var(--elevation-3), var(--glow-primary);
+}
+
+/* ============================================
+   FORMULAIRES FUTURISTES
+   ============================================ */
+
+.form-control,
+.form-select {
+  position: relative;
+  transition: all 0.3s var(--ease-out-quart);
+  background: white;
+  border: 2px solid var(--color-border);
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--color-primary-light);
+  box-shadow: 0 0 0 4px rgba(107, 166, 68, 0.15), var(--elevation-2);
+  transform: translateY(-2px);
+  background: #FFFFFF;
+}
+
+.form-control:focus::placeholder,
+.form-select:focus::placeholder {
+  color: var(--color-primary-light);
+  opacity: 0.7;
+}
+
+.form-label {
+  font-weight: 600;
+  color: var(--color-text-dark);
+  margin-bottom: var(--spacing-sm);
+  display: block;
+  letter-spacing: 0.3px;
+  transition: color 0.3s ease;
+}
+
+.form-control:focus ~ .form-label,
+.form-select:focus ~ .form-label {
+  color: var(--color-primary);
+}
+
+/* Input avec icône */
+.input-group-modern {
+  position: relative;
+}
+
+.input-group-modern .form-control {
+  padding-left: 3.5rem;
+}
+
+.input-group-modern .input-icon {
+  position: absolute;
+  left: var(--spacing-md);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-light);
+  z-index: 10;
+  transition: all 0.3s ease;
+  font-size: 1.1rem;
+}
+
+.input-group-modern .form-control:focus ~ .input-icon,
+.input-group-modern .form-control:focus + .input-icon {
+  color: var(--color-primary);
+  transform: translateY(-50%) scale(1.2);
+}
+
+/* ============================================
+   TABLES FUTURISTES
+   ============================================ */
+
+.table-modern {
+  background: white;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--elevation-2);
+  border: none;
+}
+
+.table-modern thead {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-medium) 100%);
+  color: white;
+}
+
+.table-modern thead th {
+  border: none;
+  padding: var(--spacing-lg);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.875rem;
+}
+
+.table-modern tbody tr {
+  transition: all 0.3s var(--ease-out-quart);
+  border-bottom: 1px solid rgba(45, 80, 22, 0.05);
+}
+
+.table-modern tbody tr:hover {
+  background: rgba(107, 166, 68, 0.05);
+  transform: translateX(4px);
+  box-shadow: -4px 0 0 var(--color-primary-light);
+}
+
+.table-modern tbody td {
+  padding: var(--spacing-lg);
+  border: none;
+  vertical-align: middle;
+}
+
+/* ============================================
+   BADGES ET LABELS FUTURISTES
+   ============================================ */
+
+.badge {
+  padding: var(--spacing-xs) var(--spacing-md);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  border-radius: var(--radius-md);
+  box-shadow: var(--elevation-1);
+  transition: all 0.3s var(--ease-out-quart);
+  position: relative;
+  overflow: hidden;
+}
+
+.badge::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.6s ease;
+}
+
+.badge:hover::before {
+  left: 100%;
+}
+
+.badge:hover {
+  transform: scale(1.05);
+  box-shadow: var(--elevation-2);
+}
+
+.badge.bg-primary {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-medium) 100%) !important;
+}
+
+.badge.bg-success {
+  background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-primary-lighter) 100%) !important;
+}
+
+.badge.bg-warning {
+  background: linear-gradient(135deg, var(--color-primary-medium) 0%, var(--color-primary-light) 100%) !important;
+}
+
+.badge.bg-danger {
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%) !important;
+}
+
+.badge.bg-info {
+  background: linear-gradient(135deg, var(--color-primary-lighter) 0%, var(--color-primary-lightest) 100%) !important;
+  color: var(--color-text-dark) !important;
+}
+
+/* ============================================
+   DROPDOWN FUTURISTE
+   ============================================ */
+
+.dropdown-menu {
+  border: none;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--elevation-4);
+  padding: var(--spacing-sm);
+  margin-top: var(--spacing-sm);
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(45, 80, 22, 0.1);
+  min-width: 240px;
+  animation: fadeInScale 0.3s var(--ease-out-back);
+}
+
+.dropdown-item {
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md) var(--spacing-lg);
+  transition: all 0.3s var(--ease-out-quart);
+  font-weight: 500;
+  color: var(--color-text-dark);
+  font-size: 0.95rem;
+  margin-bottom: var(--spacing-xs);
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.dropdown-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--color-primary);
+  transform: scaleY(0);
+  transition: transform 0.3s var(--ease-out-expo);
+}
+
+.dropdown-item:hover::before {
+  transform: scaleY(1);
+}
+
+.dropdown-item:hover {
+  background: linear-gradient(90deg, rgba(107, 166, 68, 0.1) 0%, transparent 100%);
+  color: var(--color-primary);
+  transform: translateX(6px);
+  padding-left: calc(var(--spacing-lg) + 6px);
+}
+
+.dropdown-item i {
+  margin-right: var(--spacing-md);
+  width: 24px;
+  text-align: center;
+  transition: transform 0.3s var(--ease-out-back);
+}
+
+.dropdown-item:hover i {
+  transform: scale(1.2) rotate(5deg);
+}
+
+/* ============================================
+   NAVBAR FUTURISTE
+   ============================================ */
+
+.navbar:not(.modern-navbar) {
+  backdrop-filter: blur(20px) saturate(180%);
+  background: rgba(255, 255, 255, 0.95) !important;
+  box-shadow: 0 4px 24px rgba(45, 80, 22, 0.12);
+  border-bottom: 2px solid rgba(107, 166, 68, 0.2);
+  transition: all 0.3s var(--ease-out-quart);
+}
+
+.navbar.scrolled {
+  box-shadow: 0 8px 32px rgba(45, 80, 22, 0.16);
+  border-bottom-color: var(--color-primary-light);
+}
+
+.nav-link {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  transition: all 0.3s var(--ease-out-quart);
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+  border-radius: 3px;
+  transform: translateX(-50%);
+  transition: width 0.4s var(--ease-out-expo);
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  width: 80%;
+}
+
+.nav-link:hover {
+  background: rgba(107, 166, 68, 0.1);
+  transform: translateY(-2px);
+}
+
+.nav-link.active {
+  background: rgba(107, 166, 68, 0.15);
+  color: var(--color-primary) !important;
+  font-weight: 600;
+}
+
+/* ============================================
+   ALERTS FUTURISTES
+   ============================================ */
+
+.alert {
+  border: none;
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg) var(--spacing-xl);
+  box-shadow: var(--elevation-2);
+  border-left: 4px solid;
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp 0.4s var(--ease-out-quart);
+}
+
+.alert::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(180deg, transparent 0%, currentColor 50%, transparent 100%);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.alert-primary {
+  background: linear-gradient(135deg, rgba(45, 80, 22, 0.1) 0%, rgba(107, 166, 68, 0.05) 100%);
+  border-left-color: var(--color-primary);
+  color: var(--color-text-dark);
+}
+
+.alert-success {
+  background: linear-gradient(135deg, rgba(107, 166, 68, 0.1) 0%, rgba(143, 203, 107, 0.05) 100%);
+  border-left-color: var(--color-primary-light);
+  color: var(--color-text-dark);
+}
+
+/* ============================================
+   MODALS FUTURISTES
+   ============================================ */
+
+.modal-content {
+  border: none;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--elevation-5);
+  overflow: hidden;
+  animation: fadeInScale 0.3s var(--ease-out-back);
+}
+
+.modal-header {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-medium) 100%);
+  color: white;
+  border-bottom: none;
+  padding: var(--spacing-xl);
+}
+
+.modal-body {
+  padding: var(--spacing-2xl);
+}
+
+.modal-footer {
+  border-top: 2px solid rgba(45, 80, 22, 0.1);
+  padding: var(--spacing-lg) var(--spacing-xl);
+  background: rgba(45, 80, 22, 0.02);
+}
+
+/* ============================================
+   LISTES FUTURISTES
+   ============================================ */
+
+.list-group-item {
+  border: none;
+  border-left: 3px solid transparent;
+  padding: var(--spacing-md) var(--spacing-lg);
+  margin-bottom: var(--spacing-xs);
+  border-radius: var(--radius-md);
+  transition: all 0.3s var(--ease-out-quart);
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.list-group-item:hover {
+  border-left-color: var(--color-primary-light);
+  background: rgba(107, 166, 68, 0.05);
+  transform: translateX(4px);
+  box-shadow: var(--elevation-2);
+}
+
+.list-group-item.active {
+  border-left-color: var(--color-primary);
+  background: linear-gradient(90deg, rgba(107, 166, 68, 0.1) 0%, transparent 100%);
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+/* ============================================
+   PAGINATION FUTURISTE
+   ============================================ */
+
+.pagination {
+  gap: var(--spacing-xs);
+}
+
+.page-link {
+  border: none;
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md) var(--spacing-lg);
+  color: var(--color-text-dark);
+  transition: all 0.3s var(--ease-out-quart);
+  box-shadow: var(--elevation-1);
+  background: white;
+}
+
+.page-link:hover {
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--elevation-2);
+}
+
+.page-item.active .page-link {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+  color: white;
+  box-shadow: var(--elevation-3), var(--glow-primary);
+}
+
+/* ============================================
+   UTILITAIRES FUTURISTES
+   ============================================ */
+
+.text-gradient {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+}
+
+.shadow-glow {
+  box-shadow: var(--elevation-3), var(--glow-primary);
+}
+
+.hover-lift {
+  transition: transform 0.3s var(--ease-out-back);
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+}
+
+.glass-effect {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* ============================================
+   RESPONSIVE FUTURISTE
+   ============================================ */
+
+@media (max-width: 768px) {
+  .card-modern,
+  .card-modern-glass {
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .btn {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: 0.8125rem;
+  }
+  
+  .table-modern {
+    font-size: 0.875rem;
+  }
+  
+  .table-modern thead th,
+  .table-modern tbody td {
+    padding: var(--spacing-sm);
+  }
+}
+
+/* ============================================
+   SCROLLBAR FUTURISTE
+   ============================================ */
+
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(45, 80, 22, 0.05);
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+  border-radius: 6px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 10px rgba(107, 166, 68, 0.3);
+  transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-primary-lighter) 100%);
+  box-shadow: 0 0 15px rgba(107, 166, 68, 0.5);
+}

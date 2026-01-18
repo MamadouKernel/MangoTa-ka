@@ -1,0 +1,169 @@
+@model List<MangoTaikaDistrict.Domain.Entities.Activite>
+@{
+    ViewData["Title"] = "Gestion des Activités";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-1"><i class="bi bi-calendar-event me-2 text-primary"></i>Activités</h2>
+        <p class="text-muted mb-0">Gérer les activités et leurs autorisations</p>
+    </div>
+    <div>
+        @if (User.IsInRole("ADMIN") || User.IsInRole("GESTIONNAIRE"))
+        {
+            <a asp-area="Admin" asp-controller="Authorizations" asp-action="CreateActivite" class="btn btn-primary btn-modern me-2">
+                <i class="bi bi-plus-circle me-1"></i>Nouvelle activité
+            </a>
+        }
+        <a asp-area="Admin" asp-controller="Authorizations" asp-action="Pending" class="btn btn-outline-warning btn-modern">
+            <i class="bi bi-clock-history me-1"></i>Demandes en attente
+        </a>
+    </div>
+</div>
+
+@if (TempData["err"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-triangle me-2"></i>@TempData["err"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle me-2"></i>@TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="card-modern card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-modern table-hover align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th><i class="bi bi-file-text me-1"></i>Titre</th>
+                        <th><i class="bi bi-people me-1"></i>Groupe</th>
+                        <th><i class="bi bi-geo-alt me-1"></i>Lieu</th>
+                        <th><i class="bi bi-calendar me-1"></i>Date début</th>
+                        <th><i class="bi bi-calendar-check me-1"></i>Date fin</th>
+                        <th><i class="bi bi-info-circle me-1"></i>Statut</th>
+                        <th><i class="bi bi-shield-check me-1"></i>Autorisation</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Any())
+                    {
+                        @foreach (var a in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <strong>@a.Titre</strong>
+                                    @if (!string.IsNullOrEmpty(a.TypeActivite))
+                                    {
+                                        <br><small class="text-muted"><i class="bi bi-tag me-1"></i>@a.TypeActivite</small>
+                                    }
+                                </td>
+                                <td>
+                                    <span class="badge bg-info">@a.Groupe?.Nom</span>
+                                </td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(a.Lieu))
+                                    {
+                                        <span><i class="bi bi-geo-alt me-1"></i>@a.Lieu</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">-</span>
+                                    }
+                                </td>
+                                <td>
+                                    <i class="bi bi-calendar-event me-1 text-primary"></i>
+                                    <span>@a.DateDebut.ToString("dd/MM/yyyy")</span><br>
+                                    <small class="text-muted">@a.DateDebut.ToString("HH:mm")</small>
+                                </td>
+                                <td>
+                                    <i class="bi bi-calendar-check me-1 text-success"></i>
+                                    <span>@a.DateFin.ToString("dd/MM/yyyy")</span><br>
+                                    <small class="text-muted">@a.DateFin.ToString("HH:mm")</small>
+                                </td>
+                                <td>
+                                    @switch (a.Statut)
+                                    {
+                                        case MangoTaikaDistrict.Domain.Enums.StatutDemande.BROUILLON:
+                                            <span class="badge bg-secondary"><i class="bi bi-file-earmark me-1"></i>Brouillon</span>
+                                            break;
+                                        case MangoTaikaDistrict.Domain.Enums.StatutDemande.SOUMISE:
+                                            <span class="badge bg-info"><i class="bi bi-send me-1"></i>Soumise</span>
+                                            break;
+                                        case MangoTaikaDistrict.Domain.Enums.StatutDemande.EN_ATTENTE:
+                                            <span class="badge bg-warning"><i class="bi bi-clock-history me-1"></i>En attente</span>
+                                            break;
+                                        case MangoTaikaDistrict.Domain.Enums.StatutDemande.VALIDEE:
+                                            <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i>Validée</span>
+                                            break;
+                                        case MangoTaikaDistrict.Domain.Enums.StatutDemande.REJETEE:
+                                            <span class="badge bg-danger"><i class="bi bi-x-circle me-1"></i>Rejetée</span>
+                                            break;
+                                        default:
+                                            <span class="badge bg-secondary">@a.Statut</span>
+                                            break;
+                                    }
+                                </td>
+                                <td>
+                                    @if (a.DemandeAutorisation == null)
+                                    {
+                                        <span class="badge bg-light text-dark">
+                                            <i class="bi bi-dash-circle me-1"></i>Aucune demande
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-primary">
+                                            <i class="bi bi-shield-check me-1"></i>Demande créée
+                                        </span>
+                                    }
+                                </td>
+                                <td class="text-end">
+                                    @if (a.DemandeAutorisation == null && (User.IsInRole("ADMIN") || User.IsInRole("GESTIONNAIRE")))
+                                    {
+                                        <form method="post" asp-area="Admin" asp-controller="Authorizations" asp-action="Soumettre" class="d-inline">
+                                            <input type="hidden" name="activiteId" value="@a.Id" />
+                                            <button type="submit" class="btn btn-sm btn-primary btn-modern">
+                                                <i class="bi bi-send me-1"></i>Soumettre
+                                            </button>
+                                        </form>
+                                    }
+                                    else if (a.DemandeAutorisation != null)
+                                    {
+                                        <a asp-area="Admin" asp-controller="Authorizations" asp-action="Details" asp-route-id="@a.DemandeAutorisation.Id" 
+                                           class="btn btn-sm btn-outline-info btn-modern">
+                                            <i class="bi bi-eye me-1"></i>Voir demande
+                                        </a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="8" class="text-center py-5">
+                                <i class="bi bi-inbox fs-1 text-muted d-block mb-2"></i>
+                                <p class="text-muted">Aucune activité enregistrée</p>
+                                @if (User.IsInRole("ADMIN") || User.IsInRole("GESTIONNAIRE"))
+                                {
+                                    <a asp-area="Admin" asp-controller="Authorizations" asp-action="CreateActivite" class="btn btn-primary">
+                                        <i class="bi bi-plus-circle me-1"></i>Créer la première activité
+                                    </a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

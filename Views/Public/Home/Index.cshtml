@@ -1,7 +1,14 @@
 @{
     ViewData["Title"] = "Accueil";
     var motCommissaire = ViewBag.MotCommissaire as MangoTaikaDistrict.Domain.Entities.MotCommissaire;
-    var banniere = (ViewBag.Banniere as List<MangoTaikaDistrict.Domain.Entities.Actualite>)?.FirstOrDefault();
+    var banniere = ViewBag.Banniere as MangoTaikaDistrict.Domain.Entities.Actualite;
+    var recentNews = ViewBag.RecentNews as List<MangoTaikaDistrict.Domain.Entities.Actualite> ?? new();
+    var recentAlbums = ViewBag.RecentAlbums as List<MangoTaikaDistrict.Domain.Entities.Album> ?? new();
+    var recentMessages = ViewBag.RecentMessages as List<MangoTaikaDistrict.Domain.Entities.LivreOrMessage> ?? new();
+    var recentFormations = ViewBag.RecentFormations as List<MangoTaikaDistrict.Domain.Entities.Formation> ?? new();
+    var totalGroupes = ViewBag.TotalGroupes as int? ?? 0;
+    var totalScouts = ViewBag.TotalScouts as int? ?? 0;
+    var totalActualites = ViewBag.TotalActualites as int? ?? 0;
 }
 
 <!-- Hero Section avec effet parallax -->
@@ -17,7 +24,7 @@
             <div class="col-lg-6 text-white">
                 <div class="hero-content">
                     <h1 class="display-3 fw-bold mb-4 animate-fade-in">
-                        <span class="gradient-text">Mango Taika</span><br>
+                        <span class="gradient-text">MANGO TAÏKA</span><br>
                         <span class="text-white">District</span>
                     </h1>
                     <p class="lead mb-4 fs-4 animate-slide-up">
@@ -49,8 +56,11 @@
                 </div>
             </div>
             <div class="col-lg-6 text-center mt-5 mt-lg-0">
-                <div class="hero-image-container">
-                    <img src="~/images/logo.png" alt="Logo Mango Taika" class="hero-logo animate-float" />
+                <div class="hero-image-container position-relative">
+                    <!-- Logo bien visible au premier plan -->
+                    <div class="hero-logo-wrapper">
+                        <img src="~/images/logo.png" alt="Logo MANGO TAÏKA" class="hero-logo animate-float" style="max-width: 400px; width: 100%; height: auto; filter: drop-shadow(0 20px 60px rgba(0,0,0,0.4)); z-index: 10; position: relative;" />
+                    </div>
                     <div class="floating-particles">
                         <div class="particle"></div>
                         <div class="particle"></div>
@@ -232,34 +242,247 @@
     </div>
 </section>
 
-<!-- Stats Section -->
+<!-- Stats Section Dynamique -->
 <section class="stats-section py-5 mb-5">
     <div class="container">
         <div class="row g-4 text-center">
             <div class="col-md-3 col-6">
                 <div class="stat-item">
-                    <div class="stat-number">50+</div>
-                    <div class="stat-label">Groupes</div>
+                    <div class="stat-number" data-target="@totalGroupes">0</div>
+                    <div class="stat-label"><i class="bi bi-people-fill me-2"></i>Groupes Actifs</div>
                 </div>
             </div>
             <div class="col-md-3 col-6">
                 <div class="stat-item">
-                    <div class="stat-number">1000+</div>
-                    <div class="stat-label">Scouts</div>
+                    <div class="stat-number" data-target="@totalScouts">0</div>
+                    <div class="stat-label"><i class="bi bi-person-badge me-2"></i>Scouts Actifs</div>
                 </div>
             </div>
             <div class="col-md-3 col-6">
                 <div class="stat-item">
-                    <div class="stat-number">200+</div>
-                    <div class="stat-label">Activités</div>
+                    <div class="stat-number" data-target="@totalActualites">0</div>
+                    <div class="stat-label"><i class="bi bi-newspaper me-2"></i>Actualités</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-item">
+                    <div class="stat-number" data-target="@recentFormations.Count">0</div>
+                    <div class="stat-label"><i class="bi bi-book-half me-2"></i>Formations Actives</div>
+                </div>
             </div>
         </div>
-            <div class="col-md-3 col-6">
-                <div class="stat-item">
-                    <div class="stat-number">24/7</div>
-                    <div class="stat-label">Support</div>
+    </div>
+</section>
+
+<!-- Actualités Récentes -->
+@if (recentNews.Any())
+{
+    <section class="container mb-5">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3"><i class="bi bi-newspaper me-2 text-primary"></i>Actualités Récentes</h2>
+            <p class="lead text-muted">Restez informé des dernières nouvelles du district</p>
+        </div>
+        <div class="row g-4">
+            @foreach (var news in recentNews)
+            {
+                <div class="col-md-4">
+                    <div class="card-modern-glass card-scout h-100 animate-fade-in">
+                        <div class="card-body">
+                            @if (!string.IsNullOrEmpty(news.Titre))
+                            {
+                                <h5 class="fw-bold mb-3">@news.Titre</h5>
+                            }
+                            @if (!string.IsNullOrEmpty(news.Contenu))
+                            {
+                                <p class="text-muted mb-3">@(news.Contenu.Length > 150 ? news.Contenu.Substring(0, 150) + "..." : news.Contenu)</p>
+                            }
+                            <div class="d-flex justify-content-between align-items-center">
+                                @if (news.PublishedAt.HasValue)
+                                {
+                                    <small class="text-muted"><i class="bi bi-calendar me-1"></i>@news.PublishedAt.Value.ToString("dd/MM/yyyy")</small>
+                                }
+                                <a asp-controller="News" asp-action="Details" asp-route-id="@news.Id" class="btn btn-sm btn-primary">
+                                    Lire plus <i class="bi bi-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            }
+        </div>
+        <div class="text-center mt-4">
+            <a asp-controller="News" asp-action="Index" class="btn btn-primary btn-lg modern-btn">
+                <i class="bi bi-newspaper me-2"></i>Voir toutes les actualités
+            </a>
+        </div>
+    </section>
+}
+
+<!-- Formations en Vedette -->
+@if (recentFormations.Any())
+{
+    <section class="container mb-5">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3"><i class="bi bi-book-half me-2 text-primary"></i>Formations Disponibles</h2>
+            <p class="lead text-muted">Développez vos compétences avec nos formations en ligne</p>
+        </div>
+        <div class="row g-4">
+            @foreach (var formation in recentFormations)
+            {
+                <div class="col-md-4">
+                    <div class="card-modern-glass card-scout h-100 animate-fade-in">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="icon-wrapper bg-info-gradient me-3" style="width: 60px; height: 60px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="bi bi-book text-white" style="font-size: 1.5rem;"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold mb-0">@formation.Titre</h5>
+                                    <small class="text-muted">@formation.Niveau</small>
+                                </div>
+                            </div>
+                            @if (!string.IsNullOrEmpty(formation.Description))
+                            {
+                                <p class="text-muted mb-3">@(formation.Description.Length > 120 ? formation.Description.Substring(0, 120) + "..." : formation.Description)</p>
+                            }
+                            <div class="d-flex justify-content-between align-items-center mt-auto">
+                                @if (formation.EstActive)
+                                {
+                                    <span class="badge bg-success">
+                                        <i class="bi bi-check-circle me-1"></i>Disponible
+                                    </span>
+                                }
+                                @if (User.Identity?.IsAuthenticated == true)
+                                {
+                                    <a asp-controller="Formations" asp-action="Details" asp-route-id="@formation.Id" class="btn btn-sm btn-primary">
+                                        Découvrir <i class="bi bi-arrow-right ms-1"></i>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a asp-controller="Account" asp-action="Login" class="btn btn-sm btn-outline-primary">
+                                        Connectez-vous <i class="bi bi-arrow-right ms-1"></i>
+                                    </a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+            <div class="text-center mt-4">
+                <a asp-controller="Formations" asp-action="Index" class="btn btn-primary btn-lg modern-btn">
+                    <i class="bi bi-book-half me-2"></i>Voir toutes les formations
+                </a>
             </div>
+        }
+    </section>
+}
+
+<!-- Galerie Récente -->
+@if (recentAlbums.Any())
+{
+    <section class="container mb-5">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3"><i class="bi bi-images me-2 text-primary"></i>Galerie Photos</h2>
+            <p class="lead text-muted">Découvrez nos moments forts en images</p>
+        </div>
+        <div class="row g-4">
+            @foreach (var album in recentAlbums)
+            {
+                <div class="col-md-4">
+                    <div class="card-modern-glass card-scout h-100 animate-fade-in overflow-hidden">
+                        @if (album.Medias?.Any() == true)
+                        {
+                            var firstMedia = album.Medias.First();
+                            <img src="@firstMedia.FilePath" alt="@album.Titre" class="card-img-top" style="height: 200px; object-fit: cover;" />
+                        }
+                        <div class="card-body">
+                            <h5 class="fw-bold mb-2">@album.Titre</h5>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">
+                                    <i class="bi bi-images me-1"></i>@(album.Medias?.Count ?? 0) photo(s)
+                                </small>
+                                <a asp-controller="Gallery" asp-action="Details" asp-route-id="@album.Id" class="btn btn-sm btn-primary">
+                                    Voir <i class="bi bi-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="text-center mt-4">
+            <a asp-controller="Gallery" asp-action="Index" class="btn btn-primary btn-lg modern-btn">
+                <i class="bi bi-images me-2"></i>Voir toute la galerie
+            </a>
+        </div>
+    </section>
+}
+
+<!-- Témoignages (Livre d'Or) -->
+@if (recentMessages.Any())
+{
+    <section class="container mb-5">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3"><i class="bi bi-chat-heart me-2 text-primary"></i>Témoignages</h2>
+            <p class="lead text-muted">Ce que nos membres disent de nous</p>
+        </div>
+        <div class="row g-4">
+            @foreach (var message in recentMessages)
+            {
+                <div class="col-md-4">
+                    <div class="card-modern-glass card-scout h-100 animate-fade-in">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="icon-wrapper bg-warning-gradient me-3" style="width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                    <i class="bi bi-person-fill text-white"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold mb-0">@(message.Auteur ?? "Anonyme")</h6>
+                                    <small class="text-muted">@message.CreatedAt.ToString("dd/MM/yyyy")</small>
+                                </div>
+                            </div>
+                            <p class="mb-0">@message.Message</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="text-center mt-4">
+            <a asp-controller="Guestbook" asp-action="Index" class="btn btn-primary btn-lg modern-btn">
+                <i class="bi bi-chat-heart me-2"></i>Voir le livre d'or
+            </a>
+        </div>
+    </section>
+}
+
+<!-- Call to Action Final -->
+<section class="container mb-5">
+    <div class="card-modern-glass card-scout p-5 text-center animate-fade-in" style="background: linear-gradient(135deg, rgba(45, 80, 22, 0.1) 0%, rgba(107, 166, 68, 0.1) 100%);">
+        <h2 class="display-5 fw-bold mb-3">Rejoignez notre communauté</h2>
+        <p class="lead text-muted mb-4">Découvrez le scoutisme moderne avec MANGO TAÏKA District</p>
+        <div class="d-flex flex-wrap gap-3 justify-content-center">
+            @if (!User.Identity?.IsAuthenticated == true)
+            {
+                <a asp-controller="Account" asp-action="Register" class="btn btn-primary btn-lg px-5 py-3 modern-btn">
+                    <i class="bi bi-rocket-takeoff me-2"></i>S'inscrire maintenant
+                </a>
+                <a asp-controller="Account" asp-action="Login" class="btn btn-outline-primary btn-lg px-5 py-3 modern-btn">
+                    <i class="bi bi-box-arrow-in-right me-2"></i>Se connecter
+                </a>
+            }
+            else
+            {
+                <a asp-controller="Formations" asp-action="Index" class="btn btn-primary btn-lg px-5 py-3 modern-btn">
+                    <i class="bi bi-book me-2"></i>Voir les formations
+                </a>
+                <a asp-controller="Groups" asp-action="Index" class="btn btn-outline-primary btn-lg px-5 py-3 modern-btn">
+                    <i class="bi bi-people me-2"></i>Découvrir les groupes
+                </a>
+            }
         </div>
     </div>
 </section>
@@ -320,14 +543,29 @@
     }
 
     .hero-logo {
-        max-width: 300px;
-        filter: drop-shadow(0 20px 40px rgba(0,0,0,0.3));
+        max-width: 400px;
+        width: 100%;
+        height: auto;
+        filter: drop-shadow(0 20px 60px rgba(0,0,0,0.4));
         animation: float 6s ease-in-out infinite;
+        /* Pas de rotation - conforme aux règles de la charte graphique */
+    }
+    
+    .hero-logo-wrapper {
+        position: relative;
+        z-index: 10;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 2rem;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 30px;
+        backdrop-filter: blur(10px);
     }
 
     @@keyframes float {
-        0%, 100% { transform: translateY(0px) rotate(0deg); }
-        50% { transform: translateY(-20px) rotate(5deg); }
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-20px); }
     }
 
     .floating-particles {
@@ -454,7 +692,7 @@
     }
 
     .service-card:hover .icon-wrapper {
-        transform: rotate(10deg) scale(1.1);
+        transform: scale(1.1); /* Pas de rotation - conforme aux règles */
     }
 
     .bg-primary-gradient { background: linear-gradient(135deg, #2D5016 0%, #4A7C2A 100%); }
@@ -606,3 +844,48 @@
         }
     }
 </style>
+
+@section Scripts {
+<script>
+    // Animation des statistiques au scroll
+    document.addEventListener('DOMContentLoaded', function() {
+        const statNumbers = document.querySelectorAll('.stat-number[data-target]');
+        
+        function animateCounter(element) {
+            const target = parseInt(element.getAttribute('data-target'));
+            const duration = 2000; // 2 secondes
+            const increment = target / (duration / 16); // 60 FPS
+            let current = 0;
+            
+            const timer = setInterval(function() {
+                current += increment;
+                if (current >= target) {
+                    element.textContent = target;
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.floor(current);
+                }
+            }, 16);
+        }
+        
+        // Observer pour déclencher l'animation quand la section entre dans la vue
+        const statsSection = document.querySelector('.stats-section');
+        if (statsSection) {
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        statNumbers.forEach(stat => {
+                            if (stat.textContent === '0') {
+                                animateCounter(stat);
+                            }
+                        });
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+            
+            observer.observe(statsSection);
+        }
+    });
+</script>
+}

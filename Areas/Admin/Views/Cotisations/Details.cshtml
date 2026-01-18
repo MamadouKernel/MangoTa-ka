@@ -1,0 +1,120 @@
+@model MangoTaikaDistrict.Domain.Entities.Cotisation
+@{
+    ViewData["Title"] = "Détails de la Cotisation";
+}
+
+<div class="mb-4">
+    <h2 class="fw-bold mb-1"><i class="bi bi-info-circle me-2 text-primary"></i>Détails de la Cotisation</h2>
+    <p class="text-muted">Informations complètes</p>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card-modern card">
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold text-muted">Scout</label>
+                        <div class="fs-5 fw-semibold">
+                            <i class="bi bi-person me-2 text-primary"></i>@Model.Scout?.Nom @Model.Scout?.Prenoms
+                        </div>
+                        @if (!string.IsNullOrEmpty(Model.Scout?.Matricule))
+                        {
+                            <small class="text-muted">Matricule: @Model.Scout.Matricule</small>
+                        }
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold text-muted">Groupe</label>
+                        <div class="fs-5">
+                            <span class="badge bg-info fs-6">@Model.Groupe?.Nom</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold text-muted">Période</label>
+                        <div class="fs-5">
+                            <span class="badge bg-secondary fs-6">@Model.Periode</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold text-muted">Statut</label>
+                        <div>
+                            @if (Model.Statut == MangoTaikaDistrict.Domain.Enums.StatutCotisation.PAYE)
+                            {
+                                <span class="badge bg-success fs-6"><i class="bi bi-check-circle me-1"></i>@Model.Statut</span>
+                            }
+                            else if (Model.Statut == MangoTaikaDistrict.Domain.Enums.StatutCotisation.PARTIEL)
+                            {
+                                <span class="badge bg-warning fs-6"><i class="bi bi-hourglass-split me-1"></i>@Model.Statut</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger fs-6"><i class="bi bi-x-circle me-1"></i>@Model.Statut</span>
+                            }
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold text-muted">Montant Attendu</label>
+                        <div class="fs-4 fw-bold text-primary">
+                            @Model.MontantAttendu.ToString("N2") FCFA
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold text-muted">Montant Payé</label>
+                        <div class="fs-4 fw-bold text-success">
+                            @Model.MontantPaye.ToString("N2") FCFA
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold text-muted">Date Enregistrement</label>
+                        <div class="fs-6">
+                            <i class="bi bi-calendar me-1"></i>@Model.DateEnregistrement.ToString("dd/MM/yyyy HH:mm")
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold text-muted">Date Paiement</label>
+                        <div class="fs-6">
+                            @if (Model.DatePaiement.HasValue)
+                            {
+                                <i class="bi bi-calendar-check me-1"></i>@Model.DatePaiement.Value.ToString("dd/MM/yyyy HH:mm")
+                            }
+                            else
+                            {
+                                <span class="text-muted">-</span>
+                            }
+                        </div>
+                    </div>
+                    @if (!string.IsNullOrEmpty(Model.Observations))
+                    {
+                        <div class="col-12">
+                            <label class="form-label fw-semibold text-muted">Observations</label>
+                            <div class="p-3 bg-light rounded">
+                                @Model.Observations
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card-modern card">
+            <div class="card-body">
+                <h5 class="card-title mb-3">Actions</h5>
+                <div class="d-grid gap-2">
+                    <a asp-area="Admin" asp-controller="Cotisations" asp-action="Edit" asp-route-id="@Model.Id" 
+                       class="btn btn-primary btn-modern">
+                        <i class="bi bi-pencil me-1"></i>Modifier
+                    </a>
+                    <a asp-area="Admin" asp-controller="Cotisations" asp-action="Delete" asp-route-id="@Model.Id" 
+                       class="btn btn-outline-danger btn-modern">
+                        <i class="bi bi-trash me-1"></i>Supprimer
+                    </a>
+                    <a asp-area="Admin" asp-controller="Cotisations" asp-action="Index" 
+                       class="btn btn-outline-secondary btn-modern">
+                        <i class="bi bi-arrow-left me-1"></i>Retour à la liste
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

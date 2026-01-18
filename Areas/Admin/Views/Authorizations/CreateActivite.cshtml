@@ -1,0 +1,153 @@
+@model MangoTaikaDistrict.Domain.Entities.Activite
+@{
+    ViewData["Title"] = "Créer une Activité";
+    var groupes = ViewBag.Groupes as List<MangoTaikaDistrict.Domain.Entities.Groupe> ?? new();
+}
+
+<div class="mb-4">
+    <h2 class="fw-bold mb-1"><i class="bi bi-calendar-plus me-2 text-primary"></i>Créer une Activité</h2>
+    <p class="text-muted">Ajouter une nouvelle activité nécessitant une autorisation</p>
+</div>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <h6 class="alert-heading"><i class="bi bi-exclamation-triangle me-2"></i>Erreurs de validation</h6>
+        <ul class="mb-0">
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="card-modern card">
+    <div class="card-body">
+        <form method="post" class="form-modern" id="activiteForm">
+            <div class="row g-3">
+                <div class="col-md-12">
+                    <label asp-for="Titre" class="form-label fw-semibold">
+                        <i class="bi bi-file-text me-1"></i>Titre de l'activité *
+                    </label>
+                    <input asp-for="Titre" class="form-control" required placeholder="Ex: Sortie de groupe" />
+                    <span asp-validation-for="Titre" class="text-danger"></span>
+                </div>
+                
+                <div class="col-md-6">
+                    <label asp-for="TypeActivite" class="form-label fw-semibold">
+                        <i class="bi bi-tag me-1"></i>Type d'activité *
+                    </label>
+                    <input asp-for="TypeActivite" class="form-control" required placeholder="Ex: Sortie, Camp, Réunion" />
+                    <span asp-validation-for="TypeActivite" class="text-danger"></span>
+                </div>
+                
+                <div class="col-md-6">
+                    <label asp-for="GroupeId" class="form-label fw-semibold">
+                        <i class="bi bi-people me-1"></i>Groupe *
+                    </label>
+                    <select asp-for="GroupeId" class="form-select" required>
+                        <option value="">-- Sélectionner un groupe --</option>
+                        @foreach (var g in groupes)
+                        {
+                            <option value="@g.Id">@g.Nom</option>
+                        }
+                    </select>
+                    <span asp-validation-for="GroupeId" class="text-danger"></span>
+                </div>
+                
+                <div class="col-md-12">
+                    <label asp-for="Lieu" class="form-label fw-semibold">
+                        <i class="bi bi-geo-alt me-1"></i>Lieu
+                    </label>
+                    <input asp-for="Lieu" class="form-control" placeholder="Ex: Parc national, Local du groupe" />
+                    <small class="text-muted">Optionnel - Indiquez le lieu où se déroulera l'activité</small>
+                </div>
+                
+                <div class="col-md-6">
+                    <label asp-for="DateDebut" class="form-label fw-semibold">
+                        <i class="bi bi-calendar-event me-1"></i>Date et heure de début *
+                    </label>
+                    <input asp-for="DateDebut" type="datetime-local" class="form-control" required id="dateDebut" />
+                    <span asp-validation-for="DateDebut" class="text-danger"></span>
+                </div>
+                
+                <div class="col-md-6">
+                    <label asp-for="DateFin" class="form-label fw-semibold">
+                        <i class="bi bi-calendar-check me-1"></i>Date et heure de fin *
+                    </label>
+                    <input asp-for="DateFin" type="datetime-local" class="form-control" required id="dateFin" />
+                    <span asp-validation-for="DateFin" class="text-danger"></span>
+                    <small class="text-danger d-none" id="dateError">La date de fin doit être postérieure à la date de début</small>
+                </div>
+            </div>
+            
+            <div class="mt-4 d-flex gap-2">
+                <button type="submit" class="btn btn-primary btn-modern">
+                    <i class="bi bi-check-circle me-1"></i>Enregistrer
+                </button>
+                <a asp-area="Admin" asp-controller="Authorizations" asp-action="Activites" class="btn btn-outline-secondary btn-modern">
+                    <i class="bi bi-arrow-left me-1"></i>Retour
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        // Validation des dates côté client
+        document.getElementById('activiteForm').addEventListener('submit', function(e) {
+            var dateDebut = new Date(document.getElementById('dateDebut').value);
+            var dateFin = new Date(document.getElementById('dateFin').value);
+            var dateError = document.getElementById('dateError');
+            
+            if (dateFin <= dateDebut) {
+                e.preventDefault();
+                dateError.classList.remove('d-none');
+                dateError.classList.add('d-block');
+                document.getElementById('dateFin').classList.add('is-invalid');
+                return false;
+            } else {
+                dateError.classList.add('d-none');
+                dateError.classList.remove('d-block');
+                document.getElementById('dateFin').classList.remove('is-invalid');
+            }
+        });
+        
+        // Validation en temps réel
+        document.getElementById('dateDebut').addEventListener('change', function() {
+            var dateDebut = new Date(this.value);
+            var dateFin = new Date(document.getElementById('dateFin').value);
+            var dateError = document.getElementById('dateError');
+            
+            if (document.getElementById('dateFin').value && dateFin <= dateDebut) {
+                dateError.classList.remove('d-none');
+                dateError.classList.add('d-block');
+                document.getElementById('dateFin').classList.add('is-invalid');
+            } else {
+                dateError.classList.add('d-none');
+                dateError.classList.remove('d-block');
+                document.getElementById('dateFin').classList.remove('is-invalid');
+            }
+        });
+        
+        document.getElementById('dateFin').addEventListener('change', function() {
+            var dateDebut = new Date(document.getElementById('dateDebut').value);
+            var dateFin = new Date(this.value);
+            var dateError = document.getElementById('dateError');
+            
+            if (document.getElementById('dateDebut').value && dateFin <= dateDebut) {
+                dateError.classList.remove('d-none');
+                dateError.classList.add('d-block');
+                this.classList.add('is-invalid');
+            } else {
+                dateError.classList.add('d-none');
+                dateError.classList.remove('d-block');
+                this.classList.remove('is-invalid');
+            }
+        });
+    </script>
+}

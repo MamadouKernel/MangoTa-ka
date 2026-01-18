@@ -1,0 +1,149 @@
+@{
+    ViewData["Title"] = "Rapports & Exports";
+    var groupes = ViewBag.Groupes as List<MangoTaikaDistrict.Domain.Entities.Groupe> ?? new();
+    Guid? selectedGroupeId = ViewBag.SelectedGroupeId as Guid?;
+    string start = ViewBag.Start as string ?? "";
+    string end = ViewBag.End as string ?? "";
+}
+
+<div class="mb-4">
+    <h2 class="fw-bold mb-1"><i class="bi bi-graph-up me-2 text-info"></i>Rapports & Exports</h2>
+    <p class="text-muted">Générer des rapports et exporter vos données</p>
+</div>
+
+<!-- Statistiques rapides -->
+<div class="row g-4 mb-4">
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="stat-icon bg-primary bg-opacity-10 text-primary">
+                <i class="bi bi-person-badge"></i>
+            </div>
+            <div class="stat-label">Total Scouts</div>
+            <div class="stat-value">@ViewBag.NbScouts</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="stat-icon bg-success bg-opacity-10 text-success">
+                <i class="bi bi-people"></i>
+            </div>
+            <div class="stat-label">Total Groupes</div>
+            <div class="stat-value">@ViewBag.NbGroupes</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="stat-icon bg-info bg-opacity-10 text-info">
+                <i class="bi bi-calendar-event"></i>
+            </div>
+            <div class="stat-label">Total Activités</div>
+            <div class="stat-value">@ViewBag.NbActivites</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="stat-icon bg-warning bg-opacity-10 text-warning">
+                <i class="bi bi-ticket-perforated"></i>
+            </div>
+            <div class="stat-label">Total Tickets</div>
+            <div class="stat-value">@ViewBag.NbTickets</div>
+        </div>
+    </div>
+</div>
+
+<!-- Exports Scouts -->
+<div class="card-modern card mb-4">
+    <div class="card-header bg-white border-0 pb-0">
+        <h5 class="fw-bold mb-0"><i class="bi bi-person-badge me-2 text-primary"></i>Exports Scouts</h5>
+    </div>
+    <div class="card-body">
+        <form method="get" class="row g-3 mb-3">
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">Groupe</label>
+                <select name="groupeId" class="form-select form-modern">
+                    <option value="">-- Tous --</option>
+                    @foreach (var g in groupes)
+                    {
+                        var isSelected = selectedGroupeId.HasValue && g.Id == selectedGroupeId.Value;
+                        <option value="@g.Id" selected="@(isSelected ? "selected" : null)">@g.Nom</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Date début</label>
+                <input type="date" name="start" value="@start" class="form-control form-modern" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-semibold">Date fin</label>
+                <input type="date" name="end" value="@end" class="form-control form-modern" />
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary btn-modern w-100">
+                    <i class="bi bi-search me-1"></i>Filtrer
+                </button>
+            </div>
+        </form>
+        <div class="d-flex gap-2 flex-wrap">
+            <a asp-area="Admin" asp-controller="Reports" asp-action="ExportScoutsExcel" 
+               asp-route-groupeId="@selectedGroupeId" asp-route-start="@start" asp-route-end="@end"
+               class="btn btn-success btn-modern">
+                <i class="bi bi-file-earmark-excel me-1"></i>Excel
+            </a>
+            <a asp-area="Admin" asp-controller="Reports" asp-action="ExportScoutsCsv" 
+               class="btn btn-info btn-modern">
+                <i class="bi bi-filetype-csv me-1"></i>CSV
+            </a>
+            <a asp-area="Admin" asp-controller="Reports" asp-action="ExportScoutsPdfOfficial" 
+               asp-route-groupeId="@selectedGroupeId" asp-route-start="@start" asp-route-end="@end"
+               class="btn btn-danger btn-modern">
+                <i class="bi bi-file-pdf me-1"></i>PDF Officiel
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Exports Cotisations -->
+<div class="card-modern card mb-4">
+    <div class="card-header bg-white border-0 pb-0">
+        <h5 class="fw-bold mb-0"><i class="bi bi-cash-coin me-2 text-success"></i>Exports Cotisations</h5>
+    </div>
+    <div class="card-body">
+        <div class="d-flex gap-2 flex-wrap">
+            <a asp-area="Admin" asp-controller="Reports" asp-action="ExportCotisationsExcel" 
+               class="btn btn-success btn-modern">
+                <i class="bi bi-file-earmark-excel me-1"></i>Excel
+            </a>
+            <a asp-area="Admin" asp-controller="Reports" asp-action="ExportCotisationsCsv" 
+               class="btn btn-info btn-modern">
+                <i class="bi bi-filetype-csv me-1"></i>CSV
+            </a>
+            <a asp-area="Admin" asp-controller="Reports" asp-action="ExportCotisationsPdfOfficial" 
+               class="btn btn-danger btn-modern">
+                <i class="bi bi-file-pdf me-1"></i>PDF Officiel
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Exports Nominations -->
+<div class="card-modern card">
+    <div class="card-header bg-white border-0 pb-0">
+        <h5 class="fw-bold mb-0"><i class="bi bi-award me-2 text-warning"></i>Exports Nominations</h5>
+    </div>
+    <div class="card-body">
+        <div class="d-flex gap-2 flex-wrap">
+            <a asp-area="Admin" asp-controller="Reports" asp-action="ExportNominationsExcel" 
+               class="btn btn-success btn-modern">
+                <i class="bi bi-file-earmark-excel me-1"></i>Excel
+            </a>
+            <a asp-area="Admin" asp-controller="Reports" asp-action="ExportNominationsCsv" 
+               class="btn btn-info btn-modern">
+                <i class="bi bi-filetype-csv me-1"></i>CSV
+            </a>
+            <a asp-area="Admin" asp-controller="Reports" asp-action="ExportNominationsPdfOfficial" 
+               class="btn btn-danger btn-modern">
+                <i class="bi bi-file-pdf me-1"></i>PDF Officiel
+            </a>
+        </div>
+    </div>
+</div>

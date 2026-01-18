@@ -665,6 +665,9 @@ namespace MangoTaikaDistrict.Infrastructure.Data.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
+                    b.Property<string>("LogoUrl")
+                        .HasColumnType("text");
+
                     b.Property<string>("Nom")
                         .IsRequired()
                         .HasColumnType("text");

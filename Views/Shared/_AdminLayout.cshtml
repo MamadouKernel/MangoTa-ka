@@ -3,21 +3,74 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Admin - MangoTaikaDistrict</title>
+    <title>@ViewData["Title"] - Admin - MANGO TAÏKA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/modern-components.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/futuristic-design.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/responsive-complete.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="~/MangoTaikaDistrict.styles.css" asp-append-version="true" />
     <style>
         :root {
             --sidebar-width: 260px;
-            --primary-color: #0d6efd;
-            --sidebar-bg: #1e293b;
-            --sidebar-hover: #334155;
+            /* Couleurs du logo MangoTaika - VERT & BLANC */
+            --primary-color: #2D5016;           /* Vert foncé principal */
+            --primary-medium: #4A7C2A;          /* Vert moyen */
+            --primary-light: #6BA644;           /* Vert clair */
+            --primary-lighter: #8FCB6B;         /* Vert très clair */
+            --primary-lightest: #B8E09A;        /* Vert le plus clair */
+            --primary-soft: #E8F5E1;            /* Vert très doux */
+            --sidebar-bg: #2D5016;              /* Vert foncé pour sidebar */
+            --sidebar-hover: #4A7C2A;           /* Vert moyen pour hover */
+            --text-dark: #1A3009;               /* Vert très foncé pour textes */
+            --text-medium: #2D5016;             /* Vert foncé */
+            --text-light: #6B7A5F;              /* Gris-vert pour textes secondaires */
         }
         
         body {
-            background-color: #f8f9fa;
+            background-color: #FAFAFA;
+            position: relative;
+        }
+        
+        /* Filigrane du logo pour l'admin */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('/images/logo.png');
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: 700px 700px;
+            opacity: 0.025;
+            z-index: 0;
+            pointer-events: none;
+            filter: grayscale(100%) brightness(0.3);
+        }
+        
+        @@media (max-width: 992px) {
+            body::before {
+                background-size: 500px 500px;
+                opacity: 0.02;
+            }
+        }
+        
+        @@media (max-width: 768px) {
+            body::before {
+                background-size: 400px 400px;
+                opacity: 0.015;
+            }
+        }
+        
+        .main-content {
+            position: relative;
+            z-index: 1;
         }
         
         .sidebar {
@@ -26,25 +79,71 @@
             left: 0;
             height: 100vh;
             width: var(--sidebar-width);
-            background: linear-gradient(180deg, var(--sidebar-bg) 0%, #0f172a 100%);
+            background: linear-gradient(180deg, var(--sidebar-bg) 0%, #1A3009 100%);
             color: white;
             padding: 0;
             z-index: 1000;
             overflow-y: auto;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            box-shadow: 2px 0 10px rgba(45, 80, 22, 0.2);
             transition: transform 0.3s ease;
         }
         
         .sidebar-header {
             padding: 1.5rem;
-            background: rgba(255,255,255,0.1);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(107, 166, 68, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .sidebar-logo {
+            max-width: 180px;
+            height: auto;
+            filter: brightness(1.5) contrast(1.3) drop-shadow(0 6px 20px rgba(255, 255, 255, 0.6));
+            background: #FFFFFF;
+            padding: 1rem;
+            border-radius: 50%;
+            box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.3), 0 6px 24px rgba(255, 255, 255, 0.4);
+            border: 3px solid rgba(255, 255, 255, 0.5);
         }
         
         .sidebar-header h4 {
             margin: 0;
             font-weight: 700;
             font-size: 1.25rem;
+            color: #FFFFFF !important;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 255, 255, 0.2);
+            letter-spacing: 1px;
+        }
+        
+        .sidebar-header .text-muted {
+            color: rgba(255, 255, 255, 1) !important;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+            font-weight: 500;
+        }
+        
+        /* Forcer tous les textes de la sidebar à être blancs */
+        .sidebar,
+        .sidebar * {
+            color: white !important;
+        }
+        
+        .sidebar .nav-link,
+        .sidebar .nav-link span,
+        .sidebar .nav-link i {
+            color: #FFFFFF !important;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        
+        .sidebar .nav-link span {
+            font-weight: 500;
+        }
+        
+        .sidebar .text-danger {
+            color: #ff6b6b !important;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
         }
         
         .sidebar-menu {
@@ -52,59 +151,88 @@
         }
         
         .sidebar-menu .nav-link {
-            color: rgba(255,255,255,0.8);
+            color: #FFFFFF !important;
             padding: 0.75rem 1.5rem;
             display: flex;
             align-items: center;
             transition: all 0.3s ease;
             border-left: 3px solid transparent;
-        }
-        
-        .sidebar-menu .nav-link:hover {
-            background: var(--sidebar-hover);
-            color: white;
-            border-left-color: var(--primary-color);
-            transform: translateX(5px);
-        }
-        
-        .sidebar-menu .nav-link.active {
-            background: var(--sidebar-hover);
-            color: white;
-            border-left-color: var(--primary-color);
+            font-weight: 500;
         }
         
         .sidebar-menu .nav-link i {
             width: 24px;
             margin-right: 0.75rem;
             font-size: 1.1rem;
+            color: #FFFFFF !important;
+        }
+        
+        .sidebar-menu .nav-link span {
+            color: #FFFFFF !important;
+            font-weight: 500;
+        }
+        
+        .sidebar-menu .nav-link:hover {
+            background: rgba(74, 124, 42, 0.3);
+            color: white;
+            border-left-color: #6BA644;
+            transform: translateX(5px);
+        }
+        
+        .sidebar-menu .nav-link:hover i {
+            color: white;
+        }
+        
+        .sidebar-menu .nav-link.active {
+            background: rgba(107, 166, 68, 0.25);
+            color: white;
+            border-left-color: #6BA644;
+            font-weight: 600;
+        }
+        
+        .sidebar-menu .nav-link.active i {
+            color: white;
         }
         
         .main-content {
             margin-left: var(--sidebar-width);
             padding: 2rem;
             min-height: 100vh;
+            background: linear-gradient(135deg, #FAFAFA 0%, #E8F5E1 30%, #FAFAFA 70%, #FFFFFF 100%);
+            background-attachment: fixed;
         }
         
         .top-navbar {
             background: white;
             padding: 1rem 2rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(45, 80, 22, 0.1);
             margin-bottom: 2rem;
             border-radius: 0.5rem;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .top-navbar h3 {
+            color: var(--text-dark) !important;
+            font-weight: 700;
+        }
+        
+        .top-navbar span {
+            color: var(--text-medium) !important;
+            font-weight: 500;
         }
         
         .stat-card {
             background: white;
             border-radius: 0.75rem;
             padding: 1.5rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            box-shadow: 0 2px 8px rgba(45, 80, 22, 0.08);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             border-left: 4px solid var(--primary-color);
         }
         
         .stat-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+            box-shadow: 0 4px 16px rgba(45, 80, 22, 0.12);
         }
         
         .stat-card .stat-icon {
@@ -121,26 +249,27 @@
         .stat-card .stat-value {
             font-size: 2rem;
             font-weight: 700;
-            color: #1e293b;
+            color: var(--text-dark);
             margin: 0.5rem 0;
         }
         
         .stat-card .stat-label {
-            color: #64748b;
+            color: var(--text-medium);
             font-size: 0.9rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            font-weight: 600;
         }
         
         .table-modern {
             background: white;
             border-radius: 0.75rem;
             overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            box-shadow: 0 2px 8px rgba(45, 80, 22, 0.08);
         }
         
         .table-modern thead {
-            background: linear-gradient(135deg, var(--primary-color) 0%, #0a58ca 100%);
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-medium) 100%);
             color: white;
         }
         
@@ -149,7 +278,7 @@
         }
         
         .table-modern tbody tr:hover {
-            background-color: #f8f9fa;
+            background-color: var(--primary-soft);
         }
         
         .btn-modern {
@@ -161,31 +290,49 @@
         
         .btn-modern:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 12px rgba(45, 80, 22, 0.15);
         }
         
         .form-modern .form-control, .form-modern .form-select {
             border-radius: 0.5rem;
-            border: 2px solid #e2e8f0;
+            border: 2px solid #D4E4C8;
             padding: 0.75rem 1rem;
             transition: all 0.3s ease;
         }
         
         .form-modern .form-control:focus, .form-modern .form-select:focus {
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
+            box-shadow: 0 0 0 0.2rem rgba(45, 80, 22, 0.15);
         }
         
         .card-modern {
             border: none;
             border-radius: 0.75rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            box-shadow: 0 2px 8px rgba(45, 80, 22, 0.08);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         
         .card-modern:hover {
             transform: translateY(-3px);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+            box-shadow: 0 4px 16px rgba(45, 80, 22, 0.12);
+        }
+        
+        /* Amélioration de la visibilité des textes */
+        .text-muted {
+            color: var(--text-medium) !important;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            color: var(--text-dark) !important;
+        }
+        
+        .card-title {
+            color: var(--text-dark) !important;
+        }
+        
+        .form-label {
+            color: var(--text-medium) !important;
+            font-weight: 600;
         }
         
         @@media (max-width: 768px) {
@@ -206,7 +353,8 @@
 <body>
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <h4><i class="bi bi-tree-fill me-2"></i>MangoTaika</h4>
+            <img src="~/images/logo.png" alt="MANGO TAÏKA" class="sidebar-logo" />
+            <h4>MANGO TAÏKA</h4>
             <small class="text-muted">Administration</small>
         </div>
         <nav class="sidebar-menu">
@@ -274,11 +422,40 @@
                         <span>Rapports</span>
                     </a>
                 </li>
-                <li class="nav-item mt-3">
-                    <a class="nav-link text-danger" asp-area="" asp-controller="Account" asp-action="Logout">
-                        <i class="bi bi-box-arrow-right"></i>
-                        <span>Déconnexion</span>
+                
+                <!-- Section Mon compte -->
+                <li class="nav-item mt-4">
+                    <hr style="border-color: rgba(107, 166, 68, 0.3); margin: 0.5rem 1.5rem;" />
+                </li>
+                <li class="nav-item">
+                    <div class="nav-link" style="color: #FFFFFF !important; opacity: 1; padding: 0.5rem 1.5rem; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);">
+                        <i class="bi bi-person-circle me-2" style="color: #FFFFFF !important;"></i>MON COMPTE
+                    </div>
+                </li>
+                @if (User.IsInRole("SCOUT"))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "MyProfile" ? "active" : "")" 
+                           asp-controller="MyProfile" asp-action="Index">
+                            <i class="bi bi-person-circle"></i>
+                            <span>Mon profil</span>
+                        </a>
+                    </li>
+                }
+                <li class="nav-item">
+                    <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "MyData" ? "active" : "")" 
+                       asp-area="Admin" asp-controller="MyData" asp-action="Index">
+                        <i class="bi bi-shield-check"></i>
+                        <span>Mes données (RGPD)</span>
                     </a>
+                </li>
+                <li class="nav-item mt-3">
+                    <form method="post" asp-area="" asp-controller="Account" asp-action="Logout" class="d-inline w-100">
+                        <button type="submit" class="nav-link border-0 bg-transparent w-100 text-start" style="color: #ff6b6b !important; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">
+                            <i class="bi bi-box-arrow-right" style="color: #ff6b6b !important;"></i>
+                            <span style="color: #ff6b6b !important;">Déconnexion</span>
+                        </button>
+                    </form>
                 </li>
             </ul>
         </nav>
@@ -293,7 +470,9 @@
                 <h3 class="mb-0 ms-3 d-inline">@ViewData["Title"]</h3>
             </div>
             <div>
-                <span class="text-muted">@User.Identity?.Name</span>
+                <span style="color: #2D5016; font-weight: 500;">
+                    <i class="bi bi-person-circle me-2"></i>@User.Identity?.Name
+                </span>
             </div>
         </div>
         

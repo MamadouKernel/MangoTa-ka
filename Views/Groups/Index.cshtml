@@ -3,133 +3,172 @@
     ViewData["Title"] = "Groupes";
 }
 
-<!-- Hero Section -->
-<section class="hero-section hero-scout section-scout position-relative overflow-hidden mb-5 natural-pattern">
-    <div class="scout-leaf-decoration"></div>
-    <div class="scout-leaf-decoration"></div>
-    <div class="container position-relative" style="z-index: 2; padding-top: 80px; padding-bottom: 60px;">
-        <div class="row align-items-center">
-            <div class="col-lg-8 mx-auto text-center text-white">
-                <h1 class="display-4 fw-bold mb-3 animate-fade-in">
-                    <i class="bi bi-people me-2"></i>Nos Groupes
+<!-- Hero Section Futuriste -->
+<section class="groups-hero-section position-relative overflow-hidden">
+    <div class="hero-animated-bg"></div>
+    <div class="hero-particles"></div>
+    <div class="container position-relative" style="z-index: 10; padding: 120px 0 80px;">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 text-center text-white">
+                <div class="hero-icon-wrapper mb-4">
+                    <div class="icon-glow"></div>
+                    <i class="bi bi-people-fill hero-main-icon"></i>
+                </div>
+                <h1 class="display-3 fw-bold mb-4 hero-title">
+                    Nos Groupes
                 </h1>
-                <p class="lead mb-4 animate-slide-up">
-                    Découvrez tous les groupes qui composent le district Mango Taika
+                <p class="lead fs-4 mb-0 hero-subtitle">
+                    Découvrez le réseau de groupes qui compose le district <span class="text-highlight">MANGO TAÏKA</span>
                 </p>
             </div>
         </div>
     </div>
+    <div class="hero-wave-bottom">
+        <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 120L60 105C120 90 240 60 360 45C480 30 600 30 720 37.5C840 45 960 60 1080 67.5C1200 75 1320 75 1380 75L1440 75V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="white"/>
+        </svg>
+    </div>
 </section>
 
-<!-- Liste des Groupes -->
-<div class="container mb-5">
-    <div class="row g-4">
+<!-- Liste des Groupes avec Design Futuriste -->
+<div class="groups-container py-5 position-relative">
+    <div class="container">
         @if (Model != null && Model.Any())
         {
-            @foreach (var groupe in Model.Where(g => g.IsActive))
-            {
-                <div class="col-md-6 col-lg-4">
-                    <div class="card-scout card-modern h-100 animate-fade-in">
-                        <div class="card-badge">
-                            <i class="bi bi-building"></i>
-                        </div>
-                        <div class="card-body">
-                            <h4 class="fw-bold mb-3 text-primary">
-                                <i class="bi bi-people me-2"></i>@groupe.Nom
-                            </h4>
+            <div class="row g-4 mb-5">
+                @foreach (var groupe in Model.Where(g => g.IsActive))
+                {
+                    <div class="col-lg-4 col-md-6 groupe-card-wrapper" data-aos="fade-up" data-aos-delay="@(Model.IndexOf(groupe) * 100)">
+                        <div class="groupe-card-futuriste h-100">
+                            <!-- Header avec Logo -->
+                            <div class="groupe-card-header">
+                                @if (!string.IsNullOrEmpty(groupe.LogoUrl))
+                                {
+                                    <div class="logo-container">
+                                        <div class="logo-glow"></div>
+                                        <img src="@groupe.LogoUrl" alt="Logo @groupe.Nom" class="groupe-logo-img" />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="logo-placeholder">
+                                        <div class="placeholder-icon">
+                                            <i class="bi bi-people-fill"></i>
+                                        </div>
+                                    </div>
+                                }
+                                <div class="header-accent"></div>
+                            </div>
                             
-                            @if (!string.IsNullOrEmpty(groupe.Adresse))
-                            {
-                                <p class="text-muted mb-2">
-                                    <i class="bi bi-geo-alt me-2"></i>@groupe.Adresse
-                                </p>
-                            }
-                            
-                            @if (!string.IsNullOrEmpty(groupe.ContactTel))
-                            {
-                                <p class="text-muted mb-2">
-                                    <i class="bi bi-telephone me-2"></i>
-                                    <a href="tel:@groupe.ContactTel" class="text-decoration-none">@groupe.ContactTel</a>
-                                </p>
-                            }
-                            
-                            @if (!string.IsNullOrEmpty(groupe.ContactEmail))
-                            {
-                                <p class="text-muted mb-3">
-                                    <i class="bi bi-envelope me-2"></i>
-                                    <a href="mailto:@groupe.ContactEmail" class="text-decoration-none">@groupe.ContactEmail</a>
-                                </p>
-                            }
-                            
-                            @if (groupe.GpsLat.HasValue && groupe.GpsLng.HasValue)
-                            {
-                                <div class="d-grid gap-2 mt-3">
-                                    <a href="https://www.google.com/maps?q=@groupe.GpsLat,@groupe.GpsLng" 
-                                       target="_blank" 
-                                       class="btn btn-scout btn-sm">
-                                        <i class="bi bi-geo-alt me-2"></i>Voir sur la carte
-                                    </a>
+                            <!-- Body -->
+                            <div class="groupe-card-body">
+                                <h3 class="groupe-name">@groupe.Nom</h3>
+                                
+                                @if (!string.IsNullOrEmpty(groupe.Adresse))
+                                {
+                                    <div class="info-section location-section">
+                                        <div class="info-icon">
+                                            <i class="bi bi-geo-alt-fill"></i>
+                                        </div>
+                                        <div class="info-content">
+                                            <span class="info-label">Localisation</span>
+                                            <p class="info-value">@Html.Raw(groupe.Adresse.Replace(";", "<br/>"))</p>
+                                        </div>
+                                    </div>
+                                }
+                                
+                                <div class="contact-info">
+                                    @if (!string.IsNullOrEmpty(groupe.ContactTel))
+                                    {
+                                        <div class="contact-item">
+                                            <i class="bi bi-telephone-fill"></i>
+                                            <a href="tel:@groupe.ContactTel" class="contact-link">@groupe.ContactTel</a>
+                                        </div>
+                                    }
+                                    
+                                    @if (!string.IsNullOrEmpty(groupe.ContactEmail))
+                                    {
+                                        <div class="contact-item">
+                                            <i class="bi bi-envelope-fill"></i>
+                                            <a href="mailto:@groupe.ContactEmail" class="contact-link">@groupe.ContactEmail</a>
+                                        </div>
+                                    }
                                 </div>
-                            }
+                                
+                                <div class="card-actions">
+                                    @if (groupe.GpsLat.HasValue && groupe.GpsLng.HasValue)
+                                    {
+                                        <a href="https://www.google.com/maps?q=@groupe.GpsLat,@groupe.GpsLng" 
+                                           target="_blank" 
+                                           class="btn-futuriste btn-primary-futuriste">
+                                            <i class="bi bi-geo-alt me-2"></i>Voir sur la carte
+                                        </a>
+                                    }
+                                    @if (!string.IsNullOrEmpty(groupe.Adresse))
+                                    {
+                                        <a href="https://www.google.com/maps/search/@Uri.EscapeDataString(groupe.Adresse)" 
+                                           target="_blank" 
+                                           class="btn-futuriste btn-secondary-futuriste">
+                                            <i class="bi bi-search me-2"></i>Rechercher
+                                        </a>
+                                    }
+                                </div>
+                            </div>
+                            
+                            <!-- Footer Accent -->
+                            <div class="card-footer-accent"></div>
                         </div>
                     </div>
-                </div>
-            }
+                }
+            </div>
         }
         else
         {
-            <div class="col-12">
-                <div class="card-modern card-scout text-center p-5">
-                    <div class="empty-state">
-                        <div class="empty-state-icon">
-                            <i class="bi bi-inbox" style="font-size: 4rem; color: var(--color-primary-soft);"></i>
-                        </div>
-                        <h3 class="empty-state-title">Aucun groupe disponible</h3>
-                        <p class="empty-state-text">Les groupes seront bientôt disponibles.</p>
-                    </div>
+            <div class="empty-state-futuriste text-center py-5">
+                <div class="empty-icon-wrapper">
+                    <i class="bi bi-inbox"></i>
                 </div>
+                <h3 class="empty-title">Aucun groupe disponible</h3>
+                <p class="empty-text">Les groupes seront bientôt disponibles.</p>
             </div>
         }
     </div>
 </div>
 
-<!-- Carte Interactive -->
+<!-- Carte Interactive Futuriste -->
 @if (Model != null && Model.Any(g => g.GpsLat.HasValue && g.GpsLng.HasValue))
 {
-    <div class="container mb-5">
-        <div class="card-scout card-modern">
-            <div class="card-body p-4">
-                <h3 class="fw-bold mb-4">
-                    <i class="bi bi-map me-2 text-primary"></i>Carte Interactive
-                </h3>
-                <div id="map" style="height: 500px; border-radius: var(--radius-lg); overflow: hidden; border: 2px solid var(--color-border);"></div>
+    <div class="map-section-futuriste py-5">
+        <div class="container">
+            <div class="map-card-futuriste">
+                <div class="map-header">
+                    <h3 class="map-title">
+                        <i class="bi bi-map me-2"></i>Carte Interactive
+                    </h3>
+                </div>
+                <div class="map-container">
+                    <div id="map" class="map-wrapper"></div>
+                </div>
             </div>
         </div>
     </div>
 }
 
 <!-- Leaflet CSS & JS -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
-      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" 
-      crossorigin="" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" 
-        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" 
-        crossorigin=""></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
     @if (Model != null && Model.Any(g => g.GpsLat.HasValue && g.GpsLng.HasValue))
     {
         <text>
-        // Initialiser la carte centrée sur Abidjan
         const map = L.map('map').setView([5.345, -4.024], 11);
         
-        // Ajouter les tuiles OpenStreetMap
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
         
-        // Données des groupes avec coordonnées GPS
         const groups = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
             Model.Where(x => x.GpsLat.HasValue && x.GpsLng.HasValue && x.IsActive)
                  .Select(x => new { 
@@ -138,60 +177,579 @@
                      lat = x.GpsLat, 
                      lng = x.GpsLng, 
                      x.ContactTel,
-                     x.ContactEmail
+                     x.ContactEmail,
+                     x.LogoUrl
                  })
         ));
         
-        // Ajouter les marqueurs pour chaque groupe
         groups.forEach(g => {
             const popupContent = `
-                <div style="min-width: 200px;">
-                    <h5 class="fw-bold mb-2" style="color: var(--color-primary);">${g.Nom}</h5>
-                    ${g.Adresse ? `<p class="mb-1"><i class="bi bi-geo-alt"></i> ${g.Adresse}</p>` : ''}
-                    ${g.ContactTel ? `<p class="mb-1"><i class="bi bi-telephone"></i> <a href="tel:${g.ContactTel}">${g.ContactTel}</a></p>` : ''}
-                    ${g.ContactEmail ? `<p class="mb-0"><i class="bi bi-envelope"></i> <a href="mailto:${g.ContactEmail}">${g.ContactEmail}</a></p>` : ''}
+                <div style="min-width: 200px; text-align: center;">
+                    ${g.LogoUrl ? `<img src="${g.LogoUrl}" alt="${g.Nom}" style="max-width: 100px; max-height: 80px; margin: 0 auto 10px; display: block; object-fit: contain;" />` : ''}
+                    <h5 style="color: #2D5016; font-weight: bold; margin-bottom: 10px;">${g.Nom}</h5>
+                    ${g.Adresse ? `<p style="margin-bottom: 8px; font-size: 0.9rem;"><i class="bi bi-geo-alt"></i> ${g.Adresse.replace(/;/g, ', ')}</p>` : ''}
+                    ${g.ContactTel ? `<p style="margin-bottom: 8px;"><i class="bi bi-telephone"></i> <a href="tel:${g.ContactTel}" style="color: #2D5016; text-decoration: none;">${g.ContactTel}</a></p>` : ''}
+                    ${g.ContactEmail ? `<p style="margin-bottom: 0;"><i class="bi bi-envelope"></i> <a href="mailto:${g.ContactEmail}" style="color: #2D5016; text-decoration: none;">${g.ContactEmail}</a></p>` : ''}
                 </div>
             `;
             
-            // Créer un marqueur personnalisé avec couleur verte
             const greenIcon = L.icon({
                 iconUrl: 'data:image/svg+xml;base64,' + btoa(`
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
-                        <circle cx="16" cy="16" r="12" fill="#2D5016" stroke="white" stroke-width="2"/>
-                        <circle cx="16" cy="16" r="6" fill="white"/>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
+                        <defs>
+                            <filter id="glow">
+                                <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                                <feMerge>
+                                    <feMergeNode in="coloredBlur"/>
+                                    <feMergeNode in="SourceGraphic"/>
+                                </feMerge>
+                            </filter>
+                        </defs>
+                        <circle cx="20" cy="20" r="15" fill="#2D5016" stroke="#6BA644" stroke-width="3" filter="url(#glow)"/>
+                        <circle cx="20" cy="20" r="8" fill="white"/>
                     </svg>
                 `),
-                iconSize: [32, 32],
-                iconAnchor: [16, 32],
-                popupAnchor: [0, -32]
+                iconSize: [40, 40],
+                iconAnchor: [20, 40],
+                popupAnchor: [0, -40]
             });
             
-            L.marker([g.lat, g.lng], { icon: greenIcon })
-                .addTo(map)
-                .bindPopup(popupContent);
+            L.marker([g.lat, g.lng], { icon: greenIcon }).addTo(map).bindPopup(popupContent);
         });
         </text>
     }
 </script>
 
 <style>
+    /* ============================================
+       HERO SECTION FUTURISTE
+       ============================================ */
+    .groups-hero-section {
+        background: linear-gradient(135deg, #2D5016 0%, #4A7C2A 40%, #6BA644 100%);
+        min-height: 500px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .hero-animated-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: 
+            radial-gradient(circle at 20% 30%, rgba(107, 166, 68, 0.4) 0%, transparent 50%),
+            radial-gradient(circle at 80% 70%, rgba(143, 203, 107, 0.3) 0%, transparent 50%),
+            radial-gradient(circle at 50% 50%, rgba(45, 80, 22, 0.2) 0%, transparent 70%);
+        animation: backgroundPulse 8s ease-in-out infinite;
+    }
+    
+    @@keyframes backgroundPulse {
+        0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        50% { transform: scale(1.1) rotate(2deg); opacity: 0.8; }
+    }
+    
+    .hero-particles {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: 
+            radial-gradient(2px 2px at 20px 30px, rgba(255, 255, 255, 0.3), transparent),
+            radial-gradient(2px 2px at 60px 70px, rgba(255, 255, 255, 0.2), transparent),
+            radial-gradient(1px 1px at 50px 50px, rgba(255, 255, 255, 0.4), transparent);
+        background-size: 200px 200px;
+        animation: particlesFloat 20s linear infinite;
+    }
+    
+    @@keyframes particlesFloat {
+        0% { transform: translateY(0) translateX(0); }
+        100% { transform: translateY(-200px) translateX(-100px); }
+    }
+    
+    .hero-icon-wrapper {
+        position: relative;
+        display: inline-block;
+        margin-bottom: 2rem;
+    }
+    
+    .icon-glow {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 120px;
+        height: 120px;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+        border-radius: 50%;
+        animation: iconGlow 3s ease-in-out infinite;
+    }
+    
+    @@keyframes iconGlow {
+        0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+        50% { transform: translate(-50%, -50%) scale(1.3); opacity: 0.8; }
+    }
+    
+    .hero-main-icon {
+        position: relative;
+        font-size: 5rem;
+        color: white;
+        text-shadow: 0 0 30px rgba(255, 255, 255, 0.8);
+        animation: iconFloat 4s ease-in-out infinite;
+    }
+    
+    @@keyframes iconFloat {
+        0%, 100% { transform: translateY(0) scale(1); }
+        50% { transform: translateY(-10px) scale(1.05); }
+    }
+    
+    .hero-title {
+        font-size: 4rem;
+        font-weight: 800;
+        letter-spacing: 2px;
+        text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        animation: titleSlideIn 1s ease-out;
+    }
+    
+    @@keyframes titleSlideIn {
+        from { opacity: 0; transform: translateY(-30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .hero-subtitle {
+        animation: subtitleFadeIn 1.2s ease-out;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+    
+    @@keyframes subtitleFadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    
+    .text-highlight {
+        background: linear-gradient(120deg, #B8E09A 0%, white 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-weight: 700;
+    }
+    
+    .hero-wave-bottom {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 120px;
+        z-index: 5;
+    }
+    
+    /* ============================================
+       CARDS FUTURISTES
+       ============================================ */
+    .groups-container {
+        background: linear-gradient(to bottom, #f8f9fa 0%, #ffffff 100%);
+    }
+    
+    .groupe-card-wrapper {
+        margin-bottom: 2rem;
+    }
+    
+    .groupe-card-futuriste {
+        background: rgba(255, 255, 255, 0.98);
+        border-radius: 24px;
+        overflow: hidden;
+        position: relative;
+        box-shadow: 
+            0 10px 40px rgba(45, 80, 22, 0.1),
+            0 0 0 1px rgba(45, 80, 22, 0.05);
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        backdrop-filter: blur(10px);
+    }
+    
+    .groupe-card-futuriste::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(107, 166, 68, 0.1), transparent);
+        transition: left 0.6s;
+    }
+    
+    .groupe-card-futuriste:hover::before {
+        left: 100%;
+    }
+    
+    .groupe-card-futuriste:hover {
+        transform: translateY(-12px) scale(1.02);
+        box-shadow: 
+            0 20px 60px rgba(45, 80, 22, 0.2),
+            0 0 0 1px rgba(107, 166, 68, 0.3),
+            0 0 40px rgba(107, 166, 68, 0.15);
+    }
+    
+    .groupe-card-header {
+        position: relative;
+        background: linear-gradient(135deg, rgba(45, 80, 22, 0.05) 0%, rgba(107, 166, 68, 0.08) 100%);
+        padding: 2.5rem 1.5rem;
+        text-align: center;
+        border-bottom: 2px solid rgba(45, 80, 22, 0.1);
+    }
+    
+    .logo-container {
+        position: relative;
+        display: inline-block;
+    }
+    
+    .logo-glow {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle, rgba(107, 166, 68, 0.3) 0%, transparent 70%);
+        border-radius: 50%;
+        animation: logoGlow 3s ease-in-out infinite;
+    }
+    
+    @@keyframes logoGlow {
+        0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; }
+        50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.6; }
+    }
+    
+    .groupe-logo-img {
+        position: relative;
+        max-width: 160px;
+        max-height: 130px;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.15));
+        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    
+    .groupe-card-futuriste:hover .groupe-logo-img {
+        transform: scale(1.1) translateY(-5px);
+    }
+    
+    .logo-placeholder {
+        display: inline-block;
+    }
+    
+    .placeholder-icon {
+        width: 100px;
+        height: 100px;
+        background: linear-gradient(135deg, #2D5016 0%, #6BA644 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 8px 24px rgba(45, 80, 22, 0.3);
+    }
+    
+    .placeholder-icon i {
+        font-size: 3rem;
+        color: white;
+    }
+    
+    .header-accent {
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 4px;
+        background: linear-gradient(90deg, transparent, #6BA644, transparent);
+        border-radius: 2px;
+    }
+    
+    .groupe-card-body {
+        padding: 2rem 1.5rem;
+    }
+    
+    .groupe-name {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #2D5016;
+        margin-bottom: 1.5rem;
+        text-align: center;
+        letter-spacing: 0.5px;
+    }
+    
+    .info-section {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        background: rgba(45, 80, 22, 0.03);
+        border-radius: 12px;
+        border-left: 4px solid #6BA644;
+        transition: all 0.3s ease;
+    }
+    
+    .info-section:hover {
+        background: rgba(45, 80, 22, 0.08);
+        transform: translateX(5px);
+    }
+    
+    .info-icon {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, #2D5016 0%, #6BA644 100%);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+    
+    .info-icon i {
+        color: white;
+        font-size: 1.2rem;
+    }
+    
+    .info-content {
+        flex: 1;
+    }
+    
+    .info-label {
+        display: block;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #6BA644;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 0.25rem;
+    }
+    
+    .info-value {
+        margin: 0;
+        font-size: 0.95rem;
+        color: #2D5016;
+        line-height: 1.6;
+    }
+    
+    .contact-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .contact-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem;
+        background: rgba(45, 80, 22, 0.02);
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+    
+    .contact-item:hover {
+        background: rgba(45, 80, 22, 0.05);
+        transform: translateX(5px);
+    }
+    
+    .contact-item i {
+        color: #6BA644;
+        font-size: 1.1rem;
+    }
+    
+    .contact-link {
+        color: #2D5016;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s ease;
+    }
+    
+    .contact-link:hover {
+        color: #6BA644;
+    }
+    
+    .card-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .btn-futuriste {
+        padding: 0.875rem 1.5rem;
+        border-radius: 12px;
+        font-weight: 600;
+        text-decoration: none;
+        text-align: center;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        border: none;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .btn-futuriste::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+    }
+    
+    .btn-futuriste:hover::before {
+        width: 300px;
+        height: 300px;
+    }
+    
+    .btn-primary-futuriste {
+        background: linear-gradient(135deg, #2D5016 0%, #6BA644 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(45, 80, 22, 0.3);
+    }
+    
+    .btn-primary-futuriste:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(45, 80, 22, 0.4);
+        color: white;
+    }
+    
+    .btn-secondary-futuriste {
+        background: rgba(255, 255, 255, 0.9);
+        color: #2D5016;
+        border: 2px solid #6BA644;
+        box-shadow: 0 2px 10px rgba(45, 80, 22, 0.1);
+    }
+    
+    .btn-secondary-futuriste:hover {
+        background: #6BA644;
+        color: white;
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(107, 166, 68, 0.3);
+    }
+    
+    .card-footer-accent {
+        height: 4px;
+        background: linear-gradient(90deg, #2D5016 0%, #6BA644 50%, #2D5016 100%);
+        background-size: 200% 100%;
+        animation: accentMove 3s linear infinite;
+    }
+    
+    @@keyframes accentMove {
+        0% { background-position: 0% 0%; }
+        100% { background-position: 200% 0%; }
+    }
+    
+    /* Empty State */
+    .empty-state-futuriste {
+        padding: 80px 20px;
+    }
+    
+    .empty-icon-wrapper {
+        width: 120px;
+        height: 120px;
+        margin: 0 auto 2rem;
+        background: linear-gradient(135deg, rgba(45, 80, 22, 0.1) 0%, rgba(107, 166, 68, 0.1) 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .empty-icon-wrapper i {
+        font-size: 4rem;
+        color: #6BA644;
+    }
+    
+    .empty-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #2D5016;
+        margin-bottom: 1rem;
+    }
+    
+    .empty-text {
+        font-size: 1.1rem;
+        color: #6B7A5F;
+    }
+    
+    /* Map Section */
+    .map-section-futuriste {
+        background: linear-gradient(to bottom, #ffffff 0%, #f8f9fa 100%);
+    }
+    
+    .map-card-futuriste {
+        background: rgba(255, 255, 255, 0.98);
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: 0 15px 50px rgba(45, 80, 22, 0.15);
+        backdrop-filter: blur(10px);
+    }
+    
+    .map-header {
+        padding: 2rem;
+        background: linear-gradient(135deg, rgba(45, 80, 22, 0.05) 0%, rgba(107, 166, 68, 0.08) 100%);
+        border-bottom: 2px solid rgba(45, 80, 22, 0.1);
+    }
+    
+    .map-title {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #2D5016;
+        margin: 0;
+    }
+    
+    .map-title i {
+        color: #6BA644;
+    }
+    
+    .map-container {
+        padding: 0;
+    }
+    
+    .map-wrapper {
+        height: 600px;
+        width: 100%;
+        border-radius: 0;
+    }
+    
     .leaflet-popup-content-wrapper {
-        border-radius: var(--radius-md);
-        box-shadow: var(--shadow-lg);
+        border-radius: 16px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
     }
     
     .leaflet-popup-content {
-        margin: 1rem;
+        margin: 1.25rem;
     }
     
     .leaflet-popup-content a {
-        color: var(--color-primary);
+        color: #2D5016;
         text-decoration: none;
-        font-weight: 500;
+        font-weight: 600;
+        transition: color 0.3s ease;
     }
     
     .leaflet-popup-content a:hover {
-        color: var(--color-primary-light);
-        text-decoration: underline;
+        color: #6BA644;
+    }
+    
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .hero-title {
+            font-size: 2.5rem;
+        }
+        
+        .hero-main-icon {
+            font-size: 3.5rem;
+        }
+        
+        .groupe-card-futuriste {
+            margin-bottom: 1.5rem;
+        }
     }
 </style>

@@ -20,12 +20,22 @@
                     <span asp-validation-for="Nom" class="text-danger"></span>
                 </div>
                 
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <label asp-for="Adresse" class="form-label fw-semibold">
-                        <i class="bi bi-geo-alt me-1"></i>Adresse
+                        <i class="bi bi-geo-alt me-1"></i>Adresse complète (format: rue K84; cocody, 2 plateaux, carrefour celeste)
                     </label>
-                    <input asp-for="Adresse" class="form-control" placeholder="Adresse complète" />
+                    <textarea asp-for="Adresse" class="form-control" rows="3" placeholder="Ex: rue K84; cocody, 2 plateaux, carrefour celeste"></textarea>
+                    <small class="form-text text-muted">Utilisez le point-virgule (;) pour séparer les différentes parties de l'adresse</small>
                     <span asp-validation-for="Adresse" class="text-danger"></span>
+                </div>
+                
+                <div class="col-md-12">
+                    <label asp-for="LogoUrl" class="form-label fw-semibold">
+                        <i class="bi bi-image me-1"></i>URL du Logo du Groupe
+                    </label>
+                    <input asp-for="LogoUrl" type="url" class="form-control" placeholder="https://exemple.com/logo.png" />
+                    <small class="form-text text-muted">URL complète du logo du groupe (doit être conforme à la charte graphique - pas de rotation, pas de version contour)</small>
+                    <span asp-validation-for="LogoUrl" class="text-danger"></span>
                 </div>
                 
                 <div class="col-md-6">

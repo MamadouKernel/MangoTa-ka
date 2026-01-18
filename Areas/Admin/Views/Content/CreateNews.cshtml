@@ -1,0 +1,10 @@
+@model MangoTaikaDistrict.Domain.Entities.Actualite
+<h2>Créer actualité</h2>
+
+<form method="post">
+    <div>Titre: <input asp-for="Titre" /></div>
+    <div>Contenu: <textarea asp-for="Contenu" rows="6"></textarea></div>
+    <button type="submit">Publier</button>
+</form>
+
+<p><a asp-area="Admin" asp-controller="Content" asp-action="News">Retour</a></p>

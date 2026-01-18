@@ -1,0 +1,102 @@
+@model List<MangoTaikaDistrict.Domain.Entities.InscriptionFormation>
+@{
+    ViewData["Title"] = "Inscriptions à la Formation";
+    var formation = ViewBag.Formation as MangoTaikaDistrict.Domain.Entities.Formation;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-1"><i class="bi bi-people me-2 text-primary"></i>Inscriptions</h2>
+        <p class="text-muted mb-0">@formation?.Titre</p>
+    </div>
+    <a asp-area="Admin" asp-controller="Lms" asp-action="Index" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-1"></i>Retour
+    </a>
+</div>
+
+<div class="card-modern card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-modern table-hover align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Utilisateur</th>
+                        <th>Date inscription</th>
+                        <th>Statut</th>
+                        <th>Progression</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Any())
+                    {
+                        @foreach (var inscription in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <strong>@inscription.Scout?.Nom @inscription.Scout?.Prenoms</strong><br>
+                                    <small class="text-muted">
+                                        @if (!string.IsNullOrEmpty(inscription.Scout?.Matricule))
+                                        {
+                                            <span>Matricule: @inscription.Scout.Matricule</span>
+                                        }
+                                        @if (inscription.Scout?.Utilisateur != null && !string.IsNullOrEmpty(inscription.Scout.Utilisateur.Email))
+                                        {
+                                            <span> | Email: @inscription.Scout.Utilisateur.Email</span>
+                                        }
+                                    </small>
+                                </td>
+                                <td>@inscription.DateInscription.ToString("dd/MM/yyyy")</td>
+                                <td>
+                                    @if (inscription.Statut == MangoTaikaDistrict.Domain.Enums.StatutInscription.COMPLETE)
+                                    {
+                                        <span class="badge bg-success">Complétée</span>
+                                    }
+                                    else if (inscription.Statut == MangoTaikaDistrict.Domain.Enums.StatutInscription.EN_COURS)
+                                    {
+                                        <span class="badge bg-info">En cours</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning">Inscrit</span>
+                                    }
+                                </td>
+                                <td>
+                                    @{
+                                        var totalModules = formation?.Modules?.Count ?? 0;
+                                        var completedModules = inscription.Progressions?.Count(p => p.EstComplete) ?? 0;
+                                        var percentage = totalModules > 0 ? (completedModules * 100 / totalModules) : 0;
+                                    }
+                                    <div class="progress" style="height: 20px;">
+                                        <div class="progress-bar" role="progressbar" style="width: @percentage%">@percentage%</div>
+                                    </div>
+                                    <small class="text-muted">@completedModules / @totalModules modules</small>
+                                </td>
+                                <td class="text-end">
+                                    @if (inscription.Statut == MangoTaikaDistrict.Domain.Enums.StatutInscription.COMPLETE && !inscription.Certificats.Any(c => c.EstValide))
+                                    {
+                                        <form method="post" asp-action="GenererCertificat" class="d-inline">
+                                            <input type="hidden" name="inscriptionId" value="@inscription.Id" />
+                                            <button type="submit" class="btn btn-sm btn-success btn-modern">
+                                                <i class="bi bi-award me-1"></i>Générer certificat
+                                            </button>
+                                        </form>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center py-5">
+                                <i class="bi bi-inbox fs-1 text-muted d-block mb-2"></i>
+                                <p class="text-muted">Aucune inscription pour cette formation</p>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

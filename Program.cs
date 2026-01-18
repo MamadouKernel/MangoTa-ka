@@ -34,8 +34,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.LoginPath = "/Account/Login";
         options.AccessDeniedPath = "/Account/AccessDenied";
         options.Cookie.Name = "MangoTaikaDistrict.Auth";
-        options.ExpireTimeSpan = TimeSpan.FromHours(8);
-        options.SlidingExpiration = true;
+        options.ExpireTimeSpan = TimeSpan.FromHours(1); // Déconnexion après 1 heure d'inactivité
+        options.SlidingExpiration = true; // Réinitialise le timer à chaque activité
     });
 
 builder.Services.AddAuthorization();

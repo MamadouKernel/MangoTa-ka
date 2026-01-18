@@ -1,0 +1,199 @@
+@model MangoTaikaDistrict.Domain.Entities.Ticket
+@{
+    ViewData["Title"] = "Détails du Ticket";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-1"><i class="bi bi-ticket-perforated me-2 text-primary"></i>Détails du Ticket</h2>
+        <p class="text-muted mb-0">@Model.Sujet</p>
+    </div>
+    <a asp-area="Admin" asp-controller="Tickets" asp-action="Index" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-1"></i>Retour
+    </a>
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle me-2"></i>@TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-triangle me-2"></i>@TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<!-- Informations principales -->
+<div class="card-modern card mb-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0"><i class="bi bi-info-circle me-2"></i>Informations du Ticket</h5>
+    </div>
+    <div class="card-body">
+        <div class="row g-3">
+            <div class="col-md-12">
+                <label class="form-label fw-semibold text-muted">Sujet</label>
+                <div class="fs-5 fw-semibold">@Model.Sujet</div>
+            </div>
+            
+            <div class="col-md-4">
+                <label class="form-label fw-semibold text-muted">Type</label>
+                <div>
+                    @if (Model.Type == MangoTaikaDistrict.Domain.Enums.TypeTicket.INCIDENT)
+                    {
+                        <span class="badge bg-danger fs-6"><i class="bi bi-exclamation-triangle me-1"></i>Incident</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-info fs-6"><i class="bi bi-question-circle me-1"></i>Demande</span>
+                    }
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <label class="form-label fw-semibold text-muted">Statut</label>
+                <div>
+                    @switch (Model.Statut)
+                    {
+                        case MangoTaikaDistrict.Domain.Enums.StatutTicket.OUVERT:
+                            <span class="badge bg-success fs-6"><i class="bi bi-circle me-1"></i>Ouvert</span>
+                            break;
+                        case MangoTaikaDistrict.Domain.Enums.StatutTicket.EN_COURS:
+                            <span class="badge bg-info fs-6"><i class="bi bi-clock-history me-1"></i>En cours</span>
+                            break;
+                        case MangoTaikaDistrict.Domain.Enums.StatutTicket.RESOLU:
+                            <span class="badge bg-primary fs-6"><i class="bi bi-check-circle me-1"></i>Résolu</span>
+                            break;
+                        case MangoTaikaDistrict.Domain.Enums.StatutTicket.FERME:
+                            <span class="badge bg-secondary fs-6"><i class="bi bi-x-circle me-1"></i>Fermé</span>
+                            break;
+                        default:
+                            <span class="badge bg-secondary fs-6">@Model.Statut</span>
+                            break;
+                    }
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <label class="form-label fw-semibold text-muted">Priorité</label>
+                <div>
+                    @switch (Model.Priorite)
+                    {
+                        case MangoTaikaDistrict.Domain.Enums.PrioriteTicket.BASSE:
+                            <span class="badge bg-secondary fs-6"><i class="bi bi-arrow-down me-1"></i>Basse</span>
+                            break;
+                        case MangoTaikaDistrict.Domain.Enums.PrioriteTicket.MOYENNE:
+                            <span class="badge bg-warning fs-6"><i class="bi bi-dash me-1"></i>Moyenne</span>
+                            break;
+                        case MangoTaikaDistrict.Domain.Enums.PrioriteTicket.HAUTE:
+                            <span class="badge bg-danger fs-6"><i class="bi bi-arrow-up me-1"></i>Haute</span>
+                            break;
+                        default:
+                            <span class="badge bg-secondary fs-6">@Model.Priorite</span>
+                            break;
+                    }
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <label class="form-label fw-semibold text-muted">Créé par</label>
+                <div>
+                    <strong>@Model.CreatedBy?.Nom @Model.CreatedBy?.Prenoms</strong>
+                    @if (!string.IsNullOrEmpty(Model.CreatedBy?.Email))
+                    {
+                        <br><small class="text-muted"><i class="bi bi-envelope me-1"></i>@Model.CreatedBy.Email</small>
+                    }
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <label class="form-label fw-semibold text-muted">Assigné à</label>
+                <div>
+                    @if (Model.AssignedTo != null)
+                    {
+                        <span class="badge bg-primary fs-6">@Model.AssignedTo.Nom @Model.AssignedTo.Prenoms</span>
+                    }
+                    else
+                    {
+                        <span class="text-muted">Non assigné</span>
+                    }
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <label class="form-label fw-semibold text-muted">Date de création</label>
+                <div>
+                    <i class="bi bi-calendar me-1 text-primary"></i>@Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <label class="form-label fw-semibold text-muted">Dernière mise à jour</label>
+                <div>
+                    <i class="bi bi-clock me-1 text-info"></i>@Model.UpdatedAt.ToString("dd/MM/yyyy HH:mm")
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Description -->
+<div class="card-modern card mb-4">
+    <div class="card-header bg-info text-white">
+        <h5 class="mb-0"><i class="bi bi-card-text me-2"></i>Description</h5>
+    </div>
+    <div class="card-body">
+        <p class="mb-0" style="white-space: pre-wrap;">@Model.Description</p>
+    </div>
+</div>
+
+<!-- Messages -->
+<div class="card-modern card">
+    <div class="card-header bg-secondary text-white">
+        <h5 class="mb-0"><i class="bi bi-chat-left-text me-2"></i>Messages (@(Model.Messages?.Count ?? 0))</h5>
+    </div>
+    <div class="card-body">
+        @if (Model.Messages?.Any() == true)
+        {
+            <div class="messages-list">
+                @foreach (var m in Model.Messages.OrderBy(x => x.CreatedAt))
+                {
+                    <div class="d-flex mb-4 pb-3 border-bottom">
+                        <div class="flex-shrink-0 me-3">
+                            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                <i class="bi bi-person fs-4"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div>
+                                    <h6 class="mb-1">
+                                        <strong>@m.Auteur?.Nom @m.Auteur?.Prenoms</strong>
+                                    </h6>
+                                    <small class="text-muted">
+                                        <i class="bi bi-calendar me-1"></i>@m.CreatedAt.ToString("dd/MM/yyyy HH:mm")
+                                    </small>
+                                </div>
+                            </div>
+                            <div class="alert alert-light mt-2 mb-0" style="white-space: pre-wrap;">
+                                @m.Message
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-4">
+                <i class="bi bi-chat-left fs-1 text-muted d-block mb-2"></i>
+                <p class="text-muted">Aucun message pour ce ticket</p>
+            </div>
+        }
+    </div>
+</div>

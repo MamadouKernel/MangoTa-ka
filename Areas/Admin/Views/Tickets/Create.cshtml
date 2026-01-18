@@ -1,0 +1,87 @@
+@model MangoTaikaDistrict.Domain.Entities.Ticket
+@{
+    ViewData["Title"] = "Créer un Ticket";
+}
+
+<div class="mb-4">
+    <h2 class="fw-bold mb-1"><i class="bi bi-ticket-perforated me-2 text-primary"></i>Créer un Ticket</h2>
+    <p class="text-muted">Créer un nouveau ticket de support ou une demande</p>
+</div>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <h6 class="alert-heading"><i class="bi bi-exclamation-triangle me-2"></i>Erreurs de validation</h6>
+        <ul class="mb-0">
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="card-modern card">
+    <div class="card-body">
+        <form method="post" class="form-modern">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label asp-for="Type" class="form-label fw-semibold">
+                        <i class="bi bi-tag me-1"></i>Type de ticket *
+                    </label>
+                    <select asp-for="Type" class="form-select" required>
+                        <option value="@MangoTaikaDistrict.Domain.Enums.TypeTicket.DEMANDE">Demande</option>
+                        <option value="@MangoTaikaDistrict.Domain.Enums.TypeTicket.INCIDENT">Incident</option>
+                    </select>
+                    <small class="text-muted">Sélectionnez le type de ticket</small>
+                    <span asp-validation-for="Type" class="text-danger"></span>
+                </div>
+                
+                <div class="col-md-6">
+                    <label asp-for="Priorite" class="form-label fw-semibold">
+                        <i class="bi bi-flag me-1"></i>Priorité *
+                    </label>
+                    <select asp-for="Priorite" class="form-select" required>
+                        <option value="@MangoTaikaDistrict.Domain.Enums.PrioriteTicket.BASSE">Basse</option>
+                        <option value="@MangoTaikaDistrict.Domain.Enums.PrioriteTicket.MOYENNE" selected>Moyenne</option>
+                        <option value="@MangoTaikaDistrict.Domain.Enums.PrioriteTicket.HAUTE">Haute</option>
+                    </select>
+                    <small class="text-muted">Définissez la priorité du ticket</small>
+                    <span asp-validation-for="Priorite" class="text-danger"></span>
+                </div>
+                
+                <div class="col-md-12">
+                    <label asp-for="Sujet" class="form-label fw-semibold">
+                        <i class="bi bi-file-text me-1"></i>Sujet *
+                    </label>
+                    <input asp-for="Sujet" class="form-control" required placeholder="Ex: Problème de connexion, Demande de fonctionnalité..." />
+                    <span asp-validation-for="Sujet" class="text-danger"></span>
+                </div>
+                
+                <div class="col-md-12">
+                    <label asp-for="Description" class="form-label fw-semibold">
+                        <i class="bi bi-card-text me-1"></i>Description *
+                    </label>
+                    <textarea asp-for="Description" class="form-control" rows="8" required 
+                              placeholder="Décrivez en détail votre demande ou l'incident rencontré..."></textarea>
+                    <small class="text-muted">Fournissez tous les détails nécessaires pour mieux comprendre votre demande</small>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+            </div>
+            
+            <div class="mt-4 d-flex gap-2">
+                <button type="submit" class="btn btn-primary btn-modern">
+                    <i class="bi bi-check-circle me-1"></i>Créer le ticket
+                </button>
+                <a asp-area="Admin" asp-controller="Tickets" asp-action="Index" class="btn btn-outline-secondary btn-modern">
+                    <i class="bi bi-arrow-left me-1"></i>Retour
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -8,6 +8,7 @@ public interface IUtilisateurRepository
     Task<Utilisateur?> GetByIdAsync(Guid id);
     Task<List<string>> GetRoleCodesAsync(Guid utilisateurId);
     Task<List<Utilisateur>> GetPendingValidationAsync();
+    Task<List<Utilisateur>> GetAllValidatedAsync();
     Task AddAsync(Utilisateur user);
     Task UpdateAsync(Utilisateur user);
     Task DeleteAsync(Guid id);

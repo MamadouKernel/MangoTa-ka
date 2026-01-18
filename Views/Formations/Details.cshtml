@@ -1,0 +1,124 @@
+@model MangoTaikaDistrict.Domain.Entities.Formation
+@{
+    ViewData["Title"] = Model.Titre;
+    var inscription = ViewBag.Inscription as MangoTaikaDistrict.Domain.Entities.InscriptionFormation;
+}
+
+<div class="mb-4">
+    <a asp-action="Index" class="btn btn-outline-secondary mb-3">
+        <i class="bi bi-arrow-left me-1"></i>Retour aux formations
+    </a>
+    <h2 class="fw-bold mb-1">@Model.Titre</h2>
+    <p class="text-muted">@Model.Description</p>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card-modern card mb-4">
+            <div class="card-body">
+                <h5 class="card-title mb-3">Contenu de la formation</h5>
+                @if (!string.IsNullOrEmpty(Model.Contenu))
+                {
+                    <div>@Html.Raw(Model.Contenu)</div>
+                }
+                else
+                {
+                    <p class="text-muted">Aucun contenu détaillé disponible.</p>
+                }
+            </div>
+        </div>
+
+        @if (Model.Modules.Any())
+        {
+            <div class="card-modern card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="bi bi-list-ol me-2"></i>Modules de la formation</h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        @foreach (var module in Model.Modules.OrderBy(m => m.Ordre))
+                        {
+                            <div class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div class="flex-grow-1">
+                                        <h6 class="mb-1">
+                                            @if (inscription != null)
+                                            {
+                                                var progression = inscription.Progressions.FirstOrDefault(p => p.ModuleFormationId == module.Id);
+                                                if (progression?.EstComplete == true)
+                                                {
+                                                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                                }
+                                                else
+                                                {
+                                                    <i class="bi bi-circle me-2"></i>
+                                                }
+                                            }
+                                            @module.Titre
+                                            @if (module.EstObligatoire)
+                                            {
+                                                <span class="badge bg-warning ms-2">Obligatoire</span>
+                                            }
+                                        </h6>
+                                        @if (!string.IsNullOrEmpty(module.Description))
+                                        {
+                                            <p class="mb-1 text-muted small">@module.Description</p>
+                                        }
+                                        <small class="text-muted">
+                                            <i class="bi bi-clock me-1"></i>@module.DureeEstimee min
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="col-lg-4">
+        <div class="card-modern card">
+            <div class="card-body">
+                <h5 class="card-title mb-3">Informations</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <strong><i class="bi bi-clock me-2"></i>Durée :</strong> @Model.DureeEstimee heures
+                    </li>
+                    <li class="mb-2">
+                        <strong><i class="bi bi-bar-chart me-2"></i>Niveau :</strong> 
+                        <span class="badge bg-info">@Model.Niveau</span>
+                    </li>
+                    <li class="mb-2">
+                        <strong><i class="bi bi-list-ul me-2"></i>Modules :</strong> @Model.Modules.Count
+                    </li>
+                </ul>
+
+                @if (inscription != null)
+                {
+                    <div class="alert alert-info mt-3">
+                        <h6><i class="bi bi-info-circle me-2"></i>Vous êtes inscrit</h6>
+                        <p class="mb-2">Statut : <strong>@inscription.Statut</strong></p>
+                        <a asp-controller="MesFormations" asp-action="Suivre" asp-route-inscriptionId="@inscription.Id" class="btn btn-primary btn-sm w-100">
+                            <i class="bi bi-play-circle me-1"></i>Continuer la formation
+                        </a>
+                    </div>
+                }
+                else if (User.IsInRole("SCOUT"))
+                {
+                    <form method="post" asp-action="SInscrire" class="mt-3">
+                        <input type="hidden" name="formationId" value="@Model.Id" />
+                        <button type="submit" class="btn btn-primary btn-modern w-100">
+                            <i class="bi bi-plus-circle me-1"></i>S'inscrire
+                        </button>
+                    </form>
+                }
+                else
+                {
+                    <div class="alert alert-warning mt-3">
+                        <i class="bi bi-exclamation-triangle me-2"></i>Vous devez être connecté en tant que scout pour vous inscrire.
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

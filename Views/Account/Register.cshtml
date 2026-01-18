@@ -4,112 +4,607 @@
     Layout = "_Layout";
 }
 
-<div class="container">
-    <div class="row justify-content-center align-items-center min-vh-100 py-5">
-        <div class="col-md-6 col-lg-5">
-            <div class="card-modern card shadow-lg border-0">
-                <div class="card-body p-5">
-                    <div class="text-center mb-4">
-                        <i class="bi bi-person-plus-fill text-primary" style="font-size: 3rem;"></i>
-                        <h2 class="fw-bold mt-3 mb-1">Inscription</h2>
-                        <p class="text-muted">Rejoignez MangoTaikaDistrict</p>
+<style>
+    /* Background animé avec gradient doux */
+    body {
+        background: linear-gradient(135deg, #E8F5E1 0%, #FFFFFF 30%, #E8F5E1 70%, #FAFAFA 100%);
+        background-size: 400% 400%;
+        animation: gradientShift 15s ease infinite;
+        min-height: 100vh;
+        position: relative;
+        overflow-x: hidden;
+    }
+
+    @@keyframes gradientShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    /* Particules flottantes en arrière-plan */
+    .register-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        z-index: 0;
+        pointer-events: none;
+    }
+
+    .floating-shape {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(107, 166, 68, 0.08);
+        animation: floatShape 20s infinite ease-in-out;
+    }
+
+    .floating-shape:nth-child(1) {
+        width: 300px;
+        height: 300px;
+        top: 10%;
+        left: 5%;
+        animation-delay: 0s;
+    }
+
+    .floating-shape:nth-child(2) {
+        width: 200px;
+        height: 200px;
+        top: 60%;
+        right: 10%;
+        animation-delay: 5s;
+    }
+
+    .floating-shape:nth-child(3) {
+        width: 150px;
+        height: 150px;
+        bottom: 20%;
+        left: 15%;
+        animation-delay: 10s;
+    }
+
+    @@keyframes floatShape {
+        0%, 100% {
+            transform: translateY(0) translateX(0) scale(1);
+            opacity: 0.3;
+        }
+        33% {
+            transform: translateY(-30px) translateX(20px) scale(1.1);
+            opacity: 0.5;
+        }
+        66% {
+            transform: translateY(20px) translateX(-15px) scale(0.9);
+            opacity: 0.4;
+        }
+    }
+
+    /* Container principal */
+    .register-container {
+        position: relative;
+        z-index: 1;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 1rem;
+    }
+
+    /* Carte principale avec glassmorphism */
+    .register-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px) saturate(180%);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 32px;
+        box-shadow: 
+            0 20px 60px rgba(45, 80, 22, 0.15),
+            0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+        padding: 3rem;
+        max-width: 600px;
+        width: 100%;
+        animation: fadeInUp 0.8s ease-out;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .register-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #2D5016 0%, #4A7C2A 50%, #6BA644 100%);
+        border-radius: 32px 32px 0 0;
+    }
+
+    @@keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Header du formulaire */
+    .register-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+        position: relative;
+    }
+
+    .register-icon-wrapper {
+        width: 100px;
+        height: 100px;
+        margin: 0 auto 1.5rem;
+        background: linear-gradient(135deg, #2D5016 0%, #4A7C2A 50%, #6BA644 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 10px 30px rgba(45, 80, 22, 0.3);
+        position: relative;
+        animation: pulseIcon 2s ease-in-out infinite;
+    }
+
+    .register-icon-wrapper::after {
+        content: '';
+        position: absolute;
+        inset: -5px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #2D5016 0%, #6BA644 100%);
+        opacity: 0.3;
+        z-index: -1;
+        animation: pulseRing 2s ease-in-out infinite;
+    }
+
+    @@keyframes pulseIcon {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+
+    @@keyframes pulseRing {
+        0%, 100% { transform: scale(1); opacity: 0.3; }
+        50% { transform: scale(1.2); opacity: 0; }
+    }
+
+    .register-icon-wrapper i {
+        font-size: 3rem;
+        color: white;
+        z-index: 1;
+    }
+
+    .register-title {
+        font-size: 2.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #2D5016 0%, #4A7C2A 50%, #6BA644 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.5rem;
+        letter-spacing: -0.5px;
+    }
+
+    .register-subtitle {
+        color: #6B7A5F;
+        font-size: 1.1rem;
+        font-weight: 400;
+    }
+
+    /* Champs de formulaire */
+    .form-group-modern {
+        margin-bottom: 1.75rem;
+        position: relative;
+    }
+
+    .form-label-modern {
+        display: block;
+        font-weight: 600;
+        color: #2D5016;
+        margin-bottom: 0.75rem;
+        font-size: 0.95rem;
+        letter-spacing: 0.3px;
+    }
+
+    .form-label-modern i {
+        margin-right: 0.5rem;
+        color: #6BA644;
+        font-size: 1.1rem;
+    }
+
+    .form-control-modern {
+        width: 100%;
+        padding: 1rem 1.25rem;
+        font-size: 1rem;
+        border: 2px solid rgba(212, 228, 200, 0.5);
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.9);
+        color: #2D5016;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .form-control-modern:focus {
+        outline: none;
+        border-color: #6BA644;
+        background: white;
+        box-shadow: 0 0 0 4px rgba(107, 166, 68, 0.1);
+        transform: translateY(-2px);
+    }
+
+    .form-control-modern::placeholder {
+        color: #B8E09A;
+        opacity: 0.6;
+    }
+
+    .form-select-modern {
+        width: 100%;
+        padding: 1rem 1.25rem;
+        font-size: 1rem;
+        border: 2px solid rgba(212, 228, 200, 0.5);
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.9);
+        color: #2D5016;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        font-family: 'Poppins', sans-serif;
+        cursor: pointer;
+    }
+
+    .form-select-modern:focus {
+        outline: none;
+        border-color: #6BA644;
+        background: white;
+        box-shadow: 0 0 0 4px rgba(107, 166, 68, 0.1);
+        transform: translateY(-2px);
+    }
+
+    /* Checkbox moderne */
+    .form-check-modern {
+        display: flex;
+        align-items: flex-start;
+        padding: 1.25rem;
+        background: rgba(232, 245, 225, 0.5);
+        border-radius: 16px;
+        border: 2px solid rgba(212, 228, 200, 0.3);
+        transition: all 0.3s ease;
+        margin-bottom: 1.5rem;
+    }
+
+    .form-check-modern:hover {
+        background: rgba(232, 245, 225, 0.7);
+        border-color: #6BA644;
+    }
+
+    .form-check-input-modern {
+        width: 24px;
+        height: 24px;
+        margin-top: 0.25rem;
+        margin-right: 1rem;
+        border: 2px solid #6BA644;
+        border-radius: 6px;
+        cursor: pointer;
+        flex-shrink: 0;
+        transition: all 0.3s ease;
+    }
+
+    .form-check-input-modern:checked {
+        background: linear-gradient(135deg, #2D5016 0%, #6BA644 100%);
+        border-color: #6BA644;
+    }
+
+    .form-check-label-modern {
+        font-size: 0.9rem;
+        color: #2D5016;
+        line-height: 1.6;
+        cursor: pointer;
+    }
+
+    /* Bouton de soumission */
+    .btn-register {
+        width: 100%;
+        padding: 1.25rem 2rem;
+        font-size: 1.1rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #2D5016 0%, #4A7C2A 50%, #6BA644 100%);
+        color: white;
+        border: none;
+        border-radius: 16px;
+        box-shadow: 0 8px 24px rgba(45, 80, 22, 0.3);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 1.5rem;
+        letter-spacing: 0.5px;
+    }
+
+    .btn-register::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+    }
+
+    .btn-register:hover::before {
+        width: 300px;
+        height: 300px;
+    }
+
+    .btn-register:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 32px rgba(45, 80, 22, 0.4);
+    }
+
+    .btn-register:active {
+        transform: translateY(-1px);
+    }
+
+    .btn-register i {
+        margin-right: 0.5rem;
+    }
+
+    /* Lien de connexion */
+    .register-footer {
+        text-align: center;
+        padding-top: 1.5rem;
+        border-top: 1px solid rgba(212, 228, 200, 0.3);
+    }
+
+    .register-footer-text {
+        color: #6B7A5F;
+        font-size: 0.95rem;
+    }
+
+    .register-footer-link {
+        color: #6BA644;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        position: relative;
+    }
+
+    .register-footer-link::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: #6BA644;
+        transition: width 0.3s ease;
+    }
+
+    .register-footer-link:hover {
+        color: #4A7C2A;
+    }
+
+    .register-footer-link:hover::after {
+        width: 100%;
+    }
+
+    /* Messages d'erreur */
+    .validation-summary {
+        background: rgba(220, 53, 69, 0.1);
+        border: 2px solid rgba(220, 53, 69, 0.3);
+        border-radius: 16px;
+        padding: 1.25rem;
+        margin-bottom: 2rem;
+        color: #dc3545;
+        font-size: 0.95rem;
+    }
+
+    .field-validation-error {
+        display: block;
+        color: #dc3545;
+        font-size: 0.85rem;
+        margin-top: 0.5rem;
+        font-weight: 500;
+    }
+
+    .input-validation-error {
+        border-color: #dc3545 !important;
+        background: rgba(220, 53, 69, 0.05) !important;
+    }
+
+    /* Alertes */
+    .alert-modern {
+        border-radius: 16px;
+        padding: 1.25rem 1.5rem;
+        margin-bottom: 2rem;
+        border: none;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .alert-success-modern {
+        background: rgba(25, 135, 84, 0.1);
+        color: #198754;
+        border-left: 4px solid #198754;
+    }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .register-card {
+            padding: 2rem 1.5rem;
+            border-radius: 24px;
+        }
+
+        .register-title {
+            font-size: 2rem;
+        }
+
+        .register-icon-wrapper {
+            width: 80px;
+            height: 80px;
+        }
+
+        .register-icon-wrapper i {
+            font-size: 2.5rem;
+        }
+
+        .form-control-modern,
+        .form-select-modern {
+            padding: 0.875rem 1rem;
+        }
+    }
+</style>
+
+<div class="register-background">
+    <div class="floating-shape"></div>
+    <div class="floating-shape"></div>
+    <div class="floating-shape"></div>
+</div>
+
+<div class="register-container">
+    <div class="register-card">
+        <div class="register-header">
+            <div class="register-icon-wrapper">
+                <i class="bi bi-person-plus-fill"></i>
+            </div>
+            <h1 class="register-title">Rejoignez-nous</h1>
+            <p class="register-subtitle">Créez votre compte MANGO TAÏKA</p>
+        </div>
+
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success-modern alert-modern alert-dismissible fade show" role="alert">
+                <i class="bi bi-check-circle me-2"></i>@TempData["Success"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+
+            <div class="form-group-modern">
+                <label asp-for="Telephone" class="form-label-modern">
+                    <i class="bi bi-telephone"></i>Téléphone *
+                </label>
+                <input asp-for="Telephone" class="form-control form-control-modern" placeholder="Ex: 0100000000" />
+                <span asp-validation-for="Telephone" class="field-validation-error"></span>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="form-group-modern">
+                        <label asp-for="Nom" class="form-label-modern">
+                            <i class="bi bi-person"></i>Nom *
+                        </label>
+                        <input asp-for="Nom" class="form-control form-control-modern" placeholder="Votre nom" />
+                        <span asp-validation-for="Nom" class="field-validation-error"></span>
                     </div>
-
-                    @if (TempData["Success"] != null)
-                    {
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <i class="bi bi-check-circle me-2"></i>@TempData["Success"]
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
-                    }
-
-                    <form method="post">
-                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
-
-                        <div class="mb-3">
-                            <label asp-for="Telephone" class="form-label fw-semibold">
-                                <i class="bi bi-telephone me-1"></i>Téléphone *
-                            </label>
-                            <input asp-for="Telephone" class="form-control form-modern" placeholder="Ex: 0100000000" />
-                            <span asp-validation-for="Telephone" class="text-danger"></span>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="Nom" class="form-label fw-semibold">Nom *</label>
-                                <input asp-for="Nom" class="form-control form-modern" />
-                                <span asp-validation-for="Nom" class="text-danger"></span>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="Prenoms" class="form-label fw-semibold">Prénoms *</label>
-                                <input asp-for="Prenoms" class="form-control form-modern" />
-                                <span asp-validation-for="Prenoms" class="text-danger"></span>
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label asp-for="Email" class="form-label fw-semibold">
-                                <i class="bi bi-envelope me-1"></i>Email (optionnel)
-                            </label>
-                            <input asp-for="Email" type="email" class="form-control form-modern" />
-                            <span asp-validation-for="Email" class="text-danger"></span>
-                        </div>
-
-                        <div class="mb-3">
-                            <label asp-for="Role" class="form-label fw-semibold">
-                                <i class="bi bi-person-badge me-1"></i>Rôle *
-                            </label>
-                            <select asp-for="Role" class="form-select form-modern">
-                                <option value="">-- Sélectionner --</option>
-                                <option value="SCOUT">Scout</option>
-                                <option value="PARENT">Parent/Tuteur</option>
-                                <option value="CONSULTANT">Consultant</option>
-                            </select>
-                            <span asp-validation-for="Role" class="text-danger"></span>
-                        </div>
-
-                        <div class="mb-3">
-                            <label asp-for="Password" class="form-label fw-semibold">
-                                <i class="bi bi-lock me-1"></i>Mot de passe *
-                            </label>
-                            <input asp-for="Password" type="password" class="form-control form-modern" />
-                            <span asp-validation-for="Password" class="text-danger"></span>
-                        </div>
-
-                        <div class="mb-4">
-                            <label asp-for="ConfirmPassword" class="form-label fw-semibold">
-                                <i class="bi bi-lock-fill me-1"></i>Confirmer le mot de passe *
-                            </label>
-                            <input asp-for="ConfirmPassword" type="password" class="form-control form-modern" />
-                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-                        </div>
-
-                        <div class="mb-4">
-                            <div class="form-check">
-                                <input asp-for="Consentement" class="form-check-input" type="checkbox" />
-                                <label asp-for="Consentement" class="form-check-label">
-                                    J'accepte le traitement de mes données personnelles conformément à la réglementation en vigueur (Loi ivoirienne sur la protection des données - ARTCI)
-                                </label>
-                                <span asp-validation-for="Consentement" class="text-danger d-block"></span>
-                            </div>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary btn-modern w-100 py-2 mb-3">
-                            <i class="bi bi-person-plus me-2"></i>S'inscrire
-                        </button>
-
-                        <div class="text-center">
-                            <small class="text-muted">
-                                Déjà inscrit ? <a asp-action="Login">Se connecter</a>
-                            </small>
-                        </div>
-                    </form>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group-modern">
+                        <label asp-for="Prenoms" class="form-label-modern">
+                            <i class="bi bi-person-fill"></i>Prénoms *
+                        </label>
+                        <input asp-for="Prenoms" class="form-control form-control-modern" placeholder="Vos prénoms" />
+                        <span asp-validation-for="Prenoms" class="field-validation-error"></span>
+                    </div>
                 </div>
             </div>
-        </div>
+
+            <div class="form-group-modern">
+                <label asp-for="Email" class="form-label-modern">
+                    <i class="bi bi-envelope"></i>Email (optionnel)
+                </label>
+                <input asp-for="Email" type="email" class="form-control form-control-modern" placeholder="exemple@email.com" />
+                <span asp-validation-for="Email" class="field-validation-error"></span>
+            </div>
+
+            <div class="form-group-modern">
+                <label asp-for="Role" class="form-label-modern">
+                    <i class="bi bi-person-badge"></i>Rôle *
+                </label>
+                <select asp-for="Role" class="form-select form-select-modern">
+                    <option value="">-- Sélectionner votre rôle --</option>
+                    <option value="SCOUT">Scout</option>
+                    <option value="PARENT">Parent/Tuteur</option>
+                    <option value="CONSULTANT">Consultant</option>
+                </select>
+                <span asp-validation-for="Role" class="field-validation-error"></span>
+            </div>
+
+            <div class="form-group-modern">
+                <label asp-for="Password" class="form-label-modern">
+                    <i class="bi bi-lock"></i>Mot de passe *
+                </label>
+                <input asp-for="Password" type="password" class="form-control form-control-modern" placeholder="Minimum 8 caractères" />
+                <span asp-validation-for="Password" class="field-validation-error"></span>
+            </div>
+
+            <div class="form-group-modern">
+                <label asp-for="ConfirmPassword" class="form-label-modern">
+                    <i class="bi bi-lock-fill"></i>Confirmer le mot de passe *
+                </label>
+                <input asp-for="ConfirmPassword" type="password" class="form-control form-control-modern" placeholder="Répétez votre mot de passe" />
+                <span asp-validation-for="ConfirmPassword" class="field-validation-error"></span>
+            </div>
+
+            <div class="form-check-modern">
+                <input asp-for="Consentement" class="form-check-input form-check-input-modern" type="checkbox" id="consentement" />
+                <label asp-for="Consentement" class="form-check-label form-check-label-modern" for="consentement">
+                    J'accepte le traitement de mes données personnelles conformément à la réglementation en vigueur (Loi ivoirienne sur la protection des données - ARTCI)
+                </label>
+            </div>
+            <span asp-validation-for="Consentement" class="field-validation-error"></span>
+
+            <button type="submit" class="btn btn-register">
+                <i class="bi bi-person-plus"></i>Créer mon compte
+            </button>
+
+            <div class="register-footer">
+                <p class="register-footer-text">
+                    Déjà inscrit ? <a asp-action="Login" class="register-footer-link">Se connecter</a>
+                </p>
+            </div>
+        </form>
     </div>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        // Animation au focus des champs
+        document.querySelectorAll('.form-control-modern, .form-select-modern').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'scale(1.01)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'scale(1)';
+            });
+        });
+
+        // Validation en temps réel
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const inputs = this.querySelectorAll('.form-control-modern, .form-select-modern');
+            let isValid = true;
+            
+            inputs.forEach(input => {
+                if (!input.value.trim() && input.hasAttribute('required')) {
+                    input.classList.add('input-validation-error');
+                    isValid = false;
+                } else {
+                    input.classList.remove('input-validation-error');
+                }
+            });
+            
+            const consentement = document.getElementById('consentement');
+            if (!consentement.checked) {
+                consentement.parentElement.style.borderColor = '#dc3545';
+                isValid = false;
+            } else {
+                consentement.parentElement.style.borderColor = '';
+            }
+        });
+    </script>
 }
